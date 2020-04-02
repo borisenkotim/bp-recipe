@@ -6,19 +6,19 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-const connectStr = "";
+const connectStr = "mongodb+srv://AdminUser:TK3bTLCXqCaAeekB@cluster0-iik0u.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.set('useFindAndModify', false);
 
-// mongoose
-//   .connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(
-//     () => {
-//       console.log(`Connected to ${connectStr}.`);
-//     },
-//     err => {
-//       console.error(`Error connecting to ${connectStr}: ${err}`);
-//     }
-//   );
+mongoose
+  .connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(
+    () => {
+      console.log(`Connected to ${connectStr}.`);
+    },
+    err => {
+      console.error(`Error connecting to ${connectStr}: ${err}`);
+    }
+  );
 
 //Define schema that maps to a document in the Users collection in the appdb
 //database.

@@ -20,19 +20,18 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var connectStr = "";
+var connectStr = "mongodb+srv://AdminUser:TK3bTLCXqCaAeekB@cluster0-iik0u.mongodb.net/test?retryWrites=true&w=majority";
 
-_mongoose["default"].set('useFindAndModify', false); // mongoose
-//   .connect(connectStr, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(
-//     () => {
-//       console.log(`Connected to ${connectStr}.`);
-//     },
-//     err => {
-//       console.error(`Error connecting to ${connectStr}: ${err}`);
-//     }
-//   );
-//Define schema that maps to a document in the Users collection in the appdb
+_mongoose["default"].set('useFindAndModify', false);
+
+_mongoose["default"].connect(connectStr, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(function () {
+  console.log("Connected to ".concat(connectStr, "."));
+}, function (err) {
+  console.error("Error connecting to ".concat(connectStr, ": ").concat(err));
+}); //Define schema that maps to a document in the Users collection in the appdb
 //database.
 
 
@@ -75,13 +74,13 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 
 
 var LOCAL_PORT = 4001;
-var DEPLOY_URL = "localhost:4001";
+var DEPLOY_URL = "http://localhost:4001";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 _passport["default"].use(new GoogleStrategy({
-  clientID: "",
-  clientSecret: "",
+  clientID: "483643036081-ntt2vo7dg2aj3bgv2v5uv9v4gkked28c.apps.googleusercontent.com",
+  clientSecret: "g1_qOlTvuWcHbcOwDtsLn53C",
   callbackURL: DEPLOY_URL + "/auth/google/callback"
 },
 /*#__PURE__*/

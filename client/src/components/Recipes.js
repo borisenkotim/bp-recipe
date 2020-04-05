@@ -21,15 +21,15 @@ class Recipes extends React.Component {
   }
 
   fetchBooks = async () => {
-    let url = "/books/" + this.props.user.id;
-    let res = await fetch(url, {method: 'GET'});
-    if (res.status != 200) {
-        let msg = await res.text();
-        alert("Sorry, there was an error obtaining books data for this user: " + msg);
-        return;
-    } 
-    let body = await res.json();
-    this.setState({books: JSON.parse(body)}, this.props.changeMode(AppMode.BOOKS));
+    // let url = "/books/" + this.props.user.id;
+    // let res = await fetch(url, {method: 'GET'});
+    // if (res.status != 200) {
+    //     let msg = await res.text();
+    //     alert("Sorry, there was an error obtaining books data for this user: " + msg);
+    //     return;
+    // } 
+    // let body = await res.json();
+    // this.setState({books: JSON.parse(body)}, this.props.changeMode(AppMode.BOOKS));
 }
 
   componentDidMount() {
@@ -128,7 +128,7 @@ class Recipes extends React.Component {
   //to edit an existing book.
   render() {
     switch (this.props.mode) {
-      case AppMode.BOOKS:
+      case AppMode.RECIPES:
         return (
           <React.Fragment>
             <RecipesTable

@@ -41,7 +41,7 @@ const User = mongoose.model("User", userSchema);
 /////////////////
 
 const LOCAL_PORT = 4001;
-const DEPLOY_URL = "localhost:4001";
+const DEPLOY_URL = "http://localhost:4001";
 import passport from "passport";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -49,8 +49,8 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "",
-      clientSecret: "",
+      clientID: "483643036081-ntt2vo7dg2aj3bgv2v5uv9v4gkked28c.apps.googleusercontent.com",
+      clientSecret: "g1_qOlTvuWcHbcOwDtsLn53C",
       callbackURL: DEPLOY_URL + "/auth/google/callback"
     },
 

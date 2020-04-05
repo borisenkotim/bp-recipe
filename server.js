@@ -87,6 +87,8 @@ passport.use(
     //contains the password entered into the form.
     async (req, userId, password, done) => {
       let thisUser;
+      console.log(userId)
+      console.log(password)
       try {
         thisUser = await User.findOne({ id: userId });
         if (thisUser) {
@@ -173,7 +175,7 @@ app.listen(PORT, () => {
 app.get(
   "/auth/google",
   passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.profile"]
+    scope: ["profile"]
   })
 );
 
@@ -222,12 +224,12 @@ app.post(
   "/auth/login",
   passport.authenticate("local", { failWithError: true }),
   (req, res) => {
-    console.log("/login route reached: successful authentication.");
+    console.log("/auth/login route reached: successful authentication.");
     //Redirect to app's main page; the /auth/test route should return true
     res.status(200).send("Login successful");
   },
   (err, req, res, next) => {
-    console.log("/login route reached: unsuccessful authentication");
+    console.log("/auth/login route reached: unsuccessful authentication");
     //res.sendStatus(401);
     if (req.authError) {
       console.log("req.authError: " + req.authError);
@@ -248,189 +250,121 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//LOGIN route: Attempts to log in user using local strategy
-app.post('/login', 
-  passport.authenticate('local', { failWithError: true }),
-  (req, res) => {
-    console.log("/login route reached: successful authentication.");
-    res.status(200).send("Login successful");
-    //Assume client will redirect to '/' route to deserialize session
-  },
-  (err, req, res, next) => {
-    console.log("/login route reached: unsuccessful authentication");
-    //res.sendStatus(401);
-    if (req.authError) {
-      console.log("req.authError: " + req.authError);
-      res.status(401).send(req.authError);
-    } else {
-      res.status(401).send("Unexpected error occurred when attempting to authenticate. Please try again.");
-    }
-  });
-
-app.post("/newaccount", async (req, res, next) => {
-  console.log("in /newaccont route with body = " + JSON.stringify(req.body));
-  console.log(JSON.stringify(req.body));
-  if (!req.body || !req.body.userId || !req.body.password) {
-    //Body does not contain correct properties
-    return res
-      .status(401)
-      .send(
-        "POST request for new account formulated incorrectly. Please contact app developer."
-      );
-  }
-  let thisUser;
-  try {
-    thisUser = await User.findOne({ id: req.body.userId });
-    if (thisUser) {
-      //account already exists
-      res
-        .status(401)
-        .send(
-          "There is already an account with email '" +
-            req.body.userId +
-            "'.  Please choose a different email."
-        );
-    } else {
-      //account available -- add to database
-      thisUser = await new User({
-        id: req.body.userId,
-        password: req.body.password,
-        displayName: req.body.userId,
-        authStrategy: "local",
-        profileImageUrl: `https://www.gravatar.com/avatar/${md5(
-          req.body.userId
-        )}`,
-        securityQuestion: req.body.securityQuestion,
-        securityAnswer: req.body.securityAnswer,
-        books: []
-      }).save();
-      return res
-        .status(200)
-        .send(
-          "New account for '" + req.body.userId + "' successfully created."
-        );
-    }
-  } catch (err) {
-    console.log("Error occurred when looking up user in database.");
-    return next(err);
-  }
-});
-
-//ACCOUNTEXISTS route: Checks whether account with value of query param userId
-  //exists, returning true if so, false otherwise. Note that we pass the
-  //result as the 'result' property of a JSON object.
-  app.get('/accountexists', async(req, res, next) => {
-    console.log("in /accountexists route with query params = " + JSON.stringify(req.query));
-    if (!req.query.hasOwnProperty("userId")) {
-      //Request does not contain correct query parameters
-      return res.status(401).send("GET request for accountexists route is improperly formatted." +
-                                  " It needs a 'userId' query parameter.")
-    }
-    let thisUser;
-    try {
-      thisUser = await User.findOne({id: req.query.userId});
-      res.status(200).json({result: thisUser != null});
-    } catch (err) {
-      console.log("Error occurred when looking up or accessing user in database.")
-      return next(err);
-    }
-  });
-
-  //SECURITYQUESTION route: Returns security question associated with user
-  //account with id === req.body.userId, if account exists. Otherwise returns
-  //message.
-  app.get('/securityquestion', async(req, res, next) => {
-    console.log("in /securityquestion route with query params = " + JSON.stringify(req.query));
-    if (!req.query.hasOwnProperty("userId")) {
-      //Request does not contain correct query parameters
-      return res.status(401).send("GET request for security question is improperly formatted." +
-                                  " It needs a 'userId' query parameter.")
-    }
-    let thisUser;
-    try {
-      thisUser = await User.findOne({id: req.query.userId});
-      if (!thisUser) { //now such account exists
-        res.status(401).send("There is no account associated with email '" + req.query.userId + "'.");
-      } else { //account exists -- fetch securityQuestion
-        return res.status(200).send(thisUser.securityQuestion);
-      }
-    } catch (err) {
-      console.log("Error occurred when looking up or accessing user in database.")
-      return next(err);
-    }
-  });
-
-  //VERIFYSECURITYANSWER route: Returns true if the answer provided as a
-  //query param is the correct answer to the security question of the acount
-  //associated with userId, false otherwise. Note that result is returned within
-  //JSON object
-  app.get('/verifysecurityanswer', async(req, res, next) => {
-    console.log("in /verifysecurityanswer route with query params = " + JSON.stringify(req.query));
-    if (!req.query.hasOwnProperty("userId") || !req.query.hasOwnProperty("answer")) {
-      //Request does not contain correct query parameters
-      return res.status(401).send("GET request for verifysecurityanswer is improperly formatted." +
-                                  " It needs 'userId' and 'answer' query parameters.")
-    }
-    let thisUser;
-    try {
-      thisUser = await User.findOne({id: req.query.userId});
-      if (!thisUser) { //now such account exists
-        res.status(401).send("There is no account associated with email '" + req.query.userId + "'.");
-      } else { //account exists -- return whether answer matches answer on file
-        return res.status(200).json({result: req.query.answer === thisUser.securityAnswer});
-      }
-    } catch (err) {
-      console.log("Error occurred when looking up or accessing user in database.")
-      return next(err);
-    }
-  });
-
-  //RESETPASSWORD route: POST request to change the user's password. The message
-  //body is a JSON object containing three fields: userId, securityAnswer and
-  //newPassword. If securityAnswer does not match the one on file for userId,
-  //the request fails. Otherwise, the password is updated.
-  app.post('/resetpassword',  async (req, res, next) => {
-    console.log("in /resetpassword route with body = " + JSON.stringify(req.body));
-    if (!req.body.hasOwnProperty("userId") || 
-        !req.body.hasOwnProperty("answer") || 
-        !req.body.hasOwnProperty("newPassword")) {
-      //Body does not contain correct properties
-      return res.status(401).send("POST request for /resetpassword formulated incorrectly." +
-        "Its body must contain 'userId', 'answer', and 'newPassword' fields.")
-    }
-    let thisUser;
-    try {
-      thisUser = await User.findOne({id: req.body.userId});
-      if (!thisUser) { //account already exists
-        res.status(401).send("There is no account with email '" + req.body.userId + "'.");
-      } else if (thisUser.authStrategy != "local") {
-        res.status(401).send("Cannot reset password on account with userId " + req.body.userId +
-          ". The user does not have a local account. ");
-      } else if (thisUser.securityAnswer != req.body.answer) { //security answer incorrect 
-        res.status(401).send("Password not reset because security answer does not match answer on file.");
-      } else { //Can try to update password
-        try {
-          let status = await User.updateOne({id: req.body.userId},{password: req.body.newPassword});
-          if (status.nModified != 1) { //Should never happen!
-            res.status(401).send("User account exists in database but password could not be updated.");
-          } else {
-            res.status(200).send("User password successfully updated.")
-          }
-        } catch (err) {
-          console.log("Error occurred when updating user password in database.")
-          return next(err);
-        }
-      }
-    } catch (err) {
-      console.log("Error occurred when looking up user in database.")
-      return next(err);
-    }
-  });
-
-  /////////////////////////////////////
+/////////////////////////////////////
 //EXPRESS APP ROUTES FOR USER Docs //
 /////////////////////////////////////
 
+//USERS/userId route (GET): Attempts to return the data of a user 
+//in users collection.
+//GIVEN: 
+//  id of the user is passed as route parameter.
+//  Fields and values to be updated are passed as body as JSON object 
+//RETURNS: 
+//  Success: status = 200 with user data as JSON object
+//  Failure: status = 400 with error message
+app.get('/users/:userId', async(req, res, next) => {
+  console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
+  try {
+    let thisUser = await User.findOne({id: req.params.userId});
+    if (!thisUser) {
+      return res.status(400).message("No user account with specified userId was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisUser));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+  }
+});
+
+//USERS/userId route (POST): Attempts to add a new user in the users 
+//collection. 
+//GIVEN: 
+//  id of the user to add is passed as route parameter.
+//  user data to be added are passed as body as JSON object.
+//VALID DATA:
+//  'password' field MUST be present
+//  The following fields are optional: 
+//  displayName', 'profileImageUrl', 'securityQuestion', 'securityAnswer'
+//RETURNS: 
+//  Success: status = 200
+//  Failure: status = 400 with an error message
+
+app.post('/users/:userId',  async (req, res, next) => {
+  console.log("in /users route (POST) with params = " + JSON.stringify(req.params) +
+    " and body = " + JSON.stringify(req.body));  
+  console.log(req.hasOwnProperty('body'));
+  if (!req.body.hasOwnProperty("password")) {
+    //Body does not contain correct properties
+    return res.status(400).send("/users POST request formulated incorrectly. " + 
+      "It must contain 'password' as field in message body.")
+  }
+  try {
+    let thisUser = await User.findOne({id: req.params.userId});
+    console.log("thisUser: " + JSON.stringify(thisUser));
+
+    if (thisUser) { //account already exists
+      res.status(400).send("There is already an account with email '" + req.params.userId + "'.  Please choose a different email.");
+    } else { //account available -- add to database
+      thisUser = await new User({
+        id: req.params.userId,
+        password: req.body.password,
+        displayName: req.params.userId,
+        authStrategy: 'local',
+        profileImageUrl: req.body.hasOwnProperty("profileImageUrl") ? req.body.profileImageUrl : `https://www.gravatar.com/avatar/${md5(req.params.userId)}`,
+        securityQuestion: req.body.hasOwnProperty("securityQuestion") ? 
+          req.body.securityQuestion : "",
+        securityAnswer: req.body.hasOwnProperty("securityAnswer") ? 
+          req.body.securityAnswer : "",
+        recipes: []
+      }).save();
+
+      return res.status(200).send("New account for '" + req.params.userId + "' successfully created.");
+    }
+  } catch (err) {
+    console.log(err);
+
+    return res.status(400).send("Unexpected error occurred when adding or looking up user in database. " + err);    
+  }
+});
+
+//USERS/userId route (PUT): Attempts to update a user in the users collection. 
+//GIVEN: 
+//  id of the user to update is passed as route parameter.
+//  Fields and values to be updated are passed as body as JSON object.  
+//VALID DATA:
+//  Only the following fields may be included in the message body:
+//  password, displayName, profileImageUrl, securityQuestion, securityAnswer
+//RETURNS: 
+//  Success: status = 200
+//  Failure: status = 400 with an error message
+app.put('/users/:userId',  async (req, res, next) => {
+  console.log("in /users PUT with userId = " + JSON.stringify(req.params) + 
+    " and body = " + JSON.stringify(req.body));
+  if (!req.params.hasOwnProperty("userId"))  {
+    return res.status(400).send("users/ PUT request formulated incorrectly." +
+        "It must contain 'userId' as parameter.");
+  }
+  const validProps = ['password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'];
+  for (const bodyProp in req.body) {
+    if (!validProps.includes(bodyProp)) {
+      return res.status(400).send("users/ PUT request formulated incorrectly." +
+        "Only the following props are allowed in body: " +
+        "'password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'");
+    } 
+  }
+  try {
+        let status = await User.updateOne({id: req.params.userId}, 
+                                          {$set: req.body});                            
+        if (status.nModified != 1) { //Should never happen!
+          res.status(400).send("User account exists in database but data could not be updated. Password must be different");
+        } else {
+          res.status(200).send("User data successfully updated.")
+        }
+      } catch (err) {
+        res.status(400).send("Unexpected error occurred when updating user data in database: " + err);
+      }
+});
 
 ///////////////////////////////////////
 //EXPRESS APP ROUTES FOR Recipe Docs //

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node server.js --ignore client",
-    "build": "babel server.js --out-file server.compiled.js"
+    "build": "babel server.js --out-file server.compiled.js",
+    "build-client": "cd client && npm run build && cd .."
   },
   "keywords": [
     "React",

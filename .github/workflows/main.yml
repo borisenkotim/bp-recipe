@@ -30,7 +30,7 @@ jobs:
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: ${{format('Action - Pull Request<br>Head Ref - {0}<br>Base Ref - {1}<br>For more details, visit <a href=''https://github.com/CptS-489-WSU/bp-recipe''>https://github.com/CptS-489-WSU/bp-recipe</a>',github.head_ref, github.base_ref)}}
+        text: ${{format('Action - Pull Request<br>Head Ref - {0}<br>Base Ref - {1}<br>For more details, visit <a href=''{2}''>https://github.com</a>',github.head_ref, github.base_ref, github.event.pull_request.url)}}
         # Message theme color
         theme_color: blue
 
@@ -45,7 +45,7 @@ jobs:
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: ${{format('Action - Push<br>Branch - {0}<br>For more details, visit <a href=''https://github.com/CptS-489-WSU/bp-recipe''>https://github.com/CptS-489-WSU/bp-recipe</a>',github.ref)}}
+        text: ${{format('Action - Push<br>Branch - {0}<br>For more details, visit <a href=''{1}''>https://github.com</a>',github.ref, github.event.head_commit.url)}}
         # Message theme color
         theme_color: blue
 

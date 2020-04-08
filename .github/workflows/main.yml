@@ -29,11 +29,11 @@ jobs:
         # Incoming webhook URI to Microsoft Teams
         webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
         # Message title
-        title: $TITLE_STRING 
+        title: ${{TITLE_STRING}} 
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: $BODY_STRING
+        text: ${{BODY_STRING}}
         # Message theme color
         theme_color: blue
 
@@ -47,11 +47,11 @@ jobs:
         # Incoming webhook URI to Microsoft Teams
         webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
         # Message title
-        title: $TITLE_STRING 
+        title: ${{TITLE_STRING}} 
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: $BODY_STRING
+        text: ${{BODY_STRING}}
         # Message theme color
         theme_color: blue
 

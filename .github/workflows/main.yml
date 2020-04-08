@@ -30,7 +30,7 @@ jobs:
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: ${{format('Action - Pull Request<br>Head Ref - {0}<br>Base Ref - {1}<br>For more details, visit <a href=''{2}''>https://github.com</a>',github.head_ref, github.base_ref, github.event.pull_request.url)}}
+        text: ${{format('Action - Pull Request<br>Head Ref - {0}<br>Base Ref - {1}<br>For more details, visit <a href=''{2}''>https://github.com</a>',github.head_ref, github.base_ref, github.event.pull_request.html_url)}}
         # Message theme color
         theme_color: blue
 

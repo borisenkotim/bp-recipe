@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Notify Team
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -9,6 +9,9 @@ on:
     branches: [ master, week1, week2, week3, week4 ]
   pull_request:
     branches: [ master, week1, week2, week3, week4 ]
+
+env:
+  
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -19,19 +22,42 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Microsoft Teams (Generic)
+    - name: Microsoft Teams (Generic) - pull request
+      if: contains(github.event_name, 'pull_request')
       uses: aliencube/microsoft-teams-actions@v0.8.0
       with:
         # Incoming webhook URI to Microsoft Teams
         webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
+        env:
+          TITLE_STRING: ${{format('{0} has made a pull request in {1}!', github.actor, github.repository)}}
+          BODY_STRING: ${{format('Action - {0}\nHead_Ref - {1}\nBase_Ref - {2}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.head_ref, github.base_ref)}}
         # Message title
-        title: Someone has pushed or made a pull request to bp-recipe! 
+        title: $TITLE_STRING 
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
+        text: $BODY_STRING
         # Message theme color
         theme_color: blue
+
+    - name: Microsoft Teams (Generic) - push
+      if: contains(github.event_name, 'push')
+      uses: aliencube/microsoft-teams-actions@v0.8.0
+      with:
+        # Incoming webhook URI to Microsoft Teams
+        webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
+        env:
+          TITLE_STRING: ${{format('{0} has pushed to {1}!', github.actor, github.repository)}}
+          BODY_STRING: ${{format('Action - {0}\nBranch - {1}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.ref)}}
+        # Message title
+        title: $TITLE_STRING 
+        # Message summary
+        summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
+        #Message text
+        text: $BODY_STRING
+        # Message theme color
+        theme_color: blue
+
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 

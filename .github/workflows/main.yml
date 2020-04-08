@@ -1,0 +1,44 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: Microsoft Teams (Generic)
+      uses: aliencube/microsoft-teams-actions@v0.8.0
+      with:
+        # Incoming webhook URI to Microsoft Teams
+        webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
+        # Message title
+        title: A new commit has been pushed to bp-recipe! 
+        # Message summary
+        summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
+        # Message theme color
+        theme_color: blue
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+
+    # Runs a single command using the runners shell
+    - name: Run a one-line script
+      run: echo Hello, world!
+
+    # Runs a set of commands using the runners shell
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.

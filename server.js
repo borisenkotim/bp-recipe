@@ -24,14 +24,27 @@ mongoose
 //database.
 const Schema = mongoose.Schema;
 
+const recipeSchema = new Schema({
+
+  name : {type: String, required: true},
+  pictureURL : String,
+  ingredients : {type:Array, required: true},
+  directions : {type:Array, required: true},
+  favorited: {type: Boolean, required: true, default: false},
+  dateAdded: {type: String, required: true}
+});
+
 const userSchema = new Schema({
-  id: {type: String, required: true}, //unique identifier for user
-  password: String, //unencrypted password (for now!)
-  displayName: {type: String, required: true}, //Name to be displayed within app
-  authStrategy: {type: String, required: true}, //strategy used to authenticate, e.g., github, local
-  profileImageUrl: {type: String, required: true}, //link to profile image
-  securityQuestion: String,
-  securityAnswer: {type: String, required: function() {return this.securityQuestion ? true: false}},
+  id : {type: String, required: true},
+  password : String,
+  displayName : {type:String, required:true},
+  authStrategy : {type: String, required: true},
+  profileImageURL: String,
+  securityQuestion: String, 
+  securityAnswer: {type: String, required: function(){
+      return this.securityQuestion ? true : false 
+  } },
+  recipes : [recipeSchema]
 });
 
 const User = mongoose.model("User", userSchema);

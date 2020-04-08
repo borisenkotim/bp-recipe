@@ -34,6 +34,13 @@ const recipeSchema = new Schema({
   dateAdded: {type: String, required: true}
 });
 
+const ingredientSchema = new Schema({
+  name : {type: String, required: true},
+  pictureURL : String,
+  quantity : {type: Float, required: true},
+  unit : {type: String, required: true}
+});
+
 const userSchema = new Schema({
   id : {type: String, required: true},
   password : String,

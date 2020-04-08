@@ -22,36 +22,30 @@ jobs:
     - name: Microsoft Teams (Generic) - pull request
       if: contains(github.event_name, 'pull_request')
       uses: aliencube/microsoft-teams-actions@v0.8.0
-      env:
-          TITLE_STRING: ${{format('{0} has made a pull request in {1}!', github.actor, github.repository)}}
-          BODY_STRING: ${{format('Action - {0}\nHead_Ref - {1}\nBase_Ref - {2}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.head_ref, github.base_ref)}}
       with:
         # Incoming webhook URI to Microsoft Teams
         webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
         # Message title
-        title: ${{TITLE_STRING}} 
+        title: ${{format('{0} has made a pull request in {1}!', github.actor, github.repository)}}
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: ${{BODY_STRING}}
+        text: ${{format('Action - {0}\nHead_Ref - {1}\nBase_Ref - {2}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.head_ref, github.base_ref)}}
         # Message theme color
         theme_color: blue
 
     - name: Microsoft Teams (Generic) - push
       if: contains(github.event_name, 'push')
       uses: aliencube/microsoft-teams-actions@v0.8.0
-      env:
-          TITLE_STRING: ${{format('{0} has pushed to {1}!', github.actor, github.repository)}}
-          BODY_STRING: ${{format('Action - {0}\nBranch - {1}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.ref)}}
       with:
         # Incoming webhook URI to Microsoft Teams
         webhook_uri: https://outlook.office.com/webhook/1bef2749-acfd-4980-8523-cef1e1b85608@b52be471-f7f1-47b4-a879-0c799bb53db5/IncomingWebhook/7193235a1cb94f86ab260d9bac144277/cb69412e-2f9b-4037-82b4-f1449da23609
         # Message title
-        title: ${{TITLE_STRING}} 
+        title: ${{format('{0} has pushed to {1}!', github.actor, github.repository)}}
         # Message summary
         summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
         #Message text
-        text: ${{BODY_STRING}}
+        text: ${{format('Action - {0}\nBranch - {1}\nFor more details, visit https://github.com/CptS-489-WSU/bp-recipe',github.event_name, github.ref)}}
         # Message theme color
         theme_color: blue
 

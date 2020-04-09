@@ -16,6 +16,12 @@ var _md = _interopRequireDefault(require("md5"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -36,36 +42,68 @@ _mongoose["default"].connect(connectStr, {
 
 
 var Schema = _mongoose["default"].Schema;
+var recipeSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  pictureURL: String,
+  ingredients: {
+    type: Array,
+    required: true
+  },
+  directions: {
+    type: Array,
+    required: true
+  },
+  favorited: {
+    type: Boolean,
+    required: true,
+    "default": false
+  },
+  dateAdded: {
+    type: String,
+    required: true
+  }
+});
+var ingredientSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  pictureURL: String,
+  quantity: {
+    type: Number,
+    required: true
+  },
+  unit: {
+    type: String,
+    required: true
+  }
+});
 var userSchema = new Schema({
   id: {
     type: String,
     required: true
   },
-  //unique identifier for user
   password: String,
-  //unencrypted password (for now!)
   displayName: {
     type: String,
     required: true
   },
-  //Name to be displayed within app
   authStrategy: {
     type: String,
     required: true
   },
-  //strategy used to authenticate, e.g., github, local
-  profileImageUrl: {
-    type: String,
-    required: true
-  },
-  //link to profile image
+  profileImageURL: String,
   securityQuestion: String,
   securityAnswer: {
     type: String,
     required: function required() {
       return this.securityQuestion ? true : false;
     }
-  }
+  },
+  recipes: [recipeSchema]
 });
 
 var User = _mongoose["default"].model("User", userSchema); /////////////////
@@ -154,55 +192,57 @@ function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            console.log(userId);
+            console.log(password);
+            _context2.prev = 2;
+            _context2.next = 5;
             return User.findOne({
               id: userId
             });
 
-          case 3:
+          case 5:
             thisUser = _context2.sent;
 
             if (!thisUser) {
-              _context2.next = 13;
+              _context2.next = 15;
               break;
             }
 
             if (!(thisUser.password === password)) {
-              _context2.next = 9;
+              _context2.next = 11;
               break;
             }
 
             return _context2.abrupt("return", done(null, thisUser));
 
-          case 9:
+          case 11:
             req.authError = "The password is incorrect. Please try again" + " or reset your password.";
             return _context2.abrupt("return", done(null, false));
 
-          case 11:
-            _context2.next = 15;
+          case 13:
+            _context2.next = 17;
             break;
 
-          case 13:
+          case 15:
             //userId not found in DB
             req.authError = "There is no account with email " + userId + ". Please try again.";
             return _context2.abrupt("return", done(null, false));
 
-          case 15:
-            _context2.next = 20;
+          case 17:
+            _context2.next = 22;
             break;
 
-          case 17:
-            _context2.prev = 17;
-            _context2.t0 = _context2["catch"](0);
+          case 19:
+            _context2.prev = 19;
+            _context2.t0 = _context2["catch"](2);
             return _context2.abrupt("return", done(_context2.t0));
 
-          case 20:
+          case 22:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 17]]);
+    }, _callee2, null, [[2, 19]]);
   }));
 
   return function (_x5, _x6, _x7, _x8) {
@@ -285,7 +325,7 @@ app.listen(PORT, function () {
 //Log In page.
 
 app.get("/auth/google", _passport["default"].authenticate("google", {
-  scope: ["https://www.googleapis.com/auth/userinfo.profile"]
+  scope: ["profile"]
 })); //CALLBACK route: GitHub will call this route after the
 //OAuth authentication process is complete.
 //req.isAuthenticated() tells us whether authentication was successful.
@@ -328,11 +368,11 @@ app.get('/auth/test', function (req, res) {
 app.post("/auth/login", _passport["default"].authenticate("local", {
   failWithError: true
 }), function (req, res) {
-  console.log("/login route reached: successful authentication."); //Redirect to app's main page; the /auth/test route should return true
+  console.log("/auth/login route reached: successful authentication."); //Redirect to app's main page; the /auth/test route should return true
 
   res.status(200).send("Login successful");
 }, function (err, req, res, next) {
-  console.log("/login route reached: unsuccessful authentication"); //res.sendStatus(401);
+  console.log("/auth/login route reached: unsuccessful authentication"); //res.sendStatus(401);
 
   if (req.authError) {
     console.log("req.authError: " + req.authError);
@@ -348,395 +388,525 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
-})); //LOGIN route: Attempts to log in user using local strategy
+})); /////////////////////////////////////
+//EXPRESS APP ROUTES FOR USER Docs //
+/////////////////////////////////////
+//USERS/userId route (GET): Attempts to return the data of a user 
+//in users collection.
+//GIVEN: 
+//  id of the user is passed as route parameter.
+//  Fields and values to be updated are passed as body as JSON object 
+//RETURNS: 
+//  Success: status = 200 with user data as JSON object
+//  Failure: status = 400 with error message
 
-app.post('/login', _passport["default"].authenticate('local', {
-  failWithError: true
-}), function (req, res) {
-  console.log("/login route reached: successful authentication.");
-  res.status(200).send("Login successful"); //Assume client will redirect to '/' route to deserialize session
-}, function (err, req, res, next) {
-  console.log("/login route reached: unsuccessful authentication"); //res.sendStatus(401);
-
-  if (req.authError) {
-    console.log("req.authError: " + req.authError);
-    res.status(401).send(req.authError);
-  } else {
-    res.status(401).send("Unexpected error occurred when attempting to authenticate. Please try again.");
-  }
-});
-app.post("/newaccount", /*#__PURE__*/function () {
+app.get('/users/:userId', /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res, next) {
     var thisUser;
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            console.log("in /newaccont route with body = " + JSON.stringify(req.body));
-            console.log(JSON.stringify(req.body));
-
-            if (!(!req.body || !req.body.userId || !req.body.password)) {
-              _context4.next = 4;
-              break;
-            }
-
-            return _context4.abrupt("return", res.status(401).send("POST request for new account formulated incorrectly. Please contact app developer."));
-
-          case 4:
-            _context4.prev = 4;
-            _context4.next = 7;
+            console.log("in /users route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context4.prev = 1;
+            _context4.next = 4;
             return User.findOne({
-              id: req.body.userId
+              id: req.params.userId
             });
 
-          case 7:
+          case 4:
             thisUser = _context4.sent;
 
-            if (!thisUser) {
-              _context4.next = 12;
+            if (thisUser) {
+              _context4.next = 9;
               break;
             }
 
-            //account already exists
-            res.status(401).send("There is already an account with email '" + req.body.userId + "'.  Please choose a different email.");
+            return _context4.abrupt("return", res.status(400).message("No user account with specified userId was found in database."));
+
+          case 9:
+            return _context4.abrupt("return", res.status(200).json(JSON.stringify(thisUser)));
+
+          case 10:
             _context4.next = 16;
             break;
 
           case 12:
-            _context4.next = 14;
-            return new User({
-              id: req.body.userId,
-              password: req.body.password,
-              displayName: req.body.userId,
-              authStrategy: "local",
-              profileImageUrl: "https://www.gravatar.com/avatar/".concat((0, _md["default"])(req.body.userId)),
-              securityQuestion: req.body.securityQuestion,
-              securityAnswer: req.body.securityAnswer,
-              books: []
-            }).save();
-
-          case 14:
-            thisUser = _context4.sent;
-            return _context4.abrupt("return", res.status(200).send("New account for '" + req.body.userId + "' successfully created."));
+            _context4.prev = 12;
+            _context4.t0 = _context4["catch"](1);
+            console.log();
+            return _context4.abrupt("return", res.status(400).message("Unexpected error occurred when looking up user in database: " + _context4.t0));
 
           case 16:
-            _context4.next = 22;
-            break;
-
-          case 18:
-            _context4.prev = 18;
-            _context4.t0 = _context4["catch"](4);
-            console.log("Error occurred when looking up user in database.");
-            return _context4.abrupt("return", next(_context4.t0));
-
-          case 22:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[4, 18]]);
+    }, _callee4, null, [[1, 12]]);
   }));
 
   return function (_x11, _x12, _x13) {
     return _ref4.apply(this, arguments);
   };
-}()); //ACCOUNTEXISTS route: Checks whether account with value of query param userId
-//exists, returning true if so, false otherwise. Note that we pass the
-//result as the 'result' property of a JSON object.
+}()); //USERS/userId route (POST): Attempts to add a new user in the users 
+//collection. 
+//GIVEN: 
+//  id of the user to add is passed as route parameter.
+//  user data to be added are passed as body as JSON object.
+//VALID DATA:
+//  'password' field MUST be present
+//  The following fields are optional: 
+//  displayName', 'profileImageUrl', 'securityQuestion', 'securityAnswer'
+//RETURNS: 
+//  Success: status = 200
+//  Failure: status = 400 with an error message
 
-app.get('/accountexists', /*#__PURE__*/function () {
+app.post('/users/:userId', /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res, next) {
     var thisUser;
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
-            console.log("in /accountexists route with query params = " + JSON.stringify(req.query));
+            console.log("in /users route (POST) with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            console.log(req.hasOwnProperty('body'));
 
-            if (req.query.hasOwnProperty("userId")) {
-              _context5.next = 3;
+            if (req.body.hasOwnProperty("password")) {
+              _context5.next = 4;
               break;
             }
 
-            return _context5.abrupt("return", res.status(401).send("GET request for accountexists route is improperly formatted." + " It needs a 'userId' query parameter."));
+            return _context5.abrupt("return", res.status(400).send("/users POST request formulated incorrectly. " + "It must contain 'password' as field in message body."));
 
-          case 3:
-            _context5.prev = 3;
-            _context5.next = 6;
+          case 4:
+            _context5.prev = 4;
+            _context5.next = 7;
             return User.findOne({
-              id: req.query.userId
+              id: req.params.userId
             });
 
-          case 6:
+          case 7:
             thisUser = _context5.sent;
-            res.status(200).json({
-              result: thisUser != null
-            });
-            _context5.next = 14;
+            console.log("thisUser: " + JSON.stringify(thisUser));
+
+            if (!thisUser) {
+              _context5.next = 13;
+              break;
+            }
+
+            //account already exists
+            res.status(400).send("There is already an account with email '" + req.params.userId + "'.  Please choose a different email.");
+            _context5.next = 17;
             break;
 
-          case 10:
-            _context5.prev = 10;
-            _context5.t0 = _context5["catch"](3);
-            console.log("Error occurred when looking up or accessing user in database.");
-            return _context5.abrupt("return", next(_context5.t0));
+          case 13:
+            _context5.next = 15;
+            return new User({
+              id: req.params.userId,
+              password: req.body.password,
+              displayName: req.params.userId,
+              authStrategy: 'local',
+              profileImageUrl: req.body.hasOwnProperty("profileImageUrl") ? req.body.profileImageUrl : "https://www.gravatar.com/avatar/".concat((0, _md["default"])(req.params.userId)),
+              securityQuestion: req.body.hasOwnProperty("securityQuestion") ? req.body.securityQuestion : "",
+              securityAnswer: req.body.hasOwnProperty("securityAnswer") ? req.body.securityAnswer : "",
+              recipes: []
+            }).save();
 
-          case 14:
+          case 15:
+            thisUser = _context5.sent;
+            return _context5.abrupt("return", res.status(200).send("New account for '" + req.params.userId + "' successfully created."));
+
+          case 17:
+            _context5.next = 23;
+            break;
+
+          case 19:
+            _context5.prev = 19;
+            _context5.t0 = _context5["catch"](4);
+            console.log(_context5.t0);
+            return _context5.abrupt("return", res.status(400).send("Unexpected error occurred when adding or looking up user in database. " + _context5.t0));
+
+          case 23:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[3, 10]]);
+    }, _callee5, null, [[4, 19]]);
   }));
 
   return function (_x14, _x15, _x16) {
     return _ref5.apply(this, arguments);
   };
-}()); //SECURITYQUESTION route: Returns security question associated with user
-//account with id === req.body.userId, if account exists. Otherwise returns
-//message.
+}()); //USERS/userId route (PUT): Attempts to update a user in the users collection. 
+//GIVEN: 
+//  id of the user to update is passed as route parameter.
+//  Fields and values to be updated are passed as body as JSON object.  
+//VALID DATA:
+//  Only the following fields may be included in the message body:
+//  password, displayName, profileImageUrl, securityQuestion, securityAnswer
+//RETURNS: 
+//  Success: status = 200
+//  Failure: status = 400 with an error message
 
-app.get('/securityquestion', /*#__PURE__*/function () {
+app.put('/users/:userId', /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res, next) {
-    var thisUser;
+    var validProps, bodyProp, status;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
-            console.log("in /securityquestion route with query params = " + JSON.stringify(req.query));
+            console.log("in /users PUT with userId = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (req.query.hasOwnProperty("userId")) {
+            if (req.params.hasOwnProperty("userId")) {
               _context6.next = 3;
               break;
             }
 
-            return _context6.abrupt("return", res.status(401).send("GET request for security question is improperly formatted." + " It needs a 'userId' query parameter."));
+            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
 
           case 3:
-            _context6.prev = 3;
-            _context6.next = 6;
-            return User.findOne({
-              id: req.query.userId
-            });
+            validProps = ['password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'];
+            _context6.t0 = regeneratorRuntime.keys(req.body);
 
-          case 6:
-            thisUser = _context6.sent;
-
-            if (thisUser) {
+          case 5:
+            if ((_context6.t1 = _context6.t0()).done) {
               _context6.next = 11;
               break;
             }
 
-            //now such account exists
-            res.status(401).send("There is no account associated with email '" + req.query.userId + "'.");
-            _context6.next = 12;
+            bodyProp = _context6.t1.value;
+
+            if (validProps.includes(bodyProp)) {
+              _context6.next = 9;
+              break;
+            }
+
+            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'"));
+
+          case 9:
+            _context6.next = 5;
             break;
 
           case 11:
-            return _context6.abrupt("return", res.status(200).send(thisUser.securityQuestion));
-
-          case 12:
-            _context6.next = 18;
-            break;
+            _context6.prev = 11;
+            _context6.next = 14;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $set: req.body
+            });
 
           case 14:
-            _context6.prev = 14;
-            _context6.t0 = _context6["catch"](3);
-            console.log("Error occurred when looking up or accessing user in database.");
-            return _context6.abrupt("return", next(_context6.t0));
+            status = _context6.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("User account exists in database but data could not be updated. Password must be different");
+            } else {
+              res.status(200).send("User data successfully updated.");
+            }
+
+            _context6.next = 21;
+            break;
 
           case 18:
+            _context6.prev = 18;
+            _context6.t2 = _context6["catch"](11);
+            res.status(400).send("Unexpected error occurred when updating user data in database: " + _context6.t2);
+
+          case 21:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[3, 14]]);
+    }, _callee6, null, [[11, 18]]);
   }));
 
   return function (_x17, _x18, _x19) {
     return _ref6.apply(this, arguments);
   };
-}()); //VERIFYSECURITYANSWER route: Returns true if the answer provided as a
-//query param is the correct answer to the security question of the acount
-//associated with userId, false otherwise. Note that result is returned within
-//JSON object
+}()); ///////////////////////////////////////
+//EXPRESS APP ROUTES FOR Recipe Docs //
+///////////////////////////////////////
+//recipes/userId route (GET): Attempts to return all recipes associated with userId
+//GIVEN: 
+//  id of the user whose recipes are sought is passed as route parameter.
+//RETURNS: 
+//  Success: status = 200 with array of recipes as JSON object
+//  Failure: status = 400 with error message
 
-app.get('/verifysecurityanswer', /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res, next) {
+app.get('/recipes/:userId', /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
     var thisUser;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            console.log("in /verifysecurityanswer route with query params = " + JSON.stringify(req.query));
-
-            if (!(!req.query.hasOwnProperty("userId") || !req.query.hasOwnProperty("answer"))) {
-              _context7.next = 3;
-              break;
-            }
-
-            return _context7.abrupt("return", res.status(401).send("GET request for verifysecurityanswer is improperly formatted." + " It needs 'userId' and 'answer' query parameters."));
-
-          case 3:
-            _context7.prev = 3;
-            _context7.next = 6;
+            console.log("in /recipes route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context7.prev = 1;
+            _context7.next = 4;
             return User.findOne({
-              id: req.query.userId
+              id: req.params.userId
             });
 
-          case 6:
+          case 4:
             thisUser = _context7.sent;
 
             if (thisUser) {
-              _context7.next = 11;
+              _context7.next = 9;
               break;
             }
 
-            //now such account exists
-            res.status(401).send("There is no account associated with email '" + req.query.userId + "'.");
-            _context7.next = 12;
-            break;
+            return _context7.abrupt("return", res.status(400).message("No user account with specified userId was found in database."));
 
-          case 11:
-            return _context7.abrupt("return", res.status(200).json({
-              result: req.query.answer === thisUser.securityAnswer
-            }));
+          case 9:
+            return _context7.abrupt("return", res.status(200).json(JSON.stringify(thisUser.recipes)));
+
+          case 10:
+            _context7.next = 16;
+            break;
 
           case 12:
-            _context7.next = 18;
-            break;
+            _context7.prev = 12;
+            _context7.t0 = _context7["catch"](1);
+            console.log();
+            return _context7.abrupt("return", res.status(400).message("Unexpected error occurred when looking up user in database: " + _context7.t0));
 
-          case 14:
-            _context7.prev = 14;
-            _context7.t0 = _context7["catch"](3);
-            console.log("Error occurred when looking up or accessing user in database.");
-            return _context7.abrupt("return", next(_context7.t0));
-
-          case 18:
+          case 16:
           case "end":
             return _context7.stop();
         }
       }
-    }, _callee7, null, [[3, 14]]);
+    }, _callee7, null, [[1, 12]]);
   }));
 
-  return function (_x20, _x21, _x22) {
+  return function (_x20, _x21) {
     return _ref7.apply(this, arguments);
   };
-}()); //RESETPASSWORD route: POST request to change the user's password. The message
-//body is a JSON object containing three fields: userId, securityAnswer and
-//newPassword. If securityAnswer does not match the one on file for userId,
-//the request fails. Otherwise, the password is updated.
+}()); //recipes/userId/ (POST): Attempts to add new recipe to database
+//GIVEN:
+//  id of the user whose recipe is to be added is passed as 
+//  route parameter
+//  JSON object containing recipe to be added is passed in request body
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  Body object MUST contain only the following fields:
+//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
 
-app.post('/resetpassword', /*#__PURE__*/function () {
+app.post('/recipes/:userId', /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res, next) {
-    var thisUser, status;
+    var status;
     return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
-            console.log("in /resetpassword route with body = " + JSON.stringify(req.body));
+            console.log("in /recipes (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(!req.body.hasOwnProperty("userId") || !req.body.hasOwnProperty("answer") || !req.body.hasOwnProperty("newPassword"))) {
+            if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || !req.body.hasOwnProperty("dateAdded") || !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("instructions"))) {
               _context8.next = 3;
               break;
             }
 
-            return _context8.abrupt("return", res.status(401).send("POST request for /resetpassword formulated incorrectly." + "Its body must contain 'userId', 'answer', and 'newPassword' fields."));
+            return _context8.abrupt("return", res.status(400).send("POST request on /recipes formulated incorrectly." + "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited."));
 
           case 3:
             _context8.prev = 3;
             _context8.next = 6;
-            return User.findOne({
-              id: req.body.userId
+            return User.update({
+              id: req.params.userId
+            }, {
+              $push: {
+                recipes: req.body
+              }
             });
 
           case 6:
-            thisUser = _context8.sent;
-
-            if (thisUser) {
-              _context8.next = 11;
-              break;
-            }
-
-            //account already exists
-            res.status(401).send("There is no account with email '" + req.body.userId + "'.");
-            _context8.next = 30;
-            break;
-
-          case 11:
-            if (!(thisUser.authStrategy != "local")) {
-              _context8.next = 15;
-              break;
-            }
-
-            res.status(401).send("Cannot reset password on account with userId " + req.body.userId + ". The user does not have a local account. ");
-            _context8.next = 30;
-            break;
-
-          case 15:
-            if (!(thisUser.securityAnswer != req.body.answer)) {
-              _context8.next = 19;
-              break;
-            }
-
-            //security answer incorrect 
-            res.status(401).send("Password not reset because security answer does not match answer on file.");
-            _context8.next = 30;
-            break;
-
-          case 19:
-            _context8.prev = 19;
-            _context8.next = 22;
-            return User.updateOne({
-              id: req.body.userId
-            }, {
-              password: req.body.newPassword
-            });
-
-          case 22:
             status = _context8.sent;
 
             if (status.nModified != 1) {
               //Should never happen!
-              res.status(401).send("User account exists in database but password could not be updated.");
+              res.status(400).send("Unexpected error occurred when adding recipe to database. recipe was not added.");
             } else {
-              res.status(200).send("User password successfully updated.");
+              res.status(200).send("recipe successfully added to database.");
             }
 
-            _context8.next = 30;
+            _context8.next = 14;
             break;
 
-          case 26:
-            _context8.prev = 26;
-            _context8.t0 = _context8["catch"](19);
-            console.log("Error occurred when updating user password in database.");
-            return _context8.abrupt("return", next(_context8.t0));
+          case 10:
+            _context8.prev = 10;
+            _context8.t0 = _context8["catch"](3);
+            console.log(_context8.t0);
+            return _context8.abrupt("return", res.status(400).send("Unexpected error occurred when adding recipe to database: " + _context8.t0));
 
-          case 30:
-            _context8.next = 36;
-            break;
-
-          case 32:
-            _context8.prev = 32;
-            _context8.t1 = _context8["catch"](3);
-            console.log("Error occurred when looking up user in database.");
-            return _context8.abrupt("return", next(_context8.t1));
-
-          case 36:
+          case 14:
           case "end":
             return _context8.stop();
         }
       }
-    }, _callee8, null, [[3, 32], [19, 26]]);
+    }, _callee8, null, [[3, 10]]);
   }));
 
-  return function (_x23, _x24, _x25) {
+  return function (_x22, _x23, _x24) {
     return _ref8.apply(this, arguments);
   };
-}()); /////////////////////////////////////
-//EXPRESS APP ROUTES FOR USER Docs //
-/////////////////////////////////////
-///////////////////////////////////////
-//EXPRESS APP ROUTES FOR Recipe Docs //
-///////////////////////////////////////
+}()); //recipes/userId/recipeId (PUT): Attempts to update data for an existing recipe
+//GIVEN:
+//  id of the user whose recipe is to be updated is passed as first 
+//  route parameter
+//  id of recipe to be updated is passed as second route parameter
+//  JSON object containing data to be updated is passed in request body
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  recipe id must correspond to a user's recipe. (Use recipes/ GET route to obtain a
+//  list of all of user's recipes, including their unique ids)
+//  Body object may contain only the following 6 fields:
+//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
+
+app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res, next) {
+    var validProps, bodyObj, bodyProp, status;
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            console.log("in /recipes (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            validProps = ['name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions'];
+            bodyObj = _objectSpread({}, req.body);
+            delete bodyObj._id;
+            _context9.t0 = regeneratorRuntime.keys(bodyObj);
+
+          case 5:
+            if ((_context9.t1 = _context9.t0()).done) {
+              _context9.next = 15;
+              break;
+            }
+
+            bodyProp = _context9.t1.value;
+
+            if (validProps.includes(bodyProp)) {
+              _context9.next = 11;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions', " + bodyProp + " is not an allowed prop."));
+
+          case 11:
+            bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
+            delete bodyObj[bodyProp];
+
+          case 13:
+            _context9.next = 5;
+            break;
+
+          case 15:
+            _context9.prev = 15;
+            _context9.next = 18;
+            return User.updateOne({
+              "id": req.params.userId,
+              "recipes._id": _mongoose["default"].Types.ObjectId(req.params.recipeId)
+            }, {
+              "$set": bodyObj
+            });
+
+          case 18:
+            status = _context9.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when updating recipe in database. recipe was not updated.");
+            } else {
+              res.status(200).send("recipe successfully updated in database.");
+            }
+
+            _context9.next = 26;
+            break;
+
+          case 22:
+            _context9.prev = 22;
+            _context9.t2 = _context9["catch"](15);
+            console.log(_context9.t2);
+            return _context9.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context9.t2));
+
+          case 26:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, null, [[15, 22]]);
+  }));
+
+  return function (_x25, _x26, _x27) {
+    return _ref9.apply(this, arguments);
+  };
+}()); //recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
+//GIVEN:
+//  id of the user whose recipe is to be deleted is passed as first 
+//  route parameter
+//  id of recipe to be deleted is passed as second route parameter
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  recipe id must correspond to a unique id of a user's recipe. 
+//  (Use recipes/ GET route to obtain a list of all of user's 
+//  recipes, including their unique ids)
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
+
+app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res, next) {
+    var status;
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
+            _context10.prev = 1;
+            _context10.next = 4;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $pull: {
+                recipes: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.recipeId)
+                }
+              }
+            });
+
+          case 4:
+            status = _context10.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+            } else {
+              res.status(200).send("recipe successfully deleted from database.");
+            }
+
+            _context10.next = 12;
+            break;
+
+          case 8:
+            _context10.prev = 8;
+            _context10.t0 = _context10["catch"](1);
+            console.log(_context10.t0);
+            return _context10.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context10.t0));
+
+          case 12:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[1, 8]]);
+  }));
+
+  return function (_x28, _x29, _x30) {
+    return _ref10.apply(this, arguments);
+  };
+}());

@@ -500,3 +500,43 @@ button:focus {
   color: black; 
   background-color: white;
  }
+
+ .navbar-base {
+   background-color: gray;
+   color: white;
+ }
+
+ .navbar-items {
+   display: inline-flex;
+   margin-right: 10px;
+ }
+
+ .navlink {
+   color: white;
+   width: 170px;
+ }
+
+ .navlink-grocery{
+  width: 220px!important;
+ }
+
+ .navlink-selected {
+  font-weight: 900;
+  color: white;
+ }
+
+ .navlink:active {
+  font-weight: 900;
+  color: white;
+ }
+
+ .navlink:hover {
+  font-weight: 900;
+  color: white;
+}
+
+.navbar-brand-custom {
+  font-size: 18px;
+  display: inline-flex;
+  padding-top: 10px;
+}

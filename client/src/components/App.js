@@ -1,7 +1,5 @@
 import React from "react";
 import NavBar from "./NavBar.js";
-import SideMenu from "./SideMenu.js";
-import ModeBar from "./ModeBar.js";
 import LoginPage from "./LoginPage.js";
 import Recipes from "./Recipes.js";
 import PantryPage from "./PantryPage.js";
@@ -191,21 +189,11 @@ class App extends React.Component {
           title={modeTitle[this.state.mode]}
           mode={this.state.mode}
           changeMode={this.handleChangeMode}
+          user={this.state.user}
           menuOpen={this.state.menuOpen}
           toggleMenuOpen={this.toggleMenuOpen}
-        />}
-        <SideMenu
-          mode={this.state.mode}
-          menuOpen={this.state.menuOpen}
-          changeMode={this.handleChangeMode}
-          user={this.state.user}
           showAbout={this.toggleAbout}
-        />
-        <ModeBar
-          mode={this.state.mode}
-          changeMode={this.handleChangeMode}
-          menuOpen={this.state.menuOpen}
-        />
+        />}
         <ModePage
           menuOpen={this.state.menuOpen}
           mode={this.state.mode}

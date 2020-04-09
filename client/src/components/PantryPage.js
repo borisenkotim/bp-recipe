@@ -4,12 +4,11 @@ class PantryPage extends React.Component {
   render() {
     return (
       <div className="paddedPage center">
-        <h1 align="center">Reviews</h1>
+        <h1 align="center">Grocery Management</h1>
         <center>
-          <h2>This page is under construction.</h2>
-          <i className="fa fa-book reviewsIcon"></i>
+          <h2>This page is under construction. TODO: implement functionality</h2>
+          <i className="fa fa-bacon reviewsIcon"></i>
           <br />
-          <p>&copy; 2020 Your Library. All rights reserved.</p>
         </center>
       </div>
     );

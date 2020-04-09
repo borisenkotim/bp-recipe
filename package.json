@@ -1,0 +1,42 @@
+{
+  "name": "bp-recipe-app-eb",
+  "version": "1.0.0",
+  "description": "Library app with Express.js backend deployed to EB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node server.js --ignore client",
+    "build": "babel server.js --out-file server.compiled.js",
+    "build-client": "cd client && npm run build && cd .."
+  },
+  "keywords": [
+    "React",
+    "Node",
+    "Express",
+    "Elastic",
+    "Beanstalk"
+  ],
+  "author": "The Good Team & Tasty Bites",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "js-md5": "^0.7.3",
+    "md5": "^2.2.1",
+    "mongoose": "^5.9.5",
+    "nodemon": "^2.0.2",
+    "passport": "^0.4.1",
+    "passport-github": "^1.1.0",
+    "passport-google": "^0.3.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {}
+}

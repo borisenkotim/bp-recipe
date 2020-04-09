@@ -43,7 +43,8 @@ const ingredientSchema = new Schema({
 
 const userSchema = new Schema({
   id : {type: String, required: true},
-  password : String,
+  passhash : String,
+  salt: String,
   displayName : {type:String, required:true},
   authStrategy : {type: String, required: true},
   profileImageURL: String,
@@ -53,6 +54,35 @@ const userSchema = new Schema({
   } },
   recipes : [recipeSchema]
 });
+
+import crypto from 'crypto'
+
+// uses 1000 iterations, length of 64, and sha512 function
+let hashOptions = [
+    1000,
+    64,
+    'sha512'
+]
+
+userSchema.virtual('password').
+    get(function() {
+        return this.passhash
+    }).
+    set(function(newPassword) {
+        // create unique salt for the user
+        this.salt = crypto.randomBytes(16).toString('hex');
+
+        // hashing user's password
+        this.passhash = crypto.pbkdf2Sync(newPassword, this.salt, ...hashOptions).toString(`hex`);
+    })
+
+// method for getting the hashed and salted password for users
+userSchema.methods.validatePassword = function(password) {
+    // hashes the password argument, checks against stored password
+    var passhash = crypto.pbkdf2Sync(password, this.salt, ...hashOptions).toString(`hex`);
+    return this.password === passhash; 
+}
+
 
 const User = mongoose.model("User", userSchema);
 
@@ -112,7 +142,7 @@ passport.use(
       try {
         thisUser = await User.findOne({ id: userId });
         if (thisUser) {
-          if (thisUser.password === password) {
+          if (thisUser.validatePassword(password)) {
             return done(null, thisUser);
           } else {
             req.authError =
@@ -374,9 +404,9 @@ app.put('/users/:userId',  async (req, res, next) => {
     } 
   }
   try {
-        let status = await User.updateOne({id: req.params.userId}, 
-                                          {$set: req.body});                            
-        if (status.nModified != 1) { //Should never happen!
+        let user = await User.findOne({id: req.params.userId}) 
+        await user.set(req.body).save()
+        if (!user) { //Should never happen!
           res.status(400).send("User account exists in database but data could not be updated. Password must be different");
         } else {
           res.status(200).send("User data successfully updated.")

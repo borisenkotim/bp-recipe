@@ -37,7 +37,7 @@ const recipeSchema = new Schema({
 const ingredientSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
-  quantity : {type: Float, required: true},
+  quantity : {type: Number, required: true},
   unit : {type: String, required: true}
 });
 
@@ -389,3 +389,147 @@ app.put('/users/:userId',  async (req, res, next) => {
 ///////////////////////////////////////
 //EXPRESS APP ROUTES FOR Recipe Docs //
 ///////////////////////////////////////
+
+//recipes/userId route (GET): Attempts to return all recipes associated with userId
+//GIVEN: 
+//  id of the user whose recipes are sought is passed as route parameter.
+//RETURNS: 
+//  Success: status = 200 with array of recipes as JSON object
+//  Failure: status = 400 with error message
+app.get('/recipes/:userId', async(req, res) => {
+  console.log("in /recipes route (GET) with userId = " + JSON.stringify(req.params.userId));
+  try {
+    let thisUser = await User.findOne({id: req.params.userId});
+    if (!thisUser) {
+      return res.status(400).message("No user account with specified userId was found in database.");
+    } else {
+      return res.status(200).json(JSON.stringify(thisUser.recipes));
+    }
+  } catch (err) {
+    console.log()
+    return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
+  }
+});
+
+
+//recipes/userId/ (POST): Attempts to add new recipe to database
+//GIVEN:
+//  id of the user whose recipe is to be added is passed as 
+//  route parameter
+//  JSON object containing recipe to be added is passed in request body
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  Body object MUST contain only the following fields:
+//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
+app.post('/recipes/:userId', async (req, res, next) => {
+  console.log("in /recipes (POST) route with params = " + 
+              JSON.stringify(req.params) + " and body = " + 
+              JSON.stringify(req.body));
+  if (!req.body.hasOwnProperty("name") || 
+      !req.body.hasOwnProperty("pictureURL") || 
+      !req.body.hasOwnProperty("favorited") ||
+      !req.body.hasOwnProperty("dateAdded") || 
+      !req.body.hasOwnProperty("ingredients") ||
+      !req.body.hasOwnProperty("instructions")) {
+    //Body does not contain correct properties
+    return res.status(400).send("POST request on /recipes formulated incorrectly." +
+      "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited.");
+  }
+  try {
+    let status = await User.update(
+    {id: req.params.userId},
+    {$push: {recipes: req.body}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when adding recipe to database. recipe was not added.");
+    } else {
+      res.status(200).send("recipe successfully added to database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when adding recipe to database: " + err);
+  } 
+});
+
+//recipes/userId/recipeId (PUT): Attempts to update data for an existing recipe
+//GIVEN:
+//  id of the user whose recipe is to be updated is passed as first 
+//  route parameter
+//  id of recipe to be updated is passed as second route parameter
+//  JSON object containing data to be updated is passed in request body
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  recipe id must correspond to a user's recipe. (Use recipes/ GET route to obtain a
+//  list of all of user's recipes, including their unique ids)
+//  Body object may contain only the following 6 fields:
+//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
+app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
+  console.log("in /recipes (PUT) route with params = " + 
+              JSON.stringify(req.params) + " and body = " + 
+              JSON.stringify(req.body));
+  const validProps = ['name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions'];
+  let bodyObj = {...req.body};
+  delete bodyObj._id;
+  for (const bodyProp in bodyObj) {
+    if (!validProps.includes(bodyProp)) {
+      return res.status(400).send("recipes/ PUT request formulated incorrectly." +
+        "Only the following props are allowed in body: " +
+        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions', " +
+        bodyProp + " is not an allowed prop.");
+    } else {
+      bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
+      delete bodyObj[bodyProp];
+    }
+  }
+  try {
+    let status = await User.updateOne(
+      {"id": req.params.userId,
+      "recipes._id": mongoose.Types.ObjectId(req.params.recipeId)}
+      ,{"$set" : bodyObj}
+    );
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when updating recipe in database. recipe was not updated.");
+    } else {
+      res.status(200).send("recipe successfully updated in database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when updating recipe in database: " + err);
+  } 
+});
+
+//recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
+//GIVEN:
+//  id of the user whose recipe is to be deleted is passed as first 
+//  route parameter
+//  id of recipe to be deleted is passed as second route parameter
+//VALID DATA:
+//  user id must correspond to user in Users collection
+//  recipe id must correspond to a unique id of a user's recipe. 
+//  (Use recipes/ GET route to obtain a list of all of user's 
+//  recipes, including their unique ids)
+//RETURNS:
+//  Success: status = 200
+//  Failure: status = 400 with error message
+app.delete('/recipes/:userId/:recipeId', async (req, res, next) => {
+  console.log("in /recipes (DELETE) route with params = " + 
+              JSON.stringify(req.params)); 
+  try {
+    let status = await User.updateOne(
+      {id: req.params.userId},
+      {$pull: {recipes: {_id: mongoose.Types.ObjectId(req.params.recipeId)}}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+    } else {
+      res.status(200).send("recipe successfully deleted from database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when deleting recipe from database: " + err);
+  } 
+});

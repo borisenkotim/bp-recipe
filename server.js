@@ -64,6 +64,7 @@ let hashOptions = [
     'sha512'
 ]
 
+// virtual property password
 userSchema.virtual('password').
     get(function() {
         return this.passhash
@@ -76,7 +77,7 @@ userSchema.virtual('password').
         this.passhash = crypto.pbkdf2Sync(newPassword, this.salt, ...hashOptions).toString(`hex`);
     })
 
-// method for getting the hashed and salted password for users
+// method for validating the hashed / salted password for users
 userSchema.methods.validatePassword = function(password) {
     // hashes the password argument, checks against stored password
     var passhash = crypto.pbkdf2Sync(password, this.salt, ...hashOptions).toString(`hex`);
@@ -405,10 +406,11 @@ app.put('/users/:userId',  async (req, res, next) => {
   }
   try {
         let user = await User.findOne({id: req.params.userId}) 
-        await user.set(req.body).save()
+        user.set(req.body)
         if (!user) { //Should never happen!
           res.status(400).send("User account exists in database but data could not be updated. Password must be different");
         } else {
+          await user.save()
           res.status(200).send("User data successfully updated.")
         }
       } catch (err) {

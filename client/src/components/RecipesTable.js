@@ -120,16 +120,14 @@ class RecipesTable extends React.Component {
     return (
       <div className="paddedPage">
         <center>
-          <h1>Your Library</h1>
+          <h1>Your Recipes</h1>
         </center>
 
         <table className="table table-hover booksTable">
           <thead className="thead-light">
             <tr>
               <th scope="col">Name</th>
-              <th scope="col">Author</th>
-              <th scope="col">Genere</th>
-              <th scope="col">Pages</th>
+              <th scope="col">Cook Time</th>
               <th scope="col">View/Edit</th>
               <th scope="col">Delete</th>
             </tr>

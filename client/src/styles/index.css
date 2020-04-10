@@ -468,14 +468,17 @@ button:focus {
 }
 
 .paddedPage {
-  padding: 10px 0px 30px 0px;
+  padding: 10px 20px 30px 20px;
   height: 100%;
   background-color: white;
   margin-top: 80px;
-}
-
-.reviewsIcon {
-  font-size: 200px;
+  padding-left: 30px;
+  padding-right: 30px;
+  border-left-width: 30px;
+  margin-left: 30px;
+  border-right-width: 30px;
+  margin-right: 30px;
+  background: rgba(255, 255, 255, .85);
 }
 
 .booksTable {
@@ -502,8 +505,9 @@ button:focus {
  }
 
  .navbar-base {
-   background-color: gray;
+   background-color: rgba(128, 128, 128, .91);
    color: white;
+   box-shadow: 0 0 25px 0 black;
  }
 
  .navbar-items {
@@ -513,11 +517,12 @@ button:focus {
 
  .navlink {
    color: white;
-   width: 170px;
+   width: 125px;
  }
 
  .navlink-grocery{
   width: 220px!important;
+  margin-right: 5px;
  }
 
  .navlink-selected {
@@ -536,7 +541,8 @@ button:focus {
 }
 
 .navbar-brand-custom {
-  font-size: 18px;
+  font-size: 20px;
   display: inline-flex;
   padding-top: 10px;
+  font-family: 'Lobster', cursive;
 }

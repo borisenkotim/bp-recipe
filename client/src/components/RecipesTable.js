@@ -10,33 +10,18 @@ class RecipesTable extends React.Component {
     this.state = { confirmDelete: false };
   }
 
-  //editbook -- Triggered when the user clicks the edit button for a given
-  //book. The id param is the unique property that identifies the book.
-  //Set the state variable representing the id of the book to be edited and
-  //then switch to the bookS_EDITbook mode to allow the user to edit the
-  //chosen book.
-  editBook = id => {
+  editRecipe = id => {
     this.props.setEditId(id);
-    this.props.changeMode(AppMode.BOOKS_EDITBOOK);
+    this.props.changeMode(AppMode.RECIPES_EDITRECIPE);
   };
 
-  //confirmDelete -- Triggered when the user clicks on the delete button
-  //associated with a given book. The id param is the unique property that
-  //identifies the book. Set the state variable representing the id
-  //of the item to be deleted and set the confirmDelete state variable to true
-  //to force a re-render with the confirm delete modal dialog box showing.
   confirmDelete = id => {
     this.props.setDeleteId(id);
     this.setState({ confirmDelete: true });
   };
 
-  //doDelete -- Triggered when the user clicks on the "Yes Delete" button in
-  //the confirm delete dialog box. Call upon parent component's deletebook to
-  //to actually performt he deletion of the book currently flagged for
-  //deletion and toggle the confirmDelete state variable to hide the confirm
-  //dialog box.
   doDelete = () => {
-    this.props.deleteBook();
+    this.props.deleteRecipe();
     this.setState({ confirmDelete: false });
   };
 
@@ -47,21 +32,19 @@ class RecipesTable extends React.Component {
     this.setState({ confirmDelete: false });
   };
 
-  // renderConfirmDeleteDialog: presents user with dialog to confirm deletion
-  // of book. Credit: https://getbootstrap.com/docs/4.0/components/modal/
   renderConfirmDeleteDialog = () => {
     return (
       <div className="modal" role="dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <p className="modal-title">Confirm Book Deletion</p>
+            <p className="modal-title">Confirm Recipe Deletion</p>
             <button className="close-modal-button" onClick={this.cancelDelete}>
               &times;
             </button>
           </div>
           <div className="modal-body">
             <center>
-              <h4>Are you sure that you want to delete this book?</h4>
+              <h4>Are you sure that you want to delete this recipe?</h4>
             </center>
             <div className="modal-footer">
               <button
@@ -83,20 +66,16 @@ class RecipesTable extends React.Component {
     );
   };
 
-  //renderTable -- render an HTML table displaying the books logged
-  //by the current user and providing buttons to view/edit and delete each book.
   renderTable = () => {
     let table = [];
-    for (let b = 0; b < this.props.books.length; ++b) {
+    for (let b = 0; b < this.props.recipes.length; ++b) {
       table.push(
         <tr key={b}>
-          <td>{this.props.books[b].bookName}</td>
-          <td>{this.props.books[b].author}</td>
-          <td>{this.props.books[b].genere}</td>
-          <td>{this.props.books[b].pages}</td>
+          <td>{this.props.recipes[b].name}</td>
+          <td>{this.props.recipes[b].cookTime}</td>
           <td>
             <button
-              onClick={this.props.menuOpen ? null : () => this.editBook(b)}
+              onClick={this.props.menuOpen ? null : () => this.editRecipe(b)}
             >
               <span className="fa fa-binoculars"></span>
             </button>
@@ -114,8 +93,6 @@ class RecipesTable extends React.Component {
     return table;
   };
 
-  //render--render the entire books table with header, displaying a "No
-  //books Logged" message in case the table is empty.
   render() {
     return (
       <div className="paddedPage">
@@ -123,7 +100,7 @@ class RecipesTable extends React.Component {
           <h1>Your Recipes</h1>
         </center>
 
-        <table className="table table-hover booksTable">
+        <table className="table table-hover recipesTable">
           <thead className="thead-light">
             <tr>
               <th scope="col">Name</th>
@@ -133,7 +110,7 @@ class RecipesTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(this.props.books).length === 0 ? (
+            {Object.keys(this.props.recipes).length === 0 ? (
               <tr>
                 <td colSpan="6" style={{ fontStyle: "italic" }}>
                   No data recorded

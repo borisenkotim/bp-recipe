@@ -7,26 +7,6 @@ import Navbar from "react-bootstrap/Navbar";
 import {NavDropdown, Form, FormControl, Button} from 'react-bootstrap';
 
 class NavBar extends React.Component {
-  handleMenuBtnClick = () => {
-    if (
-      this.props.mode === AppMode.BOOKS_ADDBOOK ||
-      this.props.mode === AppMode.BOOKS_EDITBOOK
-    ) {
-      this.props.changeMode(AppMode.BOOKS);
-    } else if (this.props.mode != AppMode.LOGIN) {
-      this.props.toggleMenuOpen();
-    }
-  };
-
-  getMenuBtnIcon = () => {
-    if (
-      this.props.mode === AppMode.BOOKS_ADDBOOK ||
-      this.props.mode === AppMode.BOOKS_EDITBOOK
-    )
-      return "fa fa-arrow-left";
-    if (this.props.menuOpen) return "fa fa-times";
-    return "fa fa-bars";
-  };
 
   render() {
     return (

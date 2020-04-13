@@ -30,6 +30,7 @@ const recipeSchema = new Schema({
   pictureURL : String,
   ingredients : {type:Array, required: true},
   directions : {type:Array, required: true},
+  cookTime : {type: Number, required: true},
   favorited: {type: Boolean, required: true, default: false},
   dateAdded: {type: String, required: true}
 });
@@ -114,6 +115,7 @@ passport.use(
       const userId = `${profile.id}@${profile.provider}`;
       //See if document with this unique userId exists in database
       let currentUser = await User.findOne({ id: userId });
+      console.log(profile.photos[0].value);
       if (!currentUser) {
         //Add this user to the database
         currentUser = await new User({
@@ -463,15 +465,16 @@ app.post('/recipes/:userId', async (req, res, next) => {
   if (!req.body.hasOwnProperty("name") || 
       !req.body.hasOwnProperty("pictureURL") || 
       !req.body.hasOwnProperty("favorited") ||
-      !req.body.hasOwnProperty("dateAdded") || 
+      ///!req.body.hasOwnProperty("dateAdded") || 
       !req.body.hasOwnProperty("ingredients") ||
-      !req.body.hasOwnProperty("instructions")) {
+      !req.body.hasOwnProperty("cookTime") ||
+      !req.body.hasOwnProperty("directions")) {
     //Body does not contain correct properties
     return res.status(400).send("POST request on /recipes formulated incorrectly." +
       "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited.");
   }
   try {
-    let status = await User.update(
+    let status = await User.updateOne(
     {id: req.params.userId},
     {$push: {recipes: req.body}});
     if (status.nModified != 1) { //Should never happen!
@@ -504,14 +507,14 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
   console.log("in /recipes (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions'];
+  const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited']; //'dateAdded', ,
   let bodyObj = {...req.body};
   delete bodyObj._id;
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions', " +
+        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', " +
         bodyProp + " is not an allowed prop.");
     } else {
       bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];

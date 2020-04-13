@@ -2,6 +2,8 @@
 
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
+var _crypto = _interopRequireDefault(require("crypto"));
+
 var _passport = _interopRequireDefault(require("passport"));
 
 var _passportLocal = _interopRequireDefault(require("passport-local"));
@@ -56,6 +58,10 @@ var recipeSchema = new Schema({
     type: Array,
     required: true
   },
+  cookTime: {
+    type: Number,
+    required: true
+  },
   favorited: {
     type: Boolean,
     required: true,
@@ -86,7 +92,8 @@ var userSchema = new Schema({
     type: String,
     required: true
   },
-  password: String,
+  passhash: String,
+  salt: String,
   displayName: {
     type: String,
     required: true
@@ -105,6 +112,24 @@ var userSchema = new Schema({
   },
   recipes: [recipeSchema]
 });
+// uses 1000 iterations, length of 64, and sha512 function
+var hashOptions = [1000, 64, 'sha512']; // virtual property password
+
+userSchema.virtual('password').get(function () {
+  return this.passhash;
+}).set(function (newPassword) {
+  // create unique salt for the user
+  this.salt = _crypto["default"].randomBytes(16).toString('hex'); // hashing user's password
+
+  this.passhash = _crypto["default"].pbkdf2Sync.apply(_crypto["default"], [newPassword, this.salt].concat(hashOptions)).toString("hex");
+}); // method for validating the hashed / salted password for users
+
+userSchema.methods.validatePassword = function (password) {
+  // hashes the password argument, checks against stored password
+  var passhash = _crypto["default"].pbkdf2Sync.apply(_crypto["default"], [password, this.salt].concat(hashOptions)).toString("hex");
+
+  return this.password === passhash;
+};
 
 var User = _mongoose["default"].model("User", userSchema); /////////////////
 //PASSPORT SET-UP
@@ -143,13 +168,14 @@ function () {
 
           case 6:
             currentUser = _context.sent;
+            console.log(profile.photos[0].value);
 
             if (currentUser) {
-              _context.next = 11;
+              _context.next = 12;
               break;
             }
 
-            _context.next = 10;
+            _context.next = 11;
             return new User({
               id: userId,
               displayName: profile.displayName,
@@ -157,13 +183,13 @@ function () {
               profileImageUrl: profile.photos[0].value
             }).save();
 
-          case 10:
+          case 11:
             currentUser = _context.sent;
 
-          case 11:
+          case 12:
             return _context.abrupt("return", done(null, currentUser));
 
-          case 12:
+          case 13:
           case "end":
             return _context.stop();
         }
@@ -208,7 +234,7 @@ function () {
               break;
             }
 
-            if (!(thisUser.password === password)) {
+            if (!thisUser.validatePassword(password)) {
               _context2.next = 11;
               break;
             }
@@ -550,7 +576,7 @@ app.post('/users/:userId', /*#__PURE__*/function () {
 
 app.put('/users/:userId', /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res, next) {
-    var validProps, bodyProp, status;
+    var validProps, bodyProp, user;
     return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
@@ -590,36 +616,46 @@ app.put('/users/:userId', /*#__PURE__*/function () {
           case 11:
             _context6.prev = 11;
             _context6.next = 14;
-            return User.updateOne({
+            return User.findOne({
               id: req.params.userId
-            }, {
-              $set: req.body
             });
 
           case 14:
-            status = _context6.sent;
+            user = _context6.sent;
+            user.set(req.body);
 
-            if (status.nModified != 1) {
-              //Should never happen!
-              res.status(400).send("User account exists in database but data could not be updated. Password must be different");
-            } else {
-              res.status(200).send("User data successfully updated.");
+            if (user) {
+              _context6.next = 20;
+              break;
             }
 
-            _context6.next = 21;
+            //Should never happen!
+            res.status(400).send("User account exists in database but data could not be updated. Password must be different");
+            _context6.next = 23;
             break;
 
-          case 18:
-            _context6.prev = 18;
+          case 20:
+            _context6.next = 22;
+            return user.save();
+
+          case 22:
+            res.status(200).send("User data successfully updated.");
+
+          case 23:
+            _context6.next = 28;
+            break;
+
+          case 25:
+            _context6.prev = 25;
             _context6.t2 = _context6["catch"](11);
             res.status(400).send("Unexpected error occurred when updating user data in database: " + _context6.t2);
 
-          case 21:
+          case 28:
           case "end":
             return _context6.stop();
         }
       }
-    }, _callee6, null, [[11, 18]]);
+    }, _callee6, null, [[11, 25]]);
   }));
 
   return function (_x17, _x18, _x19) {
@@ -705,7 +741,8 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
           case 0:
             console.log("in /recipes (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || !req.body.hasOwnProperty("dateAdded") || !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("instructions"))) {
+            if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || ///!req.body.hasOwnProperty("dateAdded") || 
+            !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("cookTime") || !req.body.hasOwnProperty("directions"))) {
               _context8.next = 3;
               break;
             }
@@ -715,7 +752,7 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
           case 3:
             _context8.prev = 3;
             _context8.next = 6;
-            return User.update({
+            return User.updateOne({
               id: req.params.userId
             }, {
               $push: {
@@ -777,7 +814,8 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
         switch (_context9.prev = _context9.next) {
           case 0:
             console.log("in /recipes (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-            validProps = ['name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions'];
+            validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited']; //'dateAdded', ,
+
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
             _context9.t0 = regeneratorRuntime.keys(bodyObj);
@@ -795,7 +833,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions', " + bodyProp + " is not an allowed prop."));
+            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', " + bodyProp + " is not an allowed prop."));
 
           case 11:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];

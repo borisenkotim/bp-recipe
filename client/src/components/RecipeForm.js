@@ -12,6 +12,8 @@ class RecipeForm extends React.Component {
         directions: [],
         cookTime: 0,
         pictureURL: "",
+        dateAdded: "",
+        favorited: false,
         faIcon: "fa fa-save",
         btnLabel: "Save Recipe",
       };

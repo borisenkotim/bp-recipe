@@ -741,8 +741,7 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
           case 0:
             console.log("in /recipes (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
-            if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || ///!req.body.hasOwnProperty("dateAdded") || 
-            !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("cookTime") || !req.body.hasOwnProperty("directions"))) {
+            if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || !req.body.hasOwnProperty("dateAdded") || !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("cookTime") || !req.body.hasOwnProperty("directions"))) {
               _context8.next = 3;
               break;
             }
@@ -814,8 +813,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
         switch (_context9.prev = _context9.next) {
           case 0:
             console.log("in /recipes (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-            validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited']; //'dateAdded', ,
-
+            validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
             _context9.t0 = regeneratorRuntime.keys(bodyObj);

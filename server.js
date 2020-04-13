@@ -465,7 +465,7 @@ app.post('/recipes/:userId', async (req, res, next) => {
   if (!req.body.hasOwnProperty("name") || 
       !req.body.hasOwnProperty("pictureURL") || 
       !req.body.hasOwnProperty("favorited") ||
-      ///!req.body.hasOwnProperty("dateAdded") || 
+      !req.body.hasOwnProperty("dateAdded") || 
       !req.body.hasOwnProperty("ingredients") ||
       !req.body.hasOwnProperty("cookTime") ||
       !req.body.hasOwnProperty("directions")) {
@@ -507,7 +507,7 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
   console.log("in /recipes (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited']; //'dateAdded', ,
+  const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
   let bodyObj = {...req.body};
   delete bodyObj._id;
   for (const bodyProp in bodyObj) {

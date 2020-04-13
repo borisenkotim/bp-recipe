@@ -93,6 +93,14 @@ class Recipes extends React.Component {
   };
 
   addRecipe = async (newData) => {
+    
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, "0");
+    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    var yyyy = today.getFullYear();
+    today = mm + "/" + dd + "/" + yyyy;
+    newData.dateAdded = today;
+
     const url = "/recipes/" + this.props.user.id;
     const res = await fetch(url, {
       headers: {

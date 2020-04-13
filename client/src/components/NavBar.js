@@ -47,7 +47,7 @@ class NavBar extends React.Component {
             <Dropdown as={NavItem}>
               <Dropdown.Toggle as={NavItem}>
                 <img
-                  src={this.props.user.profileImageUrl}
+                  src={this.props.user.profileImageURL}
                   height="40"
                   width="40"
                 />

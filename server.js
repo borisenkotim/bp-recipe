@@ -48,7 +48,7 @@ const userSchema = new Schema({
   salt: String,
   displayName : {type:String, required:true},
   authStrategy : {type: String, required: true},
-  profileImageURL: String,
+  profileImageURL: {type: String, required: true},
   securityQuestion: String, 
   securityAnswer: {type: String, required: function(){
       return this.securityQuestion ? true : false 
@@ -122,7 +122,7 @@ passport.use(
           id: userId,
           displayName: profile.displayName,
           authStrategy: profile.provider,
-          profileImageUrl: profile.photos[0].value
+          profileImageURL: profile.photos[0].value
         }).save();
       }
       return done(null, currentUser);
@@ -338,7 +338,7 @@ app.get('/users/:userId', async(req, res, next) => {
 //VALID DATA:
 //  'password' field MUST be present
 //  The following fields are optional: 
-//  displayName', 'profileImageUrl', 'securityQuestion', 'securityAnswer'
+//  displayName', 'profileImageURL', 'securityQuestion', 'securityAnswer'
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -364,7 +364,7 @@ app.post('/users/:userId',  async (req, res, next) => {
         password: req.body.password,
         displayName: req.params.userId,
         authStrategy: 'local',
-        profileImageUrl: req.body.hasOwnProperty("profileImageUrl") ? req.body.profileImageUrl : `https://www.gravatar.com/avatar/${md5(req.params.userId)}`,
+        profileImageURL: req.body.hasOwnProperty("profileImageURL") ? req.body.profileImageURL : `https://www.gravatar.com/avatar/${md5(req.params.userId)}`,
         securityQuestion: req.body.hasOwnProperty("securityQuestion") ? 
           req.body.securityQuestion : "",
         securityAnswer: req.body.hasOwnProperty("securityAnswer") ? 
@@ -387,7 +387,7 @@ app.post('/users/:userId',  async (req, res, next) => {
 //  Fields and values to be updated are passed as body as JSON object.  
 //VALID DATA:
 //  Only the following fields may be included in the message body:
-//  password, displayName, profileImageUrl, securityQuestion, securityAnswer
+//  password, displayName, profileImageURL, securityQuestion, securityAnswer
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -398,12 +398,12 @@ app.put('/users/:userId',  async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
         "It must contain 'userId' as parameter.");
   }
-  const validProps = ['password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'];
+  const validProps = ['password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'");
+        "'password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'");
     } 
   }
   try {

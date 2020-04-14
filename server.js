@@ -453,7 +453,7 @@ app.get('/recipes/:userId', async(req, res) => {
 //VALID DATA:
 //  user id must correspond to user in Users collection
 //  Body object MUST contain only the following fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message
@@ -470,7 +470,7 @@ app.post('/recipes/:userId', async (req, res, next) => {
       !req.body.hasOwnProperty("directions")) {
     //Body does not contain correct properties
     return res.status(400).send("POST request on /recipes formulated incorrectly." +
-      "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited.");
+      "Body must contain all 6 required fields: name, pictureURL, ingredients, directions, dateAdded, favorited.");
   }
   try {
     let status = await User.updateOne(
@@ -498,7 +498,7 @@ app.post('/recipes/:userId', async (req, res, next) => {
 //  recipe id must correspond to a user's recipe. (Use recipes/ GET route to obtain a
 //  list of all of user's recipes, including their unique ids)
 //  Body object may contain only the following 6 fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message

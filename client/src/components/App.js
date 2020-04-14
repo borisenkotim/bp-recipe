@@ -17,6 +17,7 @@ modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.RECIPES] = Recipes;
 modeToPage[AppMode.RECIPES_ADDRECIPE] = Recipes;
 modeToPage[AppMode.RECIPES_EDITRECIPE] = Recipes;
+modeToPage[AppMode.RECIPES_VIEWRECIPE] = Recipes;
 modeToPage[AppMode.PANTRY] = PantryPage;
 
 class App extends React.Component {

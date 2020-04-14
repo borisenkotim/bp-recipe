@@ -54,42 +54,42 @@ class RecipeForm extends React.Component {
 
   addIngredient(e) {
     e.preventDefault();
-    let ingredientArray = [];
-    ingredientArray.name = "";
-    ingredientArray.quantity = "";
-    ingredientArray.unit = "";
-    this.setState({ ingredients: [...this.state.ingredients, ingredientArray] });
-
+    let ingredientObj = {};
+    ingredientObj.name = "";
+    ingredientObj.quantity = 0;
+    ingredientObj.unit = "";
+    this.setState({
+      ingredients: [...this.state.ingredients, ingredientObj],
+    });
   }
 
-  handleChange2(e, index) {
+  handleChangeDirection(e, index) {
     this.state.directions[index] = e.target.value;
     this.setState({ directions: this.state.directions });
-    
   }
 
-  handleChange31(e, index) {
+  handleChangeIngredientName(e, index) {
     this.state.ingredients[index].name = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
-  handleChange32(e, index) {
-    this.state.ingredients[index].quantity = e.target.value;
+  handleChangeIngredientQuantity(e, index) {
+    this.state.ingredients[index].quantity = parseFloat(e.target.value);
     this.setState({ ingredients: this.state.ingredients });
   }
 
-  handleChange33(e, index) {
+  handleChangeIngredientUnit(e, index) {
     this.state.ingredients[index].unit = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
-  handleRemove(e, index) {
+  handleRemoveDirection(e, index) {
     e.preventDefault();
     this.state.directions.splice(index, 1);
     this.setState({ directions: this.state.directions });
   }
 
-  handleRemove2(e, index) {
+  handleRemoveIngredient(e, index) {
     e.preventDefault();
     this.state.ingredients.splice(index, 1);
     this.setState({ ingredients: this.state.ingredients });
@@ -136,27 +136,33 @@ class RecipeForm extends React.Component {
                         <input
                           placeholder="ingredient name"
                           className="ingredient-input ingredient-name"
-                          onChange={(e) => this.handleChange31(e, index)}
+                          onChange={(e) =>
+                            this.handleChangeIngredientName(e, index)
+                          }
                           value={step.name}
                         />
                         <input
                           placeholder="quantity"
                           type="number"
                           className="ingredient-input"
-                          onChange={(e) => this.handleChange32(e, index)}
+                          onChange={(e) =>
+                            this.handleChangeIngredientQuantity(e, index)
+                          }
                           value={step.quantity}
                         />
                         <input
                           placeholder="unit"
                           className="ingredient-input"
-                          onChange={(e) => this.handleChange33(e, index)}
+                          onChange={(e) =>
+                            this.handleChangeIngredientUnit(e, index)
+                          }
                           value={step.unit}
                         />
                         &nbsp;&nbsp;
                         <button
                           className="loginBtn btn
                     btn-block btncolortheme"
-                          onClick={(e) => this.handleRemove2(e, index)}
+                          onClick={(e) => this.handleRemoveIngredient(e, index)}
                         >
                           X
                         </button>
@@ -181,14 +187,14 @@ class RecipeForm extends React.Component {
                       <div className="direction-item">
                         {index + 1}.&nbsp;
                         <input
-                          onChange={(e) => this.handleChange2(e, index)}
+                          onChange={(e) => this.handleChangeDirection(e, index)}
                           value={step}
                         />
                         &nbsp;&nbsp;
                         <button
                           className="loginBtn btn
                     btn-block btncolortheme"
-                          onClick={(e) => this.handleRemove(e, index)}
+                          onClick={(e) => this.handleRemoveDirection(e, index)}
                         >
                           X
                         </button>

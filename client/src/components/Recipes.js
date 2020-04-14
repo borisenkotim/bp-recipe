@@ -100,11 +100,7 @@ class Recipes extends React.Component {
     var yyyy = today.getFullYear();
     today = mm + "/" + dd + "/" + yyyy;
     newData.dateAdded = today;
-
-    console.log('Harry look here');
-    console.log('newData');
-    console.log(JSON.stringify(newData));
-
+    
     const url = "/recipes/" + this.props.user.id;
     const res = await fetch(url, {
       headers: {

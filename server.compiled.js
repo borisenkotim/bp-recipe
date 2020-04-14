@@ -49,7 +49,7 @@ var ingredientSchema = new Schema({
     type: String,
     required: true
   },
-  //pictureURL : String,
+  pictureURL: String,
   quantity: {
     type: Number,
     required: true
@@ -65,7 +65,7 @@ var recipeSchema = new Schema({
     required: true
   },
   pictureURL: String,
-  ingredients: [Array],
+  ingredients: [ingredientSchema],
   directions: {
     type: Array,
     required: true

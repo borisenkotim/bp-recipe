@@ -26,7 +26,7 @@ const Schema = mongoose.Schema;
 
 const ingredientSchema = new Schema({
   name : {type: String, required: true},
-  //pictureURL : String,
+  pictureURL : String,
   quantity : {type: Number, required: true},
   unit : {type: String, required: true}
 });
@@ -34,14 +34,12 @@ const ingredientSchema = new Schema({
 const recipeSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
-  ingredients : [[String, Number, String]],
+  ingredients : [ingredientSchema],
   directions : {type:Array, required: true},
   cookTime : {type: Number, required: true},
   favorited: {type: Boolean, required: true, default: false},
   dateAdded: {type: String, required: true}
 });
-
-
 
 const userSchema = new Schema({
   id : {type: String, required: true},

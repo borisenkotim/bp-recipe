@@ -44,16 +44,28 @@ _mongoose["default"].connect(connectStr, {
 
 
 var Schema = _mongoose["default"].Schema;
+var ingredientSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  //pictureURL : String,
+  quantity: {
+    type: Number,
+    required: true
+  },
+  unit: {
+    type: String,
+    required: true
+  }
+});
 var recipeSchema = new Schema({
   name: {
     type: String,
     required: true
   },
   pictureURL: String,
-  ingredients: {
-    type: Array,
-    required: true
-  },
+  ingredients: [Array],
   directions: {
     type: Array,
     required: true
@@ -68,21 +80,6 @@ var recipeSchema = new Schema({
     "default": false
   },
   dateAdded: {
-    type: String,
-    required: true
-  }
-});
-var ingredientSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  pictureURL: String,
-  quantity: {
-    type: Number,
-    required: true
-  },
-  unit: {
     type: String,
     required: true
   }
@@ -102,7 +99,10 @@ var userSchema = new Schema({
     type: String,
     required: true
   },
-  profileImageURL: String,
+  profileImageURL: {
+    type: String,
+    required: true
+  },
   securityQuestion: String,
   securityAnswer: {
     type: String,
@@ -180,7 +180,7 @@ function () {
               id: userId,
               displayName: profile.displayName,
               authStrategy: profile.provider,
-              profileImageUrl: profile.photos[0].value
+              profileImageURL: profile.photos[0].value
             }).save();
 
           case 11:
@@ -482,7 +482,7 @@ app.get('/users/:userId', /*#__PURE__*/function () {
 //VALID DATA:
 //  'password' field MUST be present
 //  The following fields are optional: 
-//  displayName', 'profileImageUrl', 'securityQuestion', 'securityAnswer'
+//  displayName', 'profileImageURL', 'securityQuestion', 'securityAnswer'
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -532,7 +532,7 @@ app.post('/users/:userId', /*#__PURE__*/function () {
               password: req.body.password,
               displayName: req.params.userId,
               authStrategy: 'local',
-              profileImageUrl: req.body.hasOwnProperty("profileImageUrl") ? req.body.profileImageUrl : "https://www.gravatar.com/avatar/".concat((0, _md["default"])(req.params.userId)),
+              profileImageURL: req.body.hasOwnProperty("profileImageURL") ? req.body.profileImageURL : "https://www.gravatar.com/avatar/".concat((0, _md["default"])(req.params.userId)),
               securityQuestion: req.body.hasOwnProperty("securityQuestion") ? req.body.securityQuestion : "",
               securityAnswer: req.body.hasOwnProperty("securityAnswer") ? req.body.securityAnswer : "",
               recipes: []
@@ -569,7 +569,7 @@ app.post('/users/:userId', /*#__PURE__*/function () {
 //  Fields and values to be updated are passed as body as JSON object.  
 //VALID DATA:
 //  Only the following fields may be included in the message body:
-//  password, displayName, profileImageUrl, securityQuestion, securityAnswer
+//  password, displayName, profileImageURL, securityQuestion, securityAnswer
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -591,7 +591,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
             return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "It must contain 'userId' as parameter."));
 
           case 3:
-            validProps = ['password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'];
+            validProps = ['password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
             _context6.t0 = regeneratorRuntime.keys(req.body);
 
           case 5:
@@ -607,7 +607,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'"));
+            return _context6.abrupt("return", res.status(400).send("users/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'"));
 
           case 9:
             _context6.next = 5;

@@ -26,7 +26,6 @@ class RecipeForm extends React.Component {
 
   handleChange = (event) => {
     const name = event.target.name;
-    console.log(event.target.select);
     this.setState({ [name]: event.target.value });
   };
 
@@ -55,16 +54,32 @@ class RecipeForm extends React.Component {
 
   addIngredient(e) {
     e.preventDefault();
-    this.setState({ ingredients: [...this.state.ingredients, ""] });
+    let ingredientArray = [];
+    ingredientArray.name = "";
+    ingredientArray.quantity = "";
+    ingredientArray.unit = "";
+    this.setState({ ingredients: [...this.state.ingredients, ingredientArray] });
+
   }
 
   handleChange2(e, index) {
     this.state.directions[index] = e.target.value;
     this.setState({ directions: this.state.directions });
+    
   }
 
-  handleChange3(e, index) {
-    this.state.ingredients[index] = e.target.value;
+  handleChange31(e, index) {
+    this.state.ingredients[index].name = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChange32(e, index) {
+    this.state.ingredients[index].quantity = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChange33(e, index) {
+    this.state.ingredients[index].unit = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
@@ -119,8 +134,23 @@ class RecipeForm extends React.Component {
                     <div key={index}>
                       <div className="direction-item">
                         <input
-                          onChange={(e) => this.handleChange3(e, index)}
-                          value={step}
+                          placeholder="ingredient name"
+                          className="ingredient-input ingredient-name"
+                          onChange={(e) => this.handleChange31(e, index)}
+                          value={step.name}
+                        />
+                        <input
+                          placeholder="quantity"
+                          type="number"
+                          className="ingredient-input"
+                          onChange={(e) => this.handleChange32(e, index)}
+                          value={step.quantity}
+                        />
+                        <input
+                          placeholder="unit"
+                          className="ingredient-input"
+                          onChange={(e) => this.handleChange33(e, index)}
+                          value={step.unit}
                         />
                         &nbsp;&nbsp;
                         <button
@@ -186,7 +216,7 @@ class RecipeForm extends React.Component {
                 onChange={this.handleChange}
               />
             </label>
-            <p/>
+            <p />
             <button
               type="submit"
               onClick={this.props.handleChange}

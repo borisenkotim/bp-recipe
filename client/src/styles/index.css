@@ -585,3 +585,12 @@ button:focus {
 .pictureURL-form {
   width: 300px;
 }
+
+.ingredient-input {
+  margin-right: 15px;
+  width: 70px;
+}
+
+.ingredient-name.ingredient-input {
+  width: 135px;
+}

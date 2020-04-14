@@ -24,23 +24,24 @@ mongoose
 //database.
 const Schema = mongoose.Schema;
 
-const recipeSchema = new Schema({
+const ingredientSchema = new Schema({
+  name : {type: String, required: true},
+  //pictureURL : String,
+  quantity : {type: Number, required: true},
+  unit : {type: String, required: true}
+});
 
+const recipeSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
-  ingredients : {type:Array, required: true},
+  ingredients : [[String, Number, String]],
   directions : {type:Array, required: true},
   cookTime : {type: Number, required: true},
   favorited: {type: Boolean, required: true, default: false},
   dateAdded: {type: String, required: true}
 });
 
-const ingredientSchema = new Schema({
-  name : {type: String, required: true},
-  pictureURL : String,
-  quantity : {type: Number, required: true},
-  unit : {type: String, required: true}
-});
+
 
 const userSchema = new Schema({
   id : {type: String, required: true},

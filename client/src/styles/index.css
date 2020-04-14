@@ -594,3 +594,39 @@ button:focus {
 .ingredient-name.ingredient-input {
   width: 135px;
 }
+
+/*NOTE: must use decimals with opacity prop. If you use percents they will not work in build and will not display anything*/
+.unfavorited {
+  opacity: 0.5;
+}
+
+.unfavorited:hover {
+  opacity: 1;
+}
+
+.favorited {
+  opacity: 1;
+}
+
+.favorited:hover {
+  opacity: 0.5;
+}
+
+.recipeContent {
+  padding: 20px;
+}
+
+.recipeContentTitleInfo {
+  display: block;
+  float: left;
+  padding: 10px;
+}
+
+.recipeContentListInfo {
+  clear: left;
+  padding-top: 10px;
+}
+
+.recipeContentTitleInfoSubInfo {
+  font-size: large;
+}

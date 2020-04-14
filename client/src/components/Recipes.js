@@ -3,6 +3,7 @@ import FloatingButton from "./FloatingButton.js";
 import AppMode from "../AppMode.js";
 import RecipesTable from "./RecipesTable.js";
 import RecipeForm from "./RecipeForm.js";
+import ViewRecipePage from "./ViewRecipePage.js"
 
 class Recipes extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class Recipes extends React.Component {
       recipes: [],
       deleteId: "",
       editId: "",
+      viewId: ""
     };
   }
 
@@ -27,7 +29,7 @@ class Recipes extends React.Component {
     let body = await res.json();
     this.setState(
       { recipes: JSON.parse(body) },
-      this.props.changeMode(AppMode.RECIPES)
+      this.props.changeMode(this.props.mode === AppMode.RECIPES_VIEWRECIPE ? AppMode.RECIPES_VIEWRECIPE : AppMode.RECIPES)
     );
   };
 
@@ -47,12 +49,16 @@ class Recipes extends React.Component {
     this.setState({ editId: val });
   };
 
-  editRecipe = async (newData) => {
+  setViewId = (val) => {
+    this.setState({viewId: val});
+  }
+
+  editRecipe = async (newData, editId=this.state.editId) => {
     let url =
       "/recipes/" +
       this.props.user.id +
       "/" +
-      this.state.recipes[this.state.editId]._id;
+      this.state.recipes[editId]._id;
     let res = await fetch(url, {
       headers: {
         Accept: "application/json",
@@ -131,6 +137,7 @@ class Recipes extends React.Component {
               recipes={this.state.recipes}
               setEditId={this.setEditId}
               setDeleteId={this.setDeleteId}
+              setViewId={this.setViewId}
               deleteRecipe={this.deleteRecipe}
               changeMode={this.props.changeMode}
               menuOpen={this.props.menuOpen}
@@ -155,6 +162,17 @@ class Recipes extends React.Component {
             mode={this.props.mode}
             startData={this.state.recipes[this.state.editId]}
             saveRecipe={this.editRecipe}
+          />
+        );
+      case AppMode.RECIPES_VIEWRECIPE:
+        return (
+          <ViewRecipePage
+            mode={this.props.mode}
+            id={this.state.viewId}
+            data={this.state.recipes[this.state.viewId]}
+            changeMode={this.props.changeMode}
+            setEditId={this.setEditId}
+            editRecipe={this.editRecipe}
           />
         );
     }

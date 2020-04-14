@@ -10,6 +10,7 @@ const AppMode = {
     RECIPES: "RecipeMode",
     RECIPES_ADDRECIPE: "RecipeMode-AddRecipe",
     RECIPES_EDITRECIPE: "RecipeMode-EditRecipe",
+    RECIPES_VIEWRECIPE: "RecipeMode-ViewRecipe",
     PANTRY: "PantryMode"
 };
 

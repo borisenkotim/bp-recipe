@@ -32,6 +32,11 @@ class RecipesTable extends React.Component {
     this.setState({ confirmDelete: false });
   };
 
+  viewRecipe = id => {
+    this.props.setViewId(id);
+    this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
+  }
+
   renderConfirmDeleteDialog = () => {
     return (
       <div className="modal" role="dialog">
@@ -77,7 +82,7 @@ class RecipesTable extends React.Component {
             <button
               onClick={this.props.menuOpen ? null : () => this.editRecipe(b)}
             >
-              <span className="fa fa-binoculars"></span>
+              <span className="fa fa-edit"></span>
             </button>
           </td>
           <td>
@@ -85,6 +90,13 @@ class RecipesTable extends React.Component {
               onClick={this.props.menuOpen ? null : () => this.confirmDelete(b)}
             >
               <span className="fa fa-trash"></span>
+            </button>
+          </td>
+          <td>
+            <button
+              onClick={this.props.menuOpen ? null: () => this.viewRecipe(b)}
+            >
+              <span className="fa fa-binoculars"></span>
             </button>
           </td>
         </tr>
@@ -107,12 +119,13 @@ class RecipesTable extends React.Component {
               <th scope="col">Cook Time</th>
               <th scope="col">View/Edit</th>
               <th scope="col">Delete</th>
+              <th scope="col">View</th>
             </tr>
           </thead>
           <tbody>
             {Object.keys(this.props.recipes).length === 0 ? (
               <tr>
-                <td colSpan="6" style={{ fontStyle: "italic" }}>
+                <td colSpan="7" style={{ fontStyle: "italic" }}>
                   No data recorded
                 </td>
               </tr>

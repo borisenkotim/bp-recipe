@@ -29,7 +29,7 @@ class Recipes extends React.Component {
     let body = await res.json();
     this.setState(
       { recipes: JSON.parse(body) },
-      this.props.changeMode(AppMode.RECIPES)
+      this.props.changeMode(this.props.mode === AppMode.RECIPES_VIEWRECIPE ? AppMode.RECIPES_VIEWRECIPE : AppMode.RECIPES)
     );
   };
 
@@ -53,12 +53,12 @@ class Recipes extends React.Component {
     this.setState({viewId: val});
   }
 
-  editRecipe = async (newData) => {
+  editRecipe = async (newData, editId=this.state.editId) => {
     let url =
       "/recipes/" +
       this.props.user.id +
       "/" +
-      this.state.recipes[this.state.editId]._id;
+      this.state.recipes[editId]._id;
     let res = await fetch(url, {
       headers: {
         Accept: "application/json",
@@ -165,12 +165,14 @@ class Recipes extends React.Component {
           />
         );
       case AppMode.RECIPES_VIEWRECIPE:
-        console.log(this.state.recipes[this.state.viewId])
         return (
           <ViewRecipePage
             mode={this.props.mode}
+            id={this.state.viewId}
             data={this.state.recipes[this.state.viewId]}
             changeMode={this.props.changeMode}
+            setEditId={this.setEditId}
+            editRecipe={this.editRecipe}
           />
         );
     }

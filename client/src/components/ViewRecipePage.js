@@ -7,13 +7,9 @@ class ViewRecipePage extends React.Component {
       super(props);
       //confirmDelete state variable determines whether to show or hide the
       //confirm delete dialog box
-      this.state = { confirmDelete: false };
+      this.state = this.props.data
+      this.state.confirmDelete = false
     }
-  
-    editRecipe = id => {
-      this.props.setEditId(id);
-      this.props.changeMode(AppMode.RECIPES_EDITRECIPE);
-    };
   
     confirmDelete = id => {
       this.props.setDeleteId(id);
@@ -32,6 +28,22 @@ class ViewRecipePage extends React.Component {
       this.setState({ confirmDelete: false });
     };
   
+    //Update the favorited field in database
+    favoriteClicked = () => {
+      var newData = this.state;
+      if(this.state.favorited){
+        this.setState({favorited: false})
+        newData.favorited = false;
+      }else{
+        this.setState({favorited: true});
+        newData.favorited = true;
+      }
+
+      delete newData.confirmDelete;
+      this.props.editRecipe(newData, this.props.id);
+      this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
+    }
+
     renderConfirmDeleteDialog = () => {
       return (
         <div className="modal" role="dialog">
@@ -66,87 +78,50 @@ class ViewRecipePage extends React.Component {
       );
     };
   
-    renderTable = () => {
-      let table = [];
-      for (let b = 0; b < this.props.recipes.length; ++b) {
-        table.push(
-          <tr key={b}>
-            <td>{this.props.recipes[b].name}</td>
-            <td>{this.props.recipes[b].cookTime}</td>
-            <td>
-              <button
-                onClick={this.props.menuOpen ? null : () => this.editRecipe(b)}
-              >
-                <span className="fa fa-binoculars"></span>
-              </button>
-            </td>
-            <td>
-              <button
-                onClick={this.props.menuOpen ? null : () => this.confirmDelete(b)}
-              >
-                <span className="fa fa-trash"></span>
-              </button>
-            </td>
-          </tr>
-        );
-      }
-      return table;
-    };
-  
     renderRecipeImage = () => {
         return (
             <img
-                src={this.props.data.pictureURL}
+                src={this.state.pictureURL}
                 height="200"
                 style={{float: "left"}}
+                alt="No Image Found"
             />)
     }
 
     renderIngredients = () => {
         let ingredients = []
-        if(!this.props.data.ingredients[0].name){
-            //if the data in the ingredient are raw strings
-            for(let i = 0; i < this.props.data.ingredients.length; ++i){
+        //if the data are ingredients objects
+        for(let i = 0; i < this.state.ingredients.length; ++i){
+            if(this.state.ingredients[i].pictureURL){
                 ingredients.push(
                     <tr key={i}>
-                        <td>{this.props.data.ingredients[i]}</td>
+                        <td><img src={this.state.ingredients[i].pictureURL} height="40" width="40"/></td>
+                        <td>{this.state.ingredients[i].name}</td>
+                        <td>{this.state.ingredients[i].quantity} {this.state.ingredients[i].unit}</td>
+
+                    </tr>
+                )
+            }else{
+                ingredients.push(
+                    <tr key={i}>
+                        <td><i>No Image</i></td>
+                        <td>{this.state.ingredients[i].name}</td>
+                        <td>{this.state.ingredients[i].quantity} {this.state.ingredients[i].unit}</td>
                     </tr>
                 )
             }
-        }else{
-            //if the data are ingredients objects
-            for(let i = 0; i < this.props.data.ingredients.length; ++i){
-                if(this.props.data.ingredients[i].pictureURL){
-                    ingredients.push(
-                        <tr key={i}>
-                            <td>{this.props.data.ingredients[i].name}</td>
-                            <td><img src={this.props.data.ingredients[i].pictureURL} height="40" width="40"/></td>
-                            <td>{this.props.data.ingredients[i].quantity} {this.props.data.ingredients[i].unit}</td>
-    
-                        </tr>
-                    )
-                }else{
-                    ingredients.push(
-                        <tr key={i}>
-                            <td>{this.props.data.ingredients[i].name}</td>
-                            <td>No Image</td>
-                            <td>{this.props.data.ingredients[i].quantity} {this.props.data.ingredients[i].unit}</td>
-                        </tr>
-                    )
-                }
-            }
         }
-
+        
         return ingredients;
     }
 
     renderDirections = () => {
         let directions = []
-        for(let i = 0; i < this.props.data.directions.length; ++i){
+        for(let i = 0; i < this.state.directions.length; ++i){
             directions.push(
                 <tr key={i}>
                     <td>{i+1}</td>
-                    <td>{this.props.data.directions[i]}</td>
+                    <td>{this.state.directions[i]}</td>
                 </tr>
             )
         }
@@ -156,29 +131,39 @@ class ViewRecipePage extends React.Component {
     render() {
         return (
             <div className="paddedPage">
-                {this.props.data.pictureURL ? this.renderRecipeImage() : null}  
-                <div className="titleInfo" style={{display: "inline;", float: "left;"}}>
-                    <h1>{this.props.data.name}</h1>
-                    {this.props.data.favorited ? (<span className="fa fa-star" style={{float: "left"}}></span>) : null}
-                    <h3>Added: {this.props.data.dateAdded}</h3>
-                    <h3>Cook Time: {this.props.data.cookTime} minutes</h3>
-                </div>
+                <div className="recipeContent">
+                  <div>
+                    {this.state.pictureURL ? this.renderRecipeImage() : null}  
+                    <div className="recipeContentTitleInfo">
+                        <div>
+                            <h1>{this.state.name} <span className={"fa fa-star " + (this.state.favorited ? "favorited" : "unfavorited")} onClick={this.favoriteClicked}></span></h1>                            
+                        </div>
+                        <h3 className="recipeContentTitleInfoSubInfo">Added: {this.state.dateAdded}</h3>
+                        <h3 className="recipeContentTitleInfoSubInfo">Cook Time: {this.state.cookTime} minutes</h3>
+                    </div>
+                  </div>
 
+                  <div className="recipeContentListInfo">
+                    <h4>Ingredients</h4>
+                    <table className="table table-hover ingredientsTable">
+                        <tbody>
+                            {this.renderIngredients()}
+                        </tbody>
+                    </table>
 
-                <table className="table table-hover ingredientsTable">
-                    <tbody>
-                        {this.renderIngredients()}
-                    </tbody>
-                </table>
-
-                <table className="table table-hover directionsTable">
-                    <tbody>
-                        {this.renderDirections()}
-                    </tbody>
-                </table>
-                {this.state.confirmDelete ? this.renderConfirmDeleteDialog() : null}
-                
+                    <h4>Directions</h4>
+                    <table className="table table-hover directionsTable">
+                        <tbody>
+                            {this.renderDirections()}
+                        </tbody>
+                    </table>
+                  </div>
+                  
+                  {this.state.confirmDelete ? this.renderConfirmDeleteDialog() : null}
+                  
+              </div>
             </div>
+                
         );
     }
 }

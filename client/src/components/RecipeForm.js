@@ -107,7 +107,7 @@ class RecipeForm extends React.Component {
                 value={this.state.name}
                 name="name"
                 id="name"
-                class="form-control form-center "
+                className="form-control form-center "
                 type="text"
                 required
                 onChange={this.handleChange}
@@ -120,7 +120,7 @@ class RecipeForm extends React.Component {
                 value={this.state.cookTime}
                 name="cookTime"
                 id="cookTime"
-                class="form-control form-center"
+                className="form-control form-center"
                 required
                 onChange={this.handleChange}
               />
@@ -217,7 +217,7 @@ class RecipeForm extends React.Component {
                 value={this.state.pictureURL}
                 name="pictureURL"
                 id="pictureURL"
-                class="form-control form-center"
+                className="form-control form-center"
                 required
                 onChange={this.handleChange}
               />

@@ -16,7 +16,7 @@ class Recipes extends React.Component {
     };
   }
 
-  fetchRecipes = async () => {
+  fetchRecipes = async (redirectPage=AppMode.RECIPES) => {
     let url = "/recipes/" + this.props.user.id;
     let res = await fetch(url, { method: "GET" });
     if (res.status != 200) {
@@ -29,7 +29,7 @@ class Recipes extends React.Component {
     let body = await res.json();
     this.setState(
       { recipes: JSON.parse(body) },
-      this.props.changeMode(this.props.mode === AppMode.RECIPES_VIEWRECIPE ? AppMode.RECIPES_VIEWRECIPE : AppMode.RECIPES)
+      this.props.changeMode(redirectPage)
     );
   };
 
@@ -53,7 +53,7 @@ class Recipes extends React.Component {
     this.setState({viewId: val});
   }
 
-  editRecipe = async (newData, editId=this.state.editId) => {
+  editRecipe = async (newData, editId=this.state.editId, redirectPage=AppMode.RECIPES) => {
     let url =
       "/recipes/" +
       this.props.user.id +
@@ -75,16 +75,16 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes();
+      this.fetchRecipes(redirectPage);
     }
   };
 
-  deleteRecipe = async () => {
+  deleteRecipe = async (deleteId=this.state.deleteId, redirectPage=AppMode.RECIPES) => {
     let url =
       "/recipes/" +
       this.props.user.id +
       "/" +
-      this.state.recipes[this.state.deleteId]._id;
+      this.state.recipes[deleteId]._id;
     let res = await fetch(url, { method: "DELETE" });
     let msg = await res.text();
     if (res.status != 200) {
@@ -94,7 +94,7 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes();
+      this.fetchRecipes(redirectPage);
     }
   };
 
@@ -171,8 +171,8 @@ class Recipes extends React.Component {
             id={this.state.viewId}
             data={this.state.recipes[this.state.viewId]}
             changeMode={this.props.changeMode}
-            setEditId={this.setEditId}
             editRecipe={this.editRecipe}
+            deleteRecipe={this.deleteRecipe}
           />
         );
     }

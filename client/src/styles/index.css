@@ -630,3 +630,11 @@ button:focus {
 .recipeContentTitleInfoSubInfo {
   font-size: large;
 }
+
+.recipeContentDeleteBtn {
+  float: right;
+}
+
+.recipeContentDeleteBtn:hover {
+  opacity: 0.5;
+}

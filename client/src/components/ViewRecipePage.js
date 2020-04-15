@@ -11,20 +11,18 @@ class ViewRecipePage extends React.Component {
       this.state.confirmDelete = false
     }
   
-    confirmDelete = id => {
-      this.props.setDeleteId(id);
+    confirmDelete = () => {
       this.setState({ confirmDelete: true });
     };
   
     doDelete = () => {
-      this.props.deleteRecipe();
+      this.props.deleteRecipe(this.props.id);
       this.setState({ confirmDelete: false });
     };
   
     //cancelDelete -- Triggered when the user chooses to cancel a delete
     //operation. We just need to update state to toggle confirmDelete to false
     cancelDelete = () => {
-      this.props.setDeleteId("");
       this.setState({ confirmDelete: false });
     };
   
@@ -40,8 +38,7 @@ class ViewRecipePage extends React.Component {
       }
 
       delete newData.confirmDelete;
-      this.props.editRecipe(newData, this.props.id);
-      this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
+      this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
     }
 
     renderConfirmDeleteDialog = () => {
@@ -95,16 +92,14 @@ class ViewRecipePage extends React.Component {
             if(this.state.ingredients[i].pictureURL){
                 ingredients.push(
                     <tr key={i}>
-                        <td><img src={this.state.ingredients[i].pictureURL} height="40" width="40"/></td>
                         <td>{this.state.ingredients[i].name}</td>
                         <td>{this.state.ingredients[i].quantity} {this.state.ingredients[i].unit}</td>
-
+                        <td><img src={this.state.ingredients[i].pictureURL} height="40" width="40"/></td>
                     </tr>
                 )
             }else{
                 ingredients.push(
                     <tr key={i}>
-                        <td><i>No Image</i></td>
                         <td>{this.state.ingredients[i].name}</td>
                         <td>{this.state.ingredients[i].quantity} {this.state.ingredients[i].unit}</td>
                     </tr>
@@ -141,6 +136,7 @@ class ViewRecipePage extends React.Component {
                         <h3 className="recipeContentTitleInfoSubInfo">Added: {this.state.dateAdded}</h3>
                         <h3 className="recipeContentTitleInfoSubInfo">Cook Time: {this.state.cookTime} minutes</h3>
                     </div>
+                    <h1><span className="recipeContentDeleteBtn fa fa-trash" onClick={this.confirmDelete}></span></h1>
                   </div>
 
                   <div className="recipeContentListInfo">

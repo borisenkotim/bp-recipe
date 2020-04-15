@@ -42,6 +42,7 @@ class RecipeForm extends React.Component {
     let recipeData = this.state;
     delete recipeData.faIcon;
     delete recipeData.btnLabel;
+    delete recipeData.confirmDelete;
     //1 second delay to show spinning icon
     setTimeout(this.props.saveRecipe, 1000, recipeData);
     event.preventDefault();

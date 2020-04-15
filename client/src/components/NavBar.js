@@ -9,14 +9,14 @@ import {NavDropdown, Form, FormControl, Button} from 'react-bootstrap';
 class NavBar extends React.Component {
 
   render() {
-    var addOrEditMode = this.props.mode === AppMode.RECIPES_ADDRECIPE || this.props.mode === AppMode.RECIPES_EDITRECIPE
+    var addOrEditMode = this.props.mode === AppMode.RECIPES_ADDRECIPE || this.props.mode === AppMode.RECIPES_EDITRECIPE || this.props.mode === AppMode.RECIPES_VIEWRECIPE
 
     return (
       <Nav className="navbar-base">
         &nbsp;
         <Nav.Item className="navbar-brand-custom">
             <span onClick={addOrEditMode ? () => this.props.changeMode(AppMode.RECIPES) : null}
-            className={addOrEditMode ? "modebar-icon fa fa-arrow-left" : "modebar-icon fa fa-th-list"}
+            className={addOrEditMode ? "modebar-icon fa fa-arrow-left favorited" : "modebar-icon fa fa-th-list"}
             disabled={!addOrEditMode} style={{marginLeft: "8px", marginTop:"3px"}}/>
           &nbsp;&nbsp;&nbsp;My Recipe App
         </Nav.Item>

@@ -92,7 +92,7 @@ const User = mongoose.model("User", userSchema);
 /////////////////
 
 const LOCAL_PORT = 4001;
-const DEPLOY_URL = "http://localhost:4001";
+const DEPLOY_URL = "https://recipe.bfapp.org";
 import passport from "passport";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;

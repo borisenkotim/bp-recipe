@@ -137,7 +137,7 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 
 
 var LOCAL_PORT = 4001;
-var DEPLOY_URL = "http://localhost:4001";
+var DEPLOY_URL = "https://recipe.bfapp.org";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
@@ -727,7 +727,7 @@ app.get('/recipes/:userId', /*#__PURE__*/function () {
 //VALID DATA:
 //  user id must correspond to user in Users collection
 //  Body object MUST contain only the following fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message
@@ -746,7 +746,7 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context8.abrupt("return", res.status(400).send("POST request on /recipes formulated incorrectly." + "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited."));
+            return _context8.abrupt("return", res.status(400).send("POST request on /recipes formulated incorrectly." + "Body must contain all 6 required fields: name, pictureURL, ingredients, directions, dateAdded, favorited."));
 
           case 3:
             _context8.prev = 3;
@@ -800,7 +800,7 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
 //  recipe id must correspond to a user's recipe. (Use recipes/ GET route to obtain a
 //  list of all of user's recipes, including their unique ids)
 //  Body object may contain only the following 6 fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message

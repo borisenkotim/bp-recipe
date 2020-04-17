@@ -1,125 +1,232 @@
 import React from "react";
 import AppMode from "../AppMode.js";
 
-//bookForm -- this component presents a controlled form through which the user
-//can enter a new book or edit an existing book.
 class RecipeForm extends React.Component {
   constructor(props) {
     super(props);
 
-    if (this.props.mode === AppMode.BOOKS_ADDBOOK) {
+    if (this.props.mode === AppMode.RECIPES_ADDRECIPE) {
       this.state = {
-        bookName: "",
-        author: "",
-        genere: "Realistic Fiction",
-        pages: null,
+        name: "",
+        ingredients: [],
+        directions: [],
+        cookTime: 0,
+        pictureURL: "",
+        dateAdded: "",
+        favorited: false,
         faIcon: "fa fa-save",
-        btnLabel: "Save Book Data"
+        btnLabel: "Save Recipe",
       };
     } else {
       this.state = this.props.startData;
       this.state.faIcon = "fa fa-edit";
-      this.state.btnLabel = "Update Book Data";
+      this.state.btnLabel = "Update Recipe";
     }
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     const name = event.target.name;
-    console.log("event.target.select");
-    console.log(event.target.select);
     this.setState({ [name]: event.target.value });
   };
 
-  //handleSubmit -- When the user clicks on the button to save/update the
-  //book, start the spinner and invoke the parent component's savebook
-  //method to do the actual work. Note that savebook is set to the correct
-  //parent method based on whether the user is logging a new book or editing
-  //an existing book.
-  handleSubmit = event => {
+  handleSubmit = (event) => {
     //start spinner
     this.setState({
       faIcon: "fa fa-spin fa-spinner",
       btnLabel:
-        this.props.mode === AppMode.BOOKS_ADDBOOK ? "Saving..." : "Updating..."
+        this.props.mode === AppMode.RECIPES_ADDRECIPE
+          ? "Saving..."
+          : "Updating...",
     });
-    //Prepare current book data to be saved
-    let bookData = this.state;
-    delete bookData.faIcon;
-    delete bookData.btnLabel;
-    //call savebook on 1 second delay to show spinning icon
-    setTimeout(this.props.saveBook, 1000, bookData);
+    //to be saved
+    let recipeData = this.state;
+    delete recipeData.faIcon;
+    delete recipeData.btnLabel;
+    delete recipeData.confirmDelete;
+    //1 second delay to show spinning icon
+    setTimeout(this.props.saveRecipe, 1000, recipeData);
     event.preventDefault();
   };
 
-  //render -- renders the form to enter book data.
+  addDirection(e) {
+    e.preventDefault();
+    this.setState({ directions: [...this.state.directions, ""] });
+  }
+
+  addIngredient(e) {
+    e.preventDefault();
+    let ingredientObj = {};
+    ingredientObj.name = "";
+    ingredientObj.quantity = 0;
+    ingredientObj.unit = "";
+    this.setState({
+      ingredients: [...this.state.ingredients, ingredientObj],
+    });
+  }
+
+  handleChangeDirection(e, index) {
+    this.state.directions[index] = e.target.value;
+    this.setState({ directions: this.state.directions });
+  }
+
+  handleChangeIngredientName(e, index) {
+    this.state.ingredients[index].name = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientQuantity(e, index) {
+    this.state.ingredients[index].quantity = parseFloat(e.target.value);
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientUnit(e, index) {
+    this.state.ingredients[index].unit = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleRemoveDirection(e, index) {
+    e.preventDefault();
+    this.state.directions.splice(index, 1);
+    this.setState({ directions: this.state.directions });
+  }
+
+  handleRemoveIngredient(e, index) {
+    e.preventDefault();
+    this.state.ingredients.splice(index, 1);
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
   render() {
     return (
       <div className="paddedPage">
         <form onSubmit={this.handleSubmit}>
           <p></p>
           <center>
-            <label htmlFor="bookName">
-              Book Name:
+            <label htmlFor="name">
+              Recipe Name:
               <input
-              value={this.state.bookName}
-                name="bookName"
-                id="bookName"
-                class="form-control form-center "
+                value={this.state.name}
+                name="name"
+                id="name"
+                className="form-control form-center "
                 type="text"
                 required
                 onChange={this.handleChange}
               />
             </label>
-            &nbsp;
-            <label htmlFor="author">
-              Author:
+            <p />
+            <label htmlFor="cookTime">
+              Cook Time (minutes):
               <input
-              value={this.state.author}
-                name="author"
-                id="author"
-                class="form-control form-center "
-                type="text"
+                value={this.state.cookTime}
+                name="cookTime"
+                id="cookTime"
+                className="form-control form-center"
                 required
                 onChange={this.handleChange}
               />
             </label>
-            &nbsp;
-            <label htmlFor="genere">
-              Genere:
-              <select
-              value={this.state.genere}
-                name="genere"
-                id="genere"
-                class="form-control form-center "
-                required
-                onChange={this.handleChange}
-              >
-                <option value="Realistic Fiction">Realistic Fiction</option>
-                <option value="Non Fiction">Non Fiction</option>
-                <option value="Mystery">Mystery</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            &nbsp;
-            <label htmlFor="numPages">
-              Number of Pages:
+            <p />
+            <div className="list-groupings">
+              <div className="ingredient-grouping">
+                <label>Ingredients:</label>
+                {this.state.ingredients.map((step, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="direction-item">
+                        <input
+                          placeholder="ingredient name"
+                          className="ingredient-input ingredient-name"
+                          onChange={(e) =>
+                            this.handleChangeIngredientName(e, index)
+                          }
+                          value={step.name}
+                        />
+                        <input
+                          placeholder="quantity"
+                          type="number"
+                          className="ingredient-input"
+                          onChange={(e) =>
+                            this.handleChangeIngredientQuantity(e, index)
+                          }
+                          value={step.quantity}
+                        />
+                        <input
+                          placeholder="unit"
+                          className="ingredient-input"
+                          onChange={(e) =>
+                            this.handleChangeIngredientUnit(e, index)
+                          }
+                          value={step.unit}
+                        />
+                        &nbsp;&nbsp;
+                        <button
+                          className="loginBtn btn
+                    btn-block btncolortheme"
+                          onClick={(e) => this.handleRemoveIngredient(e, index)}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addIngredient(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              </div>
+
+              <div className="direction-grouping">
+                <label>Directions:</label>
+                {this.state.directions.map((step, index) => {
+                  return (
+                    <div key={index}>
+                      <div className="direction-item">
+                        {index + 1}.&nbsp;
+                        <input
+                          onChange={(e) => this.handleChangeDirection(e, index)}
+                          value={step}
+                        />
+                        &nbsp;&nbsp;
+                        <button
+                          className="loginBtn btn
+                    btn-block btncolortheme"
+                          onClick={(e) => this.handleRemoveDirection(e, index)}
+                        >
+                          X
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addDirection(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              </div>
+            </div>
+            <p />
+            <label className="pictureURL-form" htmlFor="pictureURL">
+              Picture URL:
               <input
-              value={this.state.pages}
-                name="pages"
-                ref={this.pagesRef}
-                id="numPages"
-                class="form-control form-center"
-                type="number"
-                min="1"
-                max="1000"
+                value={this.state.pictureURL}
+                name="pictureURL"
+                id="pictureURL"
+                className="form-control form-center"
                 required
                 onChange={this.handleChange}
               />
             </label>
-            <p></p>
+            <p />
             <button
-              id="submitBookBtn"
               type="submit"
+              onClick={this.props.handleChange}
               className="loginBtn btn btn-primary
                     btn-block btncolortheme"
               style={{ width: "230px", fontSize: "20px", zindex: 110 }}

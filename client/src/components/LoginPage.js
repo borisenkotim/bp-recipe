@@ -52,7 +52,7 @@ class LoginPage extends React.Component {
       id: this.emailInputRef.current.value,
       username: this.emailInputRef.current.value,
       provider: "local",
-      profileImageUrl: `https://www.gravatar.com/avatar/${md5(
+      profileImageURL: `https://www.gravatar.com/avatar/${md5(
         this.emailInputRef.current.value
       )}`
     });

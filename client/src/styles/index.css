@@ -652,3 +652,37 @@ button:focus {
 .confirm-delete-btn {
   width: 150px;
 }
+
+.view-name-grouping {
+  display: inline-flex;
+}
+
+/* Styling for the edit form */
+
+.cooktime-edit-input {
+  width: 40px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.name-edit-input {
+  width: 200px;
+  margin-right: 10px;
+}
+
+.x-table-col {
+  float: right;
+}
+
+.table-input {
+  width: 100%;
+}
+
+.ingredient-name-input {
+  width: 300px;
+}
+
+.picture-url-input {
+  width: 400px;
+  margin-left: 10px;
+}

@@ -9,7 +9,13 @@ class ViewRecipePage extends React.Component {
     //confirm delete dialog box
     this.state = this.props.data;
     this.state.confirmDelete = false;
+    this.state.viewMode = true;
   }
+
+  handleChange = (event) => {
+    const name = event.target.name;
+    this.setState({ [name]: event.target.value });
+  };
 
   confirmDelete = () => {
     this.setState({ confirmDelete: true });
@@ -39,6 +45,12 @@ class ViewRecipePage extends React.Component {
 
     delete newData.confirmDelete;
     this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
+  };
+
+  changeToEditMode = () => {
+    this.state.viewMode
+      ? this.setState({ viewMode: false })
+      : this.setState({ viewMode: true });
   };
 
   renderConfirmDeleteDialog = () => {
@@ -86,18 +98,34 @@ class ViewRecipePage extends React.Component {
     );
   };
 
+  addDirection(e) {
+    e.preventDefault();
+    this.setState({ directions: [...this.state.directions, ""] });
+  }
+
+  addIngredient(e) {
+    e.preventDefault();
+    let ingredientObj = {};
+    ingredientObj.name = "";
+    ingredientObj.quantity = 0;
+    ingredientObj.unit = "";
+    this.setState({
+      ingredients: [...this.state.ingredients, ingredientObj],
+    });
+  }
+
   renderIngredients = () => {
     let ingredients = [];
     //if the data are ingredients objects
     for (let i = 0; i < this.state.ingredients.length; ++i) {
-      if (this.state.ingredients[i].pictureURL) {
-        ingredients.push(
-          <tr key={i}>
-            <td>{this.state.ingredients[i].name}</td>
-            <td>
-              {this.state.ingredients[i].quantity}{" "}
-              {this.state.ingredients[i].unit}
-            </td>
+      ingredients.push(
+        <tr key={i}>
+          <td>{this.state.ingredients[i].name}</td>
+          <td>
+            {this.state.ingredients[i].quantity}{" "}
+            {this.state.ingredients[i].unit}
+          </td>
+          {this.state.ingredients[i].pictureURL && (
             <td>
               <img
                 src={this.state.ingredients[i].pictureURL}
@@ -105,23 +133,89 @@ class ViewRecipePage extends React.Component {
                 width="40"
               />
             </td>
-          </tr>
-        );
-      } else {
-        ingredients.push(
-          <tr key={i}>
-            <td>{this.state.ingredients[i].name}</td>
-            <td>
-              {this.state.ingredients[i].quantity}{" "}
-              {this.state.ingredients[i].unit}
-            </td>
-          </tr>
-        );
-      }
+          )}
+        </tr>
+      );
     }
 
     return ingredients;
   };
+
+  handleChangeIngredientName(e, index) {
+    this.state.ingredients[index].name = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientQuantity(e, index) {
+    this.state.ingredients[index].quantity = parseFloat(e.target.value);
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientUnit(e, index) {
+    this.state.ingredients[index].unit = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  renderIngredientsEditMode = () => {
+    let ingredients = [];
+    //if the data are ingredients objects
+    for (let i = 0; i < this.state.ingredients.length; ++i) {
+      ingredients.push(
+        <tr key={i}>
+          <td>
+            {" "}
+            <input
+              className="ingredient-name-input"
+              onChange={(e) => this.handleChangeIngredientName(e, i)}
+              value={this.state.ingredients[i].name}
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
+              value={this.state.ingredients[i].quantity}
+            />
+            <input
+              onChange={(e) => this.handleChangeIngredientUnit(e, i)}
+              value={this.state.ingredients[i].unit}
+            />
+          </td>
+          {this.state.ingredients[i].pictureURL && (
+            <td>
+              <img
+                src={this.state.ingredients[i].pictureURL}
+                height="40"
+                width="40"
+              />
+            </td>
+          )}
+          <td className="x-table-col">
+            <button
+              className="loginBtn btn"
+              onClick={(e) => this.handleRemoveIngredient(e, i)}
+            >
+              X
+            </button>
+          </td>
+        </tr>
+      );
+    }
+
+    return ingredients;
+  };
+
+  handleRemoveDirection(e, index) {
+    e.preventDefault();
+    this.state.directions.splice(index, 1);
+    this.setState({ directions: this.state.directions });
+  }
+
+  handleRemoveIngredient(e, index) {
+    e.preventDefault();
+    this.state.ingredients.splice(index, 1);
+    this.setState({ ingredients: this.state.ingredients });
+  }
 
   renderDirections = () => {
     let directions = [];
@@ -136,6 +230,34 @@ class ViewRecipePage extends React.Component {
     return directions;
   };
 
+  renderDirectionsEditMode = () => {
+    let directions = [];
+    for (let i = 0; i < this.state.directions.length; ++i) {
+      directions.push(
+        <tr key={i}>
+          <td>{i + 1}</td>
+          <td>
+            {" "}
+            <input
+              onChange={(e) => this.handleChangeDirection(e, i)}
+              value={this.state.directions[i]}
+              className="table-input"
+            />
+          </td>
+          <td className="x-table-col">
+            <button
+              className="loginBtn btn"
+              onClick={(e) => this.handleRemoveDirection(e, i)}
+            >
+              X
+            </button>
+          </td>
+        </tr>
+      );
+    }
+    return directions;
+  };
+
   render() {
     return (
       <div className="paddedPage">
@@ -144,8 +266,22 @@ class ViewRecipePage extends React.Component {
             {this.state.pictureURL ? this.renderRecipeImage() : null}
             <div className="recipeContentTitleInfo">
               <div>
-                <h1>
-                  {this.state.name}{" "}
+                <h1 className="view-name-grouping">
+                  {this.state.viewMode ? (
+                    <p>{this.state.name} </p>
+                  ) : (
+                    <label htmlFor="name">
+                      <input
+                        value={this.state.name}
+                        name="name"
+                        id="name"
+                        className="name-edit-input"
+                        type="text"
+                        required
+                        onChange={this.handleChange}
+                      />
+                    </label>
+                  )}
                   <span
                     className={
                       "fa fa-star " +
@@ -159,14 +295,43 @@ class ViewRecipePage extends React.Component {
                 Added: {this.state.dateAdded}
               </h3>
               <h3 className="recipeContentTitleInfoSubInfo">
-                Cook Time: {this.state.cookTime} minutes
+                {this.state.viewMode ? (
+                  <p>Cook Time: {this.state.cookTime} minutes</p>
+                ) : (
+                  <label htmlFor="cookTime">
+                    Cook Time:
+                    <input
+                      value={this.state.cookTime}
+                      name="cookTime"
+                      id="cookTime"
+                      className="cooktime-edit-input"
+                      required
+                      onChange={this.handleChange}
+                    />{" "}
+                    minutes
+                  </label>
+                )}
               </h3>
+              {!this.state.viewMode && (
+                <label>
+                  Picture URL:
+                  <input
+                    className="picture-url-input"
+                    value={this.state.pictureURL}
+                    onChange={this.handleChange}
+                  />
+                </label>
+              )}
             </div>
             <div className="view-recipe-btn-family">
               <div>
                 <span
-                  className="view-recipe-btn view-recipe-btn-edit fa fa-edit"
-                  onClick={this.confirmDelete}
+                  className={
+                    this.state.viewMode
+                      ? "view-recipe-btn view-recipe-btn-edit fa fa-edit"
+                      : "view-recipe-btn view-recipe-btn-edit fa fa-save"
+                  }
+                  onClick={this.changeToEditMode}
                 ></span>
               </div>
               <div>
@@ -179,14 +344,42 @@ class ViewRecipePage extends React.Component {
           </div>
 
           <div className="recipeContentListInfo">
-            <h4>Ingredients</h4>
+            <h4>
+              Ingredients{" "}
+              {!this.state.viewMode && (
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addIngredient(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              )}
+            </h4>
             <table className="table table-hover ingredientsTable">
-              <tbody>{this.renderIngredients()}</tbody>
+              <tbody>
+                {this.state.viewMode
+                  ? this.renderIngredients()
+                  : this.renderIngredientsEditMode()}
+              </tbody>
             </table>
 
-            <h4>Directions</h4>
+            <h4>
+              Directions{" "}
+              {!this.state.viewMode && (
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addDirection(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              )}
+            </h4>
             <table className="table table-hover directionsTable">
-              <tbody>{this.renderDirections()}</tbody>
+              <tbody>
+                {this.state.viewMode
+                  ? this.renderDirections()
+                  : this.renderDirectionsEditMode()}
+              </tbody>
             </table>
           </div>
 

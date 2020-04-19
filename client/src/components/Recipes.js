@@ -171,7 +171,7 @@ class Recipes extends React.Component {
             id={this.state.viewId}
             data={this.state.recipes[this.state.viewId]}
             changeMode={this.props.changeMode}
-            editRecipe={this.editRecipe}
+            saveRecipe={this.editRecipe}
             deleteRecipe={this.deleteRecipe}
           />
         );

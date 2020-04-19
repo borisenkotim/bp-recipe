@@ -34,6 +34,7 @@ class RecipesTable extends React.Component {
 
   viewRecipe = id => {
     this.props.setViewId(id);
+    this.props.setEditId(id);
     this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
   }
 

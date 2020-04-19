@@ -48,9 +48,20 @@ class ViewRecipePage extends React.Component {
   };
 
   changeToEditMode = () => {
-    this.state.viewMode
-      ? this.setState({ viewMode: false })
-      : this.setState({ viewMode: true });
+    if (this.state.viewMode) {
+      this.setState({ viewMode: false })
+    }
+    // if we were in edit mode, but are going back
+    // to view mode, we will want to save any changes
+    else {
+      this.setState({ viewMode: true });
+      let recipeData = this.state;
+      delete recipeData.faIcon;
+      delete recipeData.btnLabel;
+      delete recipeData.confirmDelete;
+      delete recipeData.viewMode;
+      setTimeout(this.props.saveRecipe, 1000, recipeData);
+    }
   };
 
   renderConfirmDeleteDialog = () => {

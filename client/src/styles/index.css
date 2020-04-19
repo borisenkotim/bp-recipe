@@ -638,3 +638,7 @@ button:focus {
 .recipeContentDeleteBtn:hover {
   opacity: 0.5;
 }
+
+.confirm-delete-btn {
+  width: 150px;
+}

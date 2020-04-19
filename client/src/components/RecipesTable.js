@@ -53,13 +53,13 @@ class RecipesTable extends React.Component {
             </center>
             <div className="modal-footer">
               <button
-                className="loginBtn btn btn-primary btn-color-scheme"
+                className="loginBtn btn confirm-delete-btn"
                 onClick={this.doDelete}
               >
                 YES
               </button>
               <button
-                className="loginBtn btn btn-secondary"
+                className="loginBtn btn confirm-delete-btn"
                 onClick={this.cancelDelete}
               >
                 NO

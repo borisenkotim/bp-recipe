@@ -137,7 +137,7 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 
 
 var LOCAL_PORT = 4001;
-var DEPLOY_URL = "https://recipe.bfapp.org";
+var DEPLOY_URL = "http://localhost:4001";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
@@ -831,7 +831,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', " + bodyProp + " is not an allowed prop."));
+            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
 
           case 11:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
@@ -853,14 +853,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
 
           case 18:
             status = _context9.sent;
-
-            if (status.nModified != 1) {
-              //Should never happen!
-              res.status(400).send("Unexpected error occurred when updating recipe in database. recipe was not updated.");
-            } else {
-              res.status(200).send("recipe successfully updated in database.");
-            }
-
+            res.status(200).send("recipe successfully updated in database.");
             _context9.next = 26;
             break;
 

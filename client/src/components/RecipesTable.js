@@ -10,12 +10,7 @@ class RecipesTable extends React.Component {
     this.state = { confirmDelete: false };
   }
 
-  editRecipe = id => {
-    this.props.setEditId(id);
-    this.props.changeMode(AppMode.RECIPES_EDITRECIPE);
-  };
-
-  confirmDelete = id => {
+  confirmDelete = (id) => {
     this.props.setDeleteId(id);
     this.setState({ confirmDelete: true });
   };
@@ -32,10 +27,11 @@ class RecipesTable extends React.Component {
     this.setState({ confirmDelete: false });
   };
 
-  viewRecipe = id => {
+  viewRecipe = (id) => {
     this.props.setViewId(id);
+    this.props.setEditId(id);
     this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
-  }
+  };
 
   renderConfirmDeleteDialog = () => {
     return (
@@ -53,13 +49,13 @@ class RecipesTable extends React.Component {
             </center>
             <div className="modal-footer">
               <button
-                className="loginBtn btn btn-primary btn-color-scheme"
+                className="loginBtn btn confirm-delete-btn"
                 onClick={this.doDelete}
               >
                 YES
               </button>
               <button
-                className="loginBtn btn btn-secondary"
+                className="loginBtn btn confirm-delete-btn"
                 onClick={this.cancelDelete}
               >
                 NO
@@ -75,30 +71,9 @@ class RecipesTable extends React.Component {
     let table = [];
     for (let b = 0; b < this.props.recipes.length; ++b) {
       table.push(
-        <tr key={b}>
+        <tr key={b} onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}>
           <td>{this.props.recipes[b].name}</td>
           <td>{this.props.recipes[b].cookTime}</td>
-          <td>
-            <button
-              onClick={this.props.menuOpen ? null : () => this.editRecipe(b)}
-            >
-              <span className="fa fa-edit"></span>
-            </button>
-          </td>
-          <td>
-            <button
-              onClick={this.props.menuOpen ? null : () => this.confirmDelete(b)}
-            >
-              <span className="fa fa-trash"></span>
-            </button>
-          </td>
-          <td>
-            <button
-              onClick={this.props.menuOpen ? null: () => this.viewRecipe(b)}
-            >
-              <span className="fa fa-binoculars"></span>
-            </button>
-          </td>
         </tr>
       );
     }
@@ -117,9 +92,6 @@ class RecipesTable extends React.Component {
             <tr>
               <th scope="col">Name</th>
               <th scope="col">Cook Time</th>
-              <th scope="col">View/Edit</th>
-              <th scope="col">Delete</th>
-              <th scope="col">View</th>
             </tr>
           </thead>
           <tbody>

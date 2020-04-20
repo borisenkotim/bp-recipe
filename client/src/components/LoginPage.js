@@ -58,7 +58,6 @@ class LoginPage extends React.Component {
     });
     //Set authenticated state in parent component
     this.props.setAuthenticated(true);
-    console.log(this.props.user.username);
     //Trigger switch to FEED mode (default app landing page)
     this.props.changeMode(AppMode.Recipes);
   };

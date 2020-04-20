@@ -631,10 +631,69 @@ button:focus {
   font-size: large;
 }
 
-.recipeContentDeleteBtn {
+.view-recipe-btn-family {
+  float: right;
+  display: inline-flex;
+}
+
+.view-recipe-btn {
+  font-size: 50px;
+}
+
+.view-recipe-btn-edit {
+  margin-top: 2.5px;
+  margin-right: 10px;
+}
+
+.view-recipe-btn:hover {
+  opacity: 0.5;
+}
+
+.confirm-delete-btn {
+  width: 150px;
+}
+
+.view-name-grouping {
+  display: inline-flex;
+}
+
+/* Styling for the edit view */
+
+.cooktime-edit-input {
+  width: 60px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.name-edit-input {
+  width: 100%;
+  margin-right: 10px;
+}
+
+.x-table-col {
   float: right;
 }
 
-.recipeContentDeleteBtn:hover {
-  opacity: 0.5;
+.table-input {
+  width: 100%;
 }
+
+.ingredient-name-input {
+  width: 300px;
+}
+
+.picture-url-input {
+  width: 530px;
+  margin-left: 10px;
+}
+
+.form-control.input-style {
+  display: inline-flex;
+}
+
+.input-quantity {
+  width: 200px;
+  margin-right: 10px;
+}
+
+/* End styling for the edit view */

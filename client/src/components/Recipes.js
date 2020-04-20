@@ -16,7 +16,7 @@ class Recipes extends React.Component {
     };
   }
 
-  fetchRecipes = async (redirectPage=AppMode.RECIPES) => {
+  fetchRecipes = async (redirectPage=null) => {
     let url = "/recipes/" + this.props.user.id;
     let res = await fetch(url, { method: "GET" });
     if (res.status != 200) {
@@ -29,12 +29,15 @@ class Recipes extends React.Component {
     let body = await res.json();
     this.setState(
       { recipes: JSON.parse(body) },
-      this.props.changeMode(redirectPage)
+      
     );
+    if (redirectPage){
+      this.props.changeMode(redirectPage)
+    }
   };
 
   componentDidMount() {
-    this.fetchRecipes();
+    this.fetchRecipes(AppMode.RECIPES);
   }
 
   //setDeleteId -- Capture in this.state.deleteId the unique id of the item
@@ -53,7 +56,7 @@ class Recipes extends React.Component {
     this.setState({viewId: val});
   }
 
-  editRecipe = async (newData, editId=this.state.editId, redirectPage=AppMode.RECIPES) => {
+  editRecipe = async (newData, editId=this.state.editId) => {
     let url =
       "/recipes/" +
       this.props.user.id +
@@ -75,11 +78,11 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes(redirectPage);
+      this.fetchRecipes();
     }
   };
 
-  deleteRecipe = async (deleteId=this.state.deleteId, redirectPage=AppMode.RECIPES) => {
+  deleteRecipe = async (deleteId=this.state.deleteId) => {
     let url =
       "/recipes/" +
       this.props.user.id +
@@ -92,10 +95,8 @@ class Recipes extends React.Component {
         "An error occurred when attempting to delete recipe from database: " +
           msg
       );
-    } else {
-      //Push update into component state:
-      this.fetchRecipes(redirectPage);
     }
+    this.fetchRecipes(AppMode.RECIPES); 
   };
 
   addRecipe = async (newData) => {
@@ -124,7 +125,7 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes();
+      this.fetchRecipes(AppMode.RECIPES);
     }
   };
 
@@ -155,14 +156,6 @@ class Recipes extends React.Component {
       case AppMode.RECIPES_ADDRECIPE:
         return (
           <RecipeForm mode={this.props.mode} saveRecipe={this.addRecipe} />
-        );
-      case AppMode.RECIPES_EDITRECIPE:
-        return (
-          <RecipeForm
-            mode={this.props.mode}
-            startData={this.state.recipes[this.state.editId]}
-            saveRecipe={this.editRecipe}
-          />
         );
       case AppMode.RECIPES_VIEWRECIPE:
         return (

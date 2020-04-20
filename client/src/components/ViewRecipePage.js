@@ -47,20 +47,20 @@ class ViewRecipePage extends React.Component {
     this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
   };
 
-  changeToEditMode = () => {
+  changeToEditMode = (e) => {
     if (this.state.viewMode) {
       this.setState({ viewMode: false })
     }
     // if we were in edit mode, but are going back
     // to view mode, we will want to save any changes
     else {
-      this.setState({ viewMode: true });
       let recipeData = this.state;
-      delete recipeData.faIcon;
-      delete recipeData.btnLabel;
       delete recipeData.confirmDelete;
       delete recipeData.viewMode;
+      delete recipeData[""];
       setTimeout(this.props.saveRecipe, 1000, recipeData);
+      e.preventDefault();
+      this.setState({ viewMode: true });
     }
   };
 
@@ -176,20 +176,25 @@ class ViewRecipePage extends React.Component {
           <td>
             {" "}
             <input
-              className="ingredient-name-input"
+              className="ingredient-name-input form-control"
               onChange={(e) => this.handleChangeIngredientName(e, i)}
               value={this.state.ingredients[i].name}
+              placeholder="Ingredient Name"
             />
           </td>
-          <td>
+          <td className="view-name-grouping">
             <input
               type="number"
+              className="form-control input-style input-quantity"
               onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
               value={this.state.ingredients[i].quantity}
+              placeholder="Ingredient Quantity"
             />
             <input
+            className="form-control input-style"
               onChange={(e) => this.handleChangeIngredientUnit(e, i)}
               value={this.state.ingredients[i].unit}
+              placeholder="Ingredient Unit"
             />
           </td>
           {this.state.ingredients[i].pictureURL && (
@@ -241,6 +246,12 @@ class ViewRecipePage extends React.Component {
     return directions;
   };
 
+  
+  handleChangeDirection(e, index) {
+    this.state.directions[index] = e.target.value;
+    this.setState({ directions: this.state.directions });
+  }
+
   renderDirectionsEditMode = () => {
     let directions = [];
     for (let i = 0; i < this.state.directions.length; ++i) {
@@ -250,9 +261,9 @@ class ViewRecipePage extends React.Component {
           <td>
             {" "}
             <input
+              className='form-control'
               onChange={(e) => this.handleChangeDirection(e, i)}
               value={this.state.directions[i]}
-              className="table-input"
             />
           </td>
           <td className="x-table-col">
@@ -286,7 +297,7 @@ class ViewRecipePage extends React.Component {
                         value={this.state.name}
                         name="name"
                         id="name"
-                        className="name-edit-input"
+                        className="name-edit-input form-control"
                         type="text"
                         required
                         onChange={this.handleChange}
@@ -312,22 +323,26 @@ class ViewRecipePage extends React.Component {
                   <label htmlFor="cookTime">
                     Cook Time:
                     <input
-                      value={this.state.cookTime}
                       name="cookTime"
                       id="cookTime"
-                      className="cooktime-edit-input"
+                      type='text'
+                      value={this.state.cookTime}
+                      className="cooktime-edit-input form-control input-style"
                       required
                       onChange={this.handleChange}
-                    />{" "}
+                    />
                     minutes
                   </label>
                 )}
               </h3>
               {!this.state.viewMode && (
-                <label>
+                <label htmlFor="pictureURL">
                   Picture URL:
                   <input
-                    className="picture-url-input"
+                    name="pictureURL"
+                    id="pictureURL"
+                    type="text"
+                    className="picture-url-input form-control input-style"
                     value={this.state.pictureURL}
                     onChange={this.handleChange}
                   />
@@ -342,7 +357,7 @@ class ViewRecipePage extends React.Component {
                       ? "view-recipe-btn view-recipe-btn-edit fa fa-edit"
                       : "view-recipe-btn view-recipe-btn-edit fa fa-save"
                   }
-                  onClick={this.changeToEditMode}
+                  onClick={(e) => this.changeToEditMode(e)}
                 ></span>
               </div>
               <div>

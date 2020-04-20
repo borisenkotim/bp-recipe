@@ -1,13 +1,17 @@
 import React from "react";
 import "../styles/modal.css";
 import AppMode from "../AppMode.js";
+import RecipeSearch from "./RecipeSearch.js"
 
 class RecipesTable extends React.Component {
   constructor(props) {
     super(props);
     //confirmDelete state variable determines whether to show or hide the
     //confirm delete dialog box
-    this.state = { confirmDelete: false };
+    this.state = {
+        confirmDelete: false,
+        filtered: this.props.recipes
+    };
   }
 
   confirmDelete = (id) => {
@@ -80,12 +84,19 @@ class RecipesTable extends React.Component {
     return table;
   };
 
+  updateFilteredRecipes = (newFilteredList) => {
+      this.setState({ filtered: newFilteredList})
+  }
+
   render() {
     return (
       <div className="paddedPage">
-        <center>
-          <h1>Your Recipes</h1>
-        </center>
+        <RecipeSearch
+          updateFilteredRecipes={this.updateFilteredRecipes}
+        />
+        <h1 style={{display: "inline-block", textAlign: "center", position: "absolute", left: "50%", marginLeft: "-110px"}}>
+          Your Recipes
+        </h1>
 
         <table className="table table-hover recipesTable">
           <thead className="thead-light">

@@ -12,15 +12,18 @@ class ViewRecipePage extends React.Component {
     this.state.viewMode = true;
   }
 
+  // Handles the general changes to an input box
   handleChange = (event) => {
     const name = event.target.name;
     this.setState({ [name]: event.target.value });
   };
 
+  // confirms the decision to delete a recipe
   confirmDelete = () => {
     this.setState({ confirmDelete: true });
   };
 
+  // performs the delete
   doDelete = () => {
     this.props.deleteRecipe(this.props.id);
     this.setState({ confirmDelete: false });
@@ -47,9 +50,10 @@ class ViewRecipePage extends React.Component {
     this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
   };
 
+  // Lets the page know if we are viewing or editing a recipe
   changeToEditMode = (e) => {
     if (this.state.viewMode) {
-      this.setState({ viewMode: false })
+      this.setState({ viewMode: false });
     }
     // if we were in edit mode, but are going back
     // to view mode, we will want to save any changes
@@ -57,6 +61,8 @@ class ViewRecipePage extends React.Component {
       let recipeData = this.state;
       delete recipeData.confirmDelete;
       delete recipeData.viewMode;
+
+      // NOTE: A random empty obj was being added. Don't remove this.
       delete recipeData[""];
       setTimeout(this.props.saveRecipe, 1000, recipeData);
       e.preventDefault();
@@ -64,6 +70,7 @@ class ViewRecipePage extends React.Component {
     }
   };
 
+  // Generates the dialog to confirm deleting a recipe
   renderConfirmDeleteDialog = () => {
     return (
       <div className="modal" role="dialog">
@@ -98,22 +105,27 @@ class ViewRecipePage extends React.Component {
     );
   };
 
+  // renders the image for a recipe on the page
   renderRecipeImage = () => {
     return (
       <img
         src={this.state.pictureURL}
         height="200"
         style={{ float: "left" }}
+        // ensures something shows even if the image is not
+        // found
         alt="No Image Found"
       />
     );
   };
 
+  // Adds a direction to the recipe (blank)
   addDirection(e) {
     e.preventDefault();
     this.setState({ directions: [...this.state.directions, ""] });
   }
 
+  // Adds an ingredient to the recipe (blank)
   addIngredient(e) {
     e.preventDefault();
     let ingredientObj = {};
@@ -125,6 +137,7 @@ class ViewRecipePage extends React.Component {
     });
   }
 
+  // renders the ingredient list in view mode
   renderIngredients = () => {
     let ingredients = [];
     //if the data are ingredients objects
@@ -152,21 +165,25 @@ class ViewRecipePage extends React.Component {
     return ingredients;
   };
 
+  // handles the change to ingredient name
   handleChangeIngredientName(e, index) {
     this.state.ingredients[index].name = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
+  // handles the change to ingredient quantity
   handleChangeIngredientQuantity(e, index) {
     this.state.ingredients[index].quantity = parseFloat(e.target.value);
     this.setState({ ingredients: this.state.ingredients });
   }
 
+  // handles the change to ingredient unit
   handleChangeIngredientUnit(e, index) {
     this.state.ingredients[index].unit = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
+  // render the ingredients in edit mode with inputs
   renderIngredientsEditMode = () => {
     let ingredients = [];
     //if the data are ingredients objects
@@ -191,7 +208,7 @@ class ViewRecipePage extends React.Component {
               placeholder="Ingredient Quantity"
             />
             <input
-            className="form-control input-style"
+              className="form-control input-style"
               onChange={(e) => this.handleChangeIngredientUnit(e, i)}
               value={this.state.ingredients[i].unit}
               placeholder="Ingredient Unit"
@@ -221,18 +238,21 @@ class ViewRecipePage extends React.Component {
     return ingredients;
   };
 
+  // removes a direction and changes the numbers to match
   handleRemoveDirection(e, index) {
     e.preventDefault();
     this.state.directions.splice(index, 1);
     this.setState({ directions: this.state.directions });
   }
 
+  // removes an ingredient from the recipe
   handleRemoveIngredient(e, index) {
     e.preventDefault();
     this.state.ingredients.splice(index, 1);
     this.setState({ ingredients: this.state.ingredients });
   }
 
+  // renders the directions in view mode
   renderDirections = () => {
     let directions = [];
     for (let i = 0; i < this.state.directions.length; ++i) {
@@ -246,12 +266,13 @@ class ViewRecipePage extends React.Component {
     return directions;
   };
 
-  
+  // handes a change to a direction input
   handleChangeDirection(e, index) {
     this.state.directions[index] = e.target.value;
     this.setState({ directions: this.state.directions });
   }
 
+  // renders the directions as inputs for edit mode
   renderDirectionsEditMode = () => {
     let directions = [];
     for (let i = 0; i < this.state.directions.length; ++i) {
@@ -261,7 +282,7 @@ class ViewRecipePage extends React.Component {
           <td>
             {" "}
             <input
-              className='form-control'
+              className="form-control"
               onChange={(e) => this.handleChangeDirection(e, i)}
               value={this.state.directions[i]}
             />
@@ -288,6 +309,7 @@ class ViewRecipePage extends React.Component {
             {this.state.pictureURL ? this.renderRecipeImage() : null}
             <div className="recipeContentTitleInfo">
               <div>
+                {/* conditionally renders the name of the recipe based on mode */}
                 <h1 className="view-name-grouping">
                   {this.state.viewMode ? (
                     <p>{this.state.name} </p>
@@ -317,6 +339,7 @@ class ViewRecipePage extends React.Component {
                 Added: {this.state.dateAdded}
               </h3>
               <h3 className="recipeContentTitleInfoSubInfo">
+                {/* conditionally renders the cook time of the recipe based on mode */}
                 {this.state.viewMode ? (
                   <p>Cook Time: {this.state.cookTime} minutes</p>
                 ) : (
@@ -325,7 +348,7 @@ class ViewRecipePage extends React.Component {
                     <input
                       name="cookTime"
                       id="cookTime"
-                      type='text'
+                      type="text"
                       value={this.state.cookTime}
                       className="cooktime-edit-input form-control input-style"
                       required
@@ -335,6 +358,7 @@ class ViewRecipePage extends React.Component {
                   </label>
                 )}
               </h3>
+              {/* If we are in edit mode, we want to allow re-entering a new url */}
               {!this.state.viewMode && (
                 <label htmlFor="pictureURL">
                   Picture URL:
@@ -351,6 +375,7 @@ class ViewRecipePage extends React.Component {
             </div>
             <div className="view-recipe-btn-family">
               <div>
+                {/* toggles the edit/save button depending on mode */}
                 <span
                   className={
                     this.state.viewMode
@@ -368,7 +393,6 @@ class ViewRecipePage extends React.Component {
               </div>
             </div>
           </div>
-
           <div className="recipeContentListInfo">
             <h4>
               Ingredients{" "}

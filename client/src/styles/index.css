@@ -657,7 +657,7 @@ button:focus {
   display: inline-flex;
 }
 
-/* Styling for the edit form */
+/* Styling for the edit view */
 
 .cooktime-edit-input {
   width: 60px;
@@ -695,3 +695,5 @@ button:focus {
   width: 200px;
   margin-right: 10px;
 }
+
+/* End styling for the edit view */

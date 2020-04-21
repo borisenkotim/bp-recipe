@@ -697,3 +697,7 @@ button:focus {
 }
 
 /* End styling for the edit view */
+
+.recipe-search-icon:hover {
+    color: #706e6e
+}

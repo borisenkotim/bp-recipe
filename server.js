@@ -27,6 +27,7 @@ const Schema = mongoose.Schema;
 const ingredientSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
+  quantityString : {type: String, required: true},
   quantity : {type: Number, required: true},
   unit : {type: String, required: true}
 });

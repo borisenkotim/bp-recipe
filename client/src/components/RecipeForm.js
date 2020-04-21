@@ -150,6 +150,8 @@ class RecipeForm extends React.Component {
                             this.handleChangeIngredientQuantity(e, index)
                           }
                           value={step.quantity}
+                          step="0.01"
+                          min="0"
                         />
                         <input
                           placeholder="unit"

@@ -206,6 +206,8 @@ class ViewRecipePage extends React.Component {
               onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
               value={this.state.ingredients[i].quantity}
               placeholder="Ingredient Quantity"
+              step="0.01"
+              min="0"
             />
             <input
               className="form-control input-style"

@@ -47,7 +47,7 @@ class ViewRecipePage extends React.Component {
     }
 
     delete newData.confirmDelete;
-    this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
+    this.props.saveRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
   };
 
   // Lets the page know if we are viewing or editing a recipe
@@ -152,7 +152,11 @@ class ViewRecipePage extends React.Component {
           <td>{this.state.ingredients[i].name}</td>
           <td>
             {this.state.ingredients[i].quantity}{" "}
-            {this.state.ingredients[i].unit}
+            {this.state.ingredients[i].unit.toLowerCase() == 'whole' ? 
+              null :
+              (this.state.ingredients[i].quantity > 1 ?
+                this.state.ingredients[i].unit + "s" :
+                this.state.ingredients[i].unit)}
           </td>
           {this.state.ingredients[i].pictureURL && (
             <td>
@@ -216,10 +220,22 @@ class ViewRecipePage extends React.Component {
             />
             <input
               className="form-control input-style"
+              list="units"
               onChange={(e) => this.handleChangeIngredientUnit(e, i)}
               value={this.state.ingredients[i].unit}
               placeholder="Ingredient Unit"
-            />
+            />            
+            <datalist id="units">
+                          <option>whole</option>
+                          <option>teaspoon</option>
+                          <option>tablespoon</option>
+                          <option>cup</option>
+                          <option>gallon</option>
+                          <option>pound</option>
+                          <options>ounce</options>
+                          <options>quart</options>
+                          <options>pint</options>
+                        </datalist>
           </td>
           {this.state.ingredients[i].pictureURL && (
             <td>

@@ -156,11 +156,24 @@ class RecipeForm extends React.Component {
                         <input
                           placeholder="unit"
                           className="ingredient-input"
+                          type="text"
+                          list="units"
                           onChange={(e) =>
                             this.handleChangeIngredientUnit(e, index)
                           }
                           value={step.unit}
                         />
+                        <datalist id="units">
+                          <option>whole</option>
+                          <option>teaspoon</option>
+                          <option>tablespoon</option>
+                          <option>cup</option>
+                          <option>gallon</option>
+                          <option>pound</option>
+                          <options>ounce</options>
+                          <options>quart</options>
+                          <options>pint</options>
+                        </datalist>
                         &nbsp;&nbsp;
                         <button
                           className="loginBtn btn

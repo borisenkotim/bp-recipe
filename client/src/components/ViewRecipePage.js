@@ -105,6 +105,10 @@ class ViewRecipePage extends React.Component {
     );
   };
 
+  renderRecipeImageError = (e) =>{
+    e.target.src = 'https://www.boilersupplies.com/img/no_image.png'
+  }
+
   // renders the image for a recipe on the page
   renderRecipeImage = () => {
     return (
@@ -115,6 +119,7 @@ class ViewRecipePage extends React.Component {
         // ensures something shows even if the image is not
         // found
         alt="No Image Found"
+        onError={this.renderRecipeImageError}
       />
     );
   };

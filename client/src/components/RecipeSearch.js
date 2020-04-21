@@ -1,21 +1,35 @@
 import React from 'react'
-import AppMode from "../AppMode.js";
 
 class RecipeSearch extends React.Component {
     constructor(props) {
         super(props)
+        // open represents whether the search text input is shown or not
         this.state = {
-            searchTerm: "",
             open: false
         }
     }
-    
+
     toggleOpen = () => {
         this.setState(prevState => ({ open: !prevState.open }))
     }
 
     handleSearchChange = (e) => {
-        this.setState({ searchTerm: e.target.value })
+        let search = e.target.value
+
+        // can add search caching in the future for faster searches
+        let filteredList = []
+        if (search !== ""){
+            // convert search term and item names to lowercase because includes is case sensitve
+            let lowerSearch = search.toLowerCase()
+            filteredList = this.props.allRecipes.filter(item => {
+                let lowerItem = item.name.toLowerCase()
+                return lowerItem.includes(lowerSearch)
+            })
+        }
+        else // search term is empty
+            filteredList = this.props.allRecipes
+
+        this.props.updateFilteredRecipes(filteredList)
     }
     
     render() {

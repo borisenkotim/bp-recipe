@@ -11,7 +11,7 @@ class RecipesTable extends React.Component {
     //filtered represents the filtered list of user recipes
     this.state = {
         confirmDelete: false,
-        filtered: []
+        filtered: this.props.recipes
     };
   }
 

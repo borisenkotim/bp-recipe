@@ -4,23 +4,27 @@ import ReactDOM from 'react-dom'
 class RecipeSearch extends React.Component {
     constructor(props) {
         super(props)
-        // open represents whether the search text input is shown or not
+        // visible represents whether the search text input is shown or not
         this.state = {
-            open: false
+            visible: false
         }
     }
+
+    // adds the event listener for handling a click outside of the component
     componentDidMount() {
         document.addEventListener('click', this.handleClickOutside, true);
     }
 
+    // removes the event listener for handling a click outside of the component
     componentWillUnmount() {
         document.removeEventListener('click', this.handleClickOutside, true);
     }
 
-    toggleOpen = () => {
-        this.setState(prevState => ({ open: !prevState.open }))
+    toggleVisible = () => {
+        this.setState(prevState => ({ visible: !prevState.visible }))
     }
 
+    // updates the filtered recipes upon search input change
     handleSearchChange = e => {
         let search = e.target.value
 
@@ -40,25 +44,26 @@ class RecipeSearch extends React.Component {
         this.props.updateFilteredRecipes(filteredList)
     }
 
+    // closes search bar upon click outside of the component
     handleClickOutside = e => {
         let domNode = ReactDOM.findDOMNode(this)
 
-        if (!domNode || !domNode.contains(e.target) && this.state.open)
-            this.setState({ open: false })
+        if (!domNode || !domNode.contains(e.target) && this.state.visible)
+            this.setState({ visible: false })
     }
     
     render() {
         return (
             <div style={{display: "inline-block"}}>
                 <button
-                    onClick={this.toggleOpen} className="recipe-search-icon fa fa-search"
+                    onClick={this.toggleVisible} className="recipe-search-icon fa fa-search"
                     style={{background: "none", border: "none", fontSize: "25px", paddingBottom: "20px",
                             paddingTop: "10px", paddingRight: "15px"}}
                 />
                 <input
-                    type="search" onChange={(e) => this.handleSearchChange(e)} hidden={!this.state.open}
-                    placeholder="Search..." style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "5px",
-                                                    width: "15vw"}}
+                    type="search" onChange={(e) => this.handleSearchChange(e)} hidden={!this.state.visible} placeholder="Search..."
+                    style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "5px",
+                            width: "15vw"}}
                 />
             </div>
         )

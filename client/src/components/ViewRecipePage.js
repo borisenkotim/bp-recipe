@@ -288,15 +288,19 @@ class ViewRecipePage extends React.Component {
           <td>{i + 1}</td>
           <td>
             {" "}
-            <input
-              className="form-control"
-              onChange={(e) => this.handleChangeDirection(e, i)}
-              value={this.state.directions[i]}
-            />
+            <div>
+              <textarea
+                className="form-control"
+                onChange={(e) => this.handleChangeDirection(e, i)}
+                value={this.state.directions[i]}
+                cols="100"
+              />
+            </div>
           </td>
           <td className="x-table-col">
             <button
               className="loginBtn btn"
+              style={{height:"5%"}}
               onClick={(e) => this.handleRemoveDirection(e, i)}
             >
               X

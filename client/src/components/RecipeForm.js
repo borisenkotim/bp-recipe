@@ -189,14 +189,18 @@ class RecipeForm extends React.Component {
                     <div key={index}>
                       <div className="direction-item">
                         {index + 1}.&nbsp;
-                        <input
-                          onChange={(e) => this.handleChangeDirection(e, index)}
-                          value={step}
-                        />
+                        <div>
+                          <textarea
+                            onChange={(e) => this.handleChangeDirection(e, index)}
+                            value={step}
+                            cols="100"
+                          />
+                        </div>
                         &nbsp;&nbsp;
                         <button
                           className="loginBtn btn
-                    btn-block btncolortheme"
+                          btn-block btncolortheme"
+                          style={{height:"5%"}}
                           onClick={(e) => this.handleRemoveDirection(e, index)}
                         >
                           X

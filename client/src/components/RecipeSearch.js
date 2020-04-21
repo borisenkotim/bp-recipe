@@ -62,8 +62,8 @@ class RecipeSearch extends React.Component {
                 />
                 <input
                     type="search" onChange={(e) => this.handleSearchChange(e)} hidden={!this.state.visible} placeholder="Search..."
-                    style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "5px",
-                            width: "15vw"}}
+                    style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "8px",
+                            width: "15vw", outline: "none"}}
                 />
             </div>
         )

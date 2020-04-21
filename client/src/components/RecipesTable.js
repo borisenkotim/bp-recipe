@@ -1,13 +1,25 @@
 import React from "react";
 import "../styles/modal.css";
 import AppMode from "../AppMode.js";
+import RecipeSearch from "./RecipeSearch.js"
 
 class RecipesTable extends React.Component {
   constructor(props) {
     super(props);
     //confirmDelete state variable determines whether to show or hide the
     //confirm delete dialog box
-    this.state = { confirmDelete: false };
+    //filtered represents the filtered list of user recipes
+    this.state = {
+        confirmDelete: false,
+        filtered: this.props.recipes
+    };
+  }
+
+  // called when this component receives new props.
+  // initializes the filtered recipes list since this component is constructed and mounted
+  //  before the recipe componenet is finished fetching the users recipes 
+  componentWillReceiveProps() {
+    this.setState({filtered: this.props.recipes})
   }
 
   confirmDelete = (id) => {
@@ -69,23 +81,31 @@ class RecipesTable extends React.Component {
 
   renderTable = () => {
     let table = [];
-    for (let b = 0; b < this.props.recipes.length; ++b) {
+    for (let b = 0; b < this.state.filtered.length; ++b) {
       table.push(
         <tr key={b} onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}>
-          <td>{this.props.recipes[b].name}</td>
-          <td>{this.props.recipes[b].cookTime}</td>
+          <td>{this.state.filtered[b].name}</td>
+          <td>{this.state.filtered[b].cookTime}</td>
         </tr>
       );
     }
     return table;
   };
 
+  updateFilteredRecipes = (newFilteredList) => {
+      this.setState({ filtered: newFilteredList})
+  }
+
   render() {
     return (
       <div className="paddedPage">
-        <center>
-          <h1>Your Recipes</h1>
-        </center>
+        <RecipeSearch
+          updateFilteredRecipes={this.updateFilteredRecipes}
+          allRecipes={this.props.recipes}
+        />
+        <h1 style={{display: "inline-block", textAlign: "center", position: "absolute", left: "50%", marginLeft: "-110px"}}>
+          Your Recipes
+        </h1>
 
         <table className="table table-hover recipesTable">
           <thead className="thead-light">
@@ -95,10 +115,10 @@ class RecipesTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {Object.keys(this.props.recipes).length === 0 ? (
+            {Object.keys(this.state.filtered).length === 0 ? (
               <tr>
                 <td colSpan="7" style={{ fontStyle: "italic" }}>
-                  No data recorded
+                  No recipes found
                 </td>
               </tr>
             ) : (

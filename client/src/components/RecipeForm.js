@@ -136,7 +136,7 @@ class RecipeForm extends React.Component {
                       <div className="direction-item">
                         <input
                           placeholder="ingredient name"
-                          className="ingredient-input ingredient-name"
+                          className="ingredient-input-name"
                           onChange={(e) =>
                             this.handleChangeIngredientName(e, index)
                           }
@@ -145,7 +145,7 @@ class RecipeForm extends React.Component {
                         <input
                           placeholder="quantity"
                           type="number"
-                          className="ingredient-input"
+                          className="ingredient-input-quantity"
                           onChange={(e) =>
                             this.handleChangeIngredientQuantity(e, index)
                           }
@@ -155,7 +155,7 @@ class RecipeForm extends React.Component {
                         />
                         <input
                           placeholder="unit"
-                          className="ingredient-input"
+                          className="ingredient-input-unit"
                           type="text"
                           list="units"
                           onChange={(e) =>
@@ -202,18 +202,16 @@ class RecipeForm extends React.Component {
                     <div key={index}>
                       <div className="direction-item">
                         {index + 1}.&nbsp;
-                        <div>
-                          <textarea
+                        <div className="direction-textdiv">
+                          <textarea 
+                            className="direction-textarea"
                             onChange={(e) => this.handleChangeDirection(e, index)}
                             value={step}
-                            cols="100"
                           />
                         </div>
-                        &nbsp;&nbsp;
                         <button
                           className="loginBtn btn
                           btn-block btncolortheme"
-                          style={{height:"5%"}}
                           onClick={(e) => this.handleRemoveDirection(e, index)}
                         >
                           X

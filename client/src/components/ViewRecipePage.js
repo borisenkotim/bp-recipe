@@ -199,19 +199,17 @@ class ViewRecipePage extends React.Component {
     for (let i = 0; i < this.state.ingredients.length; ++i) {
       ingredients.push(
         <tr key={i}>
-          <td>
+          <td className="view-name-grouping">
             {" "}
             <input
-              className="ingredient-name-input form-control"
+              className="ingredient-input-name-edit form-control"
               onChange={(e) => this.handleChangeIngredientName(e, i)}
               value={this.state.ingredients[i].name}
               placeholder="Ingredient Name"
             />
-          </td>
-          <td className="view-name-grouping">
             <input
               type="number"
-              className="form-control input-style input-quantity"
+              className="form-control ingredient-input-quantity-edit"
               onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
               value={this.state.ingredients[i].quantity}
               placeholder="Ingredient Quantity"
@@ -219,7 +217,7 @@ class ViewRecipePage extends React.Component {
               min="0"
             />
             <input
-              className="form-control input-style"
+              className="form-control ingredient-input-unit-edit"
               list="units"
               onChange={(e) => this.handleChangeIngredientUnit(e, i)}
               value={this.state.ingredients[i].unit}
@@ -306,10 +304,9 @@ class ViewRecipePage extends React.Component {
             {" "}
             <div>
               <textarea
-                className="form-control"
+                className="form-control direction-textarea-edit"
                 onChange={(e) => this.handleChangeDirection(e, i)}
                 value={this.state.directions[i]}
-                cols="100"
               />
             </div>
           </td>

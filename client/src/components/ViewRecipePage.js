@@ -47,7 +47,7 @@ class ViewRecipePage extends React.Component {
     }
 
     delete newData.confirmDelete;
-    this.props.editRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
+    this.props.saveRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
   };
 
   // Lets the page know if we are viewing or editing a recipe
@@ -105,6 +105,11 @@ class ViewRecipePage extends React.Component {
     );
   };
 
+  // changes the source to a default image if the provided recipe image is not found
+  renderRecipeImageError = (e) =>{
+    e.target.src = 'https://www.boilersupplies.com/img/no_image.png'
+  }
+
   // renders the image for a recipe on the page
   renderRecipeImage = () => {
     return (
@@ -115,6 +120,7 @@ class ViewRecipePage extends React.Component {
         // ensures something shows even if the image is not
         // found
         alt="No Image Found"
+        onError={this.renderRecipeImageError}
       />
     );
   };
@@ -147,7 +153,11 @@ class ViewRecipePage extends React.Component {
           <td>{this.state.ingredients[i].name}</td>
           <td>
             {this.state.ingredients[i].quantity}{" "}
-            {this.state.ingredients[i].unit}
+            {this.state.ingredients[i].unit.toLowerCase() == 'whole' ? 
+              null :
+              (this.state.ingredients[i].quantity > 1 ?
+                this.state.ingredients[i].unit + "s" :
+                this.state.ingredients[i].unit)}
           </td>
           {this.state.ingredients[i].pictureURL && (
             <td>
@@ -190,29 +200,41 @@ class ViewRecipePage extends React.Component {
     for (let i = 0; i < this.state.ingredients.length; ++i) {
       ingredients.push(
         <tr key={i}>
-          <td>
+          <td className="view-name-grouping">
             {" "}
             <input
-              className="ingredient-name-input form-control"
+              className="ingredient-input-name-edit form-control"
               onChange={(e) => this.handleChangeIngredientName(e, i)}
               value={this.state.ingredients[i].name}
               placeholder="Ingredient Name"
             />
-          </td>
-          <td className="view-name-grouping">
             <input
               type="number"
-              className="form-control input-style input-quantity"
+              className="form-control ingredient-input-quantity-edit"
               onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
               value={this.state.ingredients[i].quantity}
               placeholder="Ingredient Quantity"
+              step="0.01"
+              min="0"
             />
             <input
-              className="form-control input-style"
+              className="form-control ingredient-input-unit-edit"
+              list="units"
               onChange={(e) => this.handleChangeIngredientUnit(e, i)}
               value={this.state.ingredients[i].unit}
               placeholder="Ingredient Unit"
-            />
+            />            
+            <datalist id="units">
+                          <option>whole</option>
+                          <option>teaspoon</option>
+                          <option>tablespoon</option>
+                          <option>cup</option>
+                          <option>gallon</option>
+                          <option>pound</option>
+                          <options>ounce</options>
+                          <options>quart</options>
+                          <options>pint</options>
+                        </datalist>
           </td>
           {this.state.ingredients[i].pictureURL && (
             <td>
@@ -281,15 +303,18 @@ class ViewRecipePage extends React.Component {
           <td>{i + 1}</td>
           <td>
             {" "}
-            <input
-              className="form-control"
-              onChange={(e) => this.handleChangeDirection(e, i)}
-              value={this.state.directions[i]}
-            />
+            <div>
+              <textarea
+                className="form-control direction-textarea-edit"
+                onChange={(e) => this.handleChangeDirection(e, i)}
+                value={this.state.directions[i]}
+              />
+            </div>
           </td>
           <td className="x-table-col">
             <button
               className="loginBtn btn"
+              style={{height:"5%"}}
               onClick={(e) => this.handleRemoveDirection(e, i)}
             >
               X
@@ -328,7 +353,7 @@ class ViewRecipePage extends React.Component {
                   )}
                   <span
                     className={
-                      "fa fa-star " +
+                      "fav-btn fa fa-star " +
                       (this.state.favorited ? "favorited" : "unfavorited")
                     }
                     onClick={this.favoriteClicked}
@@ -396,14 +421,6 @@ class ViewRecipePage extends React.Component {
           <div className="recipeContentListInfo">
             <h4>
               Ingredients{" "}
-              {!this.state.viewMode && (
-                <button
-                  className="addBtn"
-                  onClick={(e) => this.addIngredient(e)}
-                >
-                  <span className="fa fa-plus"></span>
-                </button>
-              )}
             </h4>
             <table className="table table-hover ingredientsTable">
               <tbody>
@@ -412,17 +429,21 @@ class ViewRecipePage extends React.Component {
                   : this.renderIngredientsEditMode()}
               </tbody>
             </table>
-
             <h4>
-              Directions{" "}
+              <center>
               {!this.state.viewMode && (
                 <button
                   className="addBtn"
-                  onClick={(e) => this.addDirection(e)}
+                  onClick={(e) => this.addIngredient(e)}
                 >
                   <span className="fa fa-plus"></span>
                 </button>
               )}
+              </center>   
+            </h4>
+
+            <h4>
+              Directions{" "}
             </h4>
             <table className="table table-hover directionsTable">
               <tbody>
@@ -431,6 +452,18 @@ class ViewRecipePage extends React.Component {
                   : this.renderDirectionsEditMode()}
               </tbody>
             </table>
+            <h4>  
+              <center>         
+            {!this.state.viewMode && (
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addDirection(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              )}   
+              </center>            
+            </h4>
           </div>
 
           {this.state.confirmDelete ? this.renderConfirmDeleteDialog() : null}

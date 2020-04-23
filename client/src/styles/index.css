@@ -1,4 +1,4 @@
-/* INDEX.CSS -- The style definitions for the Speedgolf App. These are imported
+/* INDEX.CSS -- The style definitions for the RecipeApp. These are imported
   in index.css for the entire app. */
 
 /* Force an element to span entire height of window */
@@ -235,6 +235,18 @@
   border-radius: 50px;
   text-align: center;
   box-shadow: 2px 2px 3px #999;
+  display: block;
+}
+
+.addBtn-edit {
+  width: 60px;
+  height: 60px;
+  background-color: slategray;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+  display: block;
 }
 
 /* Style the floating action button, which is fixed in the lower right of the app */
@@ -570,8 +582,16 @@ button:focus {
   margin-bottom: 10px;
 }
 
+.direction-textdiv {
+  padding-right: 10px;
+}
+
+.direction-textarea {
+  width: 70vw;
+}
+
 .list-groupings {
-  display: inline-flex;
+  display: block;
 }
 
 .direction-groupings {
@@ -579,20 +599,33 @@ button:focus {
 }
 
 .ingredient-grouping {
-  margin-right: 35px;
+  /*margin-left: 35px;*/
+  padding-bottom: 5vh;
 }
 
 .pictureURL-form {
   width: 300px;
 }
 
-.ingredient-input {
-  margin-right: 15px;
-  width: 70px;
+.ingredient-input-name {
+  margin-left: 1vw;
+  width: 40vw;
+  margin-right: 1vw;
 }
 
-.ingredient-name.ingredient-input {
-  width: 135px;
+.ingredient-input-quantity {
+  width: 10vw;
+  margin-right: 1vw;
+}
+
+.ingredient-input-unit {
+  width: 18vw;
+}
+
+.btn-block {
+  height: 5%;
+  width: 35px;
+  text-align: center;
 }
 
 /*NOTE: must use decimals with opacity prop. If you use percents they will not work in build and will not display anything*/
@@ -659,6 +692,10 @@ button:focus {
 
 /* Styling for the edit view */
 
+.fav-btn {
+  margin-left: 10px;
+}
+
 .cooktime-edit-input {
   width: 60px;
   height: 20px;
@@ -678,8 +715,22 @@ button:focus {
   width: 100%;
 }
 
-.ingredient-name-input {
-  width: 300px;
+.ingredient-input-name-edit {
+  width: 30vw;
+  margin-right: 1vw;
+}
+
+.ingredient-input-quantity-edit {
+  width: 10vw;
+  margin-right: 1vw;
+}
+
+.ingredient-input-unit-edit {
+  width: 18vw;
+}
+
+.direction-textarea-edit {
+  width: 60vw;
 }
 
 .picture-url-input {

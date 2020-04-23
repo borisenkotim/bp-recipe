@@ -24,16 +24,6 @@ mongoose
 //database.
 const Schema = mongoose.Schema;
 
-const recipeSchema = new Schema({
-
-  name : {type: String, required: true},
-  pictureURL : String,
-  ingredients : {type:Array, required: true},
-  directions : {type:Array, required: true},
-  favorited: {type: Boolean, required: true, default: false},
-  dateAdded: {type: String, required: true}
-});
-
 const ingredientSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
@@ -41,18 +31,59 @@ const ingredientSchema = new Schema({
   unit : {type: String, required: true}
 });
 
+const recipeSchema = new Schema({
+  name : {type: String, required: true},
+  pictureURL : String,
+  ingredients : [ingredientSchema],
+  directions : {type:Array, required: true},
+  cookTime : {type: Number, required: true},
+  favorited: {type: Boolean, required: true, default: false},
+  dateAdded: {type: String, required: true}
+});
+
 const userSchema = new Schema({
   id : {type: String, required: true},
-  password : String,
+  passhash : String,
+  salt: String,
   displayName : {type:String, required:true},
   authStrategy : {type: String, required: true},
-  profileImageURL: String,
+  profileImageURL: {type: String, required: true},
   securityQuestion: String, 
   securityAnswer: {type: String, required: function(){
       return this.securityQuestion ? true : false 
   } },
   recipes : [recipeSchema]
 });
+
+import crypto from 'crypto'
+
+// uses 1000 iterations, length of 64, and sha512 function
+let hashOptions = [
+    1000,
+    64,
+    'sha512'
+]
+
+// virtual property password
+userSchema.virtual('password').
+    get(function() {
+        return this.passhash
+    }).
+    set(function(newPassword) {
+        // create unique salt for the user
+        this.salt = crypto.randomBytes(16).toString('hex');
+
+        // hashing user's password
+        this.passhash = crypto.pbkdf2Sync(newPassword, this.salt, ...hashOptions).toString(`hex`);
+    })
+
+// method for validating the hashed / salted password for users
+userSchema.methods.validatePassword = function(password) {
+    // hashes the password argument, checks against stored password
+    var passhash = crypto.pbkdf2Sync(password, this.salt, ...hashOptions).toString(`hex`);
+    return this.password === passhash; 
+}
+
 
 const User = mongoose.model("User", userSchema);
 
@@ -83,13 +114,14 @@ passport.use(
       const userId = `${profile.id}@${profile.provider}`;
       //See if document with this unique userId exists in database
       let currentUser = await User.findOne({ id: userId });
+      console.log(profile.photos[0].value);
       if (!currentUser) {
         //Add this user to the database
         currentUser = await new User({
           id: userId,
           displayName: profile.displayName,
           authStrategy: profile.provider,
-          profileImageUrl: profile.photos[0].value
+          profileImageURL: profile.photos[0].value
         }).save();
       }
       return done(null, currentUser);
@@ -112,7 +144,7 @@ passport.use(
       try {
         thisUser = await User.findOne({ id: userId });
         if (thisUser) {
-          if (thisUser.password === password) {
+          if (thisUser.validatePassword(password)) {
             return done(null, thisUser);
           } else {
             req.authError =
@@ -305,7 +337,7 @@ app.get('/users/:userId', async(req, res, next) => {
 //VALID DATA:
 //  'password' field MUST be present
 //  The following fields are optional: 
-//  displayName', 'profileImageUrl', 'securityQuestion', 'securityAnswer'
+//  displayName', 'profileImageURL', 'securityQuestion', 'securityAnswer'
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -331,7 +363,7 @@ app.post('/users/:userId',  async (req, res, next) => {
         password: req.body.password,
         displayName: req.params.userId,
         authStrategy: 'local',
-        profileImageUrl: req.body.hasOwnProperty("profileImageUrl") ? req.body.profileImageUrl : `https://www.gravatar.com/avatar/${md5(req.params.userId)}`,
+        profileImageURL: req.body.hasOwnProperty("profileImageURL") ? req.body.profileImageURL : `https://www.gravatar.com/avatar/${md5(req.params.userId)}`,
         securityQuestion: req.body.hasOwnProperty("securityQuestion") ? 
           req.body.securityQuestion : "",
         securityAnswer: req.body.hasOwnProperty("securityAnswer") ? 
@@ -354,7 +386,7 @@ app.post('/users/:userId',  async (req, res, next) => {
 //  Fields and values to be updated are passed as body as JSON object.  
 //VALID DATA:
 //  Only the following fields may be included in the message body:
-//  password, displayName, profileImageUrl, securityQuestion, securityAnswer
+//  password, displayName, profileImageURL, securityQuestion, securityAnswer
 //RETURNS: 
 //  Success: status = 200
 //  Failure: status = 400 with an error message
@@ -365,20 +397,21 @@ app.put('/users/:userId',  async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
         "It must contain 'userId' as parameter.");
   }
-  const validProps = ['password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'];
+  const validProps = ['password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'password', 'displayname', 'profileImageUrl', 'securityQuestion', 'securityAnswer'");
+        "'password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'");
     } 
   }
   try {
-        let status = await User.updateOne({id: req.params.userId}, 
-                                          {$set: req.body});                            
-        if (status.nModified != 1) { //Should never happen!
+        let user = await User.findOne({id: req.params.userId}) 
+        user.set(req.body)
+        if (!user) { //Should never happen!
           res.status(400).send("User account exists in database but data could not be updated. Password must be different");
         } else {
+          await user.save()
           res.status(200).send("User data successfully updated.")
         }
       } catch (err) {
@@ -420,7 +453,7 @@ app.get('/recipes/:userId', async(req, res) => {
 //VALID DATA:
 //  user id must correspond to user in Users collection
 //  Body object MUST contain only the following fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message
@@ -433,13 +466,14 @@ app.post('/recipes/:userId', async (req, res, next) => {
       !req.body.hasOwnProperty("favorited") ||
       !req.body.hasOwnProperty("dateAdded") || 
       !req.body.hasOwnProperty("ingredients") ||
-      !req.body.hasOwnProperty("instructions")) {
+      !req.body.hasOwnProperty("cookTime") ||
+      !req.body.hasOwnProperty("directions")) {
     //Body does not contain correct properties
     return res.status(400).send("POST request on /recipes formulated incorrectly." +
-      "Body must contain all 6 required fields: name, pictureURL, ingredients, instructions, dateAdded, favorited.");
+      "Body must contain all 6 required fields: name, pictureURL, ingredients, directions, dateAdded, favorited.");
   }
   try {
-    let status = await User.update(
+    let status = await User.updateOne(
     {id: req.params.userId},
     {$push: {recipes: req.body}});
     if (status.nModified != 1) { //Should never happen!
@@ -464,7 +498,7 @@ app.post('/recipes/:userId', async (req, res, next) => {
 //  recipe id must correspond to a user's recipe. (Use recipes/ GET route to obtain a
 //  list of all of user's recipes, including their unique ids)
 //  Body object may contain only the following 6 fields:
-//  name, pictureURL, ingredients, instructions, dateAdded, favorited
+//  name, pictureURL, ingredients, directions, dateAdded, favorited
 //RETURNS:
 //  Success: status = 200
 //  Failure: status = 400 with error message
@@ -472,14 +506,14 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
   console.log("in /recipes (PUT) route with params = " + 
               JSON.stringify(req.params) + " and body = " + 
               JSON.stringify(req.body));
-  const validProps = ['name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions'];
+  const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
   let bodyObj = {...req.body};
   delete bodyObj._id;
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'instructions', " +
+        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', " +
         bodyProp + " is not an allowed prop.");
     } else {
       bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];

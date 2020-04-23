@@ -8,15 +8,16 @@ import AppMode from "./../AppMode.js";
 const modeTitle = {};
 modeTitle[AppMode.LOGIN] = "Welcome to Your Library";
 modeTitle[AppMode.RECIPES] = "Your Recipes";
-modeTitle[AppMode.RECIPES_ADDBOOK] = "Add New Recipe";
-modeTitle[AppMode.RECIPES_EDITBOOK] = "Edit Recipe";
+modeTitle[AppMode.RECIPES_ADDRECIPE] = "Add New Recipe";
+modeTitle[AppMode.RECIPES_EDITRECIPE] = "Edit Recipe";
 modeTitle[AppMode.REVIEWS] = "Reviews";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
 modeToPage[AppMode.RECIPES] = Recipes;
-modeToPage[AppMode.RECIPES_ADDBOOK] = Recipes;
-modeToPage[AppMode.RECIPES_EDITBOOK] = Recipes;
+modeToPage[AppMode.RECIPES_ADDRECIPE] = Recipes;
+modeToPage[AppMode.RECIPES_EDITRECIPE] = Recipes;
+modeToPage[AppMode.RECIPES_VIEWRECIPE] = Recipes;
 modeToPage[AppMode.PANTRY] = PantryPage;
 
 class App extends React.Component {
@@ -139,31 +140,30 @@ class App extends React.Component {
             <div className="modal-body ">
               <center>
                 <img
-                  src={require("./books.jpg")}
+                  src={require("./../styles/pancakes.jpg")}
                   height="280px"
                   width="370px"
                   className="aboutBody"
                 />
-                <h3>Build Your Own Personal Library!</h3>
+                <h3>Store Your Recipes Online!</h3>
                 <p>
                   <em>
                     Version 1 (Live), Build 20.6.2018 <br />
-                    &copy; 2020 Madeline Anderson. All rights reserved.
+                    &copy; 2020 Recipe Team. All rights reserved.
                   </em>
                 </p>
               </center>
               <p>
-                <b>Your Library app supports</b>
+                <b>Your Recipe App supports</b>
               </p>
               <ul className="yourRecipesSupports">
-                <li>Adding and removing RECIPES in your personal library</li>
-                <li>Viewing your library</li>
+                <li>Adding and removing recipes in your personal cook book</li>
+                <li>Managing your groceries</li>
               </ul>
+              <br/>
               <p>
-                Your Library was first developed by Madeline Anderson, a
-                Computer Science Major at Washington State University. She is
-                currently a Junior, Developing this for CptS 489. She is an
-                intern at SEL in Pullman.
+                Your Recipe App was first developed by The Recipe Team, which is
+                composed of two teams. They are doing this for a CptS 489 project.
               </p>
             </div>
             <div className="modal-footer">

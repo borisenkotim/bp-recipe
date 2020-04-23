@@ -105,6 +105,7 @@ class ViewRecipePage extends React.Component {
     );
   };
 
+  // changes the source to a default image if the provided recipe image is not found
   renderRecipeImageError = (e) =>{
     e.target.src = 'https://www.boilersupplies.com/img/no_image.png'
   }
@@ -352,7 +353,7 @@ class ViewRecipePage extends React.Component {
                   )}
                   <span
                     className={
-                      "fa fa-star " +
+                      "fav-btn fa fa-star " +
                       (this.state.favorited ? "favorited" : "unfavorited")
                     }
                     onClick={this.favoriteClicked}
@@ -420,14 +421,6 @@ class ViewRecipePage extends React.Component {
           <div className="recipeContentListInfo">
             <h4>
               Ingredients{" "}
-              {!this.state.viewMode && (
-                <button
-                  className="addBtn"
-                  onClick={(e) => this.addIngredient(e)}
-                >
-                  <span className="fa fa-plus"></span>
-                </button>
-              )}
             </h4>
             <table className="table table-hover ingredientsTable">
               <tbody>
@@ -436,17 +429,21 @@ class ViewRecipePage extends React.Component {
                   : this.renderIngredientsEditMode()}
               </tbody>
             </table>
-
             <h4>
-              Directions{" "}
+              <center>
               {!this.state.viewMode && (
                 <button
                   className="addBtn"
-                  onClick={(e) => this.addDirection(e)}
+                  onClick={(e) => this.addIngredient(e)}
                 >
                   <span className="fa fa-plus"></span>
                 </button>
               )}
+              </center>   
+            </h4>
+
+            <h4>
+              Directions{" "}
             </h4>
             <table className="table table-hover directionsTable">
               <tbody>
@@ -455,6 +452,18 @@ class ViewRecipePage extends React.Component {
                   : this.renderDirectionsEditMode()}
               </tbody>
             </table>
+            <h4>  
+              <center>         
+            {!this.state.viewMode && (
+                <button
+                  className="addBtn"
+                  onClick={(e) => this.addDirection(e)}
+                >
+                  <span className="fa fa-plus"></span>
+                </button>
+              )}   
+              </center>            
+            </h4>
           </div>
 
           {this.state.confirmDelete ? this.renderConfirmDeleteDialog() : null}

@@ -238,6 +238,17 @@
   display: block;
 }
 
+.addBtn-edit {
+  width: 60px;
+  height: 60px;
+  background-color: slategray;
+  color: white;
+  border-radius: 50px;
+  text-align: center;
+  box-shadow: 2px 2px 3px #999;
+  display: block;
+}
+
 /* Style the floating action button, which is fixed in the lower right of the app */
 .floatbtn {
   position: fixed;
@@ -680,6 +691,10 @@ button:focus {
 }
 
 /* Styling for the edit view */
+
+.fav-btn {
+  margin-left: 10px;
+}
 
 .cooktime-edit-input {
   width: 60px;

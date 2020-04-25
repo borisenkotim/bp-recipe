@@ -49,6 +49,7 @@ class RecipesTable extends React.Component {
     for (let b = colnum - 1; b < this.state.filtered.length; b += 3) {
       col.push(
         <span
+          className="recipe-card-span"
           key={b}
           onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}
         >

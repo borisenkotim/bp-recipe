@@ -18,6 +18,7 @@ class Card extends React.Component {
       <div className="recipe-card shadow mb-5 bg-white rounded">
     {/* shows the image of the recipe on the page */}
         <img
+          className="recipe-card-img"
           src={this.props.pictureURL}
           height="230"
           width="270"

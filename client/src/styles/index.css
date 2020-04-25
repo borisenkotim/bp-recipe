@@ -758,7 +758,10 @@ button:focus {
   width: 270px;
   background-color: white;
   display: inline-block;
-  border-radius: 25px;
+}
+
+.recipe-card:hover {
+  opacity: 0.7;
 }
 
 .col-sm-4.column-contents {

@@ -13,7 +13,7 @@ class Card extends React.Component {
   
   //Update the favorited field in database
   favoriteClicked = (event) => {
-    event.preventDefault();
+    event.stopPropagation();
     var newData = this.state;
     if (this.state.favorited) {
       this.setState({ favorited: false });

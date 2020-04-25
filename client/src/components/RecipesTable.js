@@ -23,11 +23,9 @@ class RecipesTable extends React.Component {
   }
 
   viewRecipe = (e, id) => {
-    if(e.target === this){
-      this.props.setViewId(id);
-      this.props.setEditId(id);
-      this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
-    }
+    this.props.setViewId(id);
+    this.props.setEditId(id);
+    this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
   };
 
   renderTable = () => {

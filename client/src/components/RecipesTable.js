@@ -22,37 +22,21 @@ class RecipesTable extends React.Component {
     this.setState({ filtered: this.props.recipes });
   }
 
-  viewRecipe = (e, id) => {
+  viewRecipe = (id) => {
     this.props.setViewId(id);
     this.props.setEditId(id);
     this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
   };
 
-  renderTable = () => {
-    let table = [];
-    for (let b = 0; b < this.state.filtered.length; ++b) {
-      table.push(
-        <tr
-          key={b}
-          onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}
-        >
-          <td>{this.state.filtered[b].name}</td>
-          <td>{this.state.filtered[b].cookTime}</td>
-        </tr>
-      );
-    }
-    return table;
-  };
-
-  renderCards = (colnum) => {
+  renderCards = () => {
     let col = [];
     for (let b = 0; b < this.state.filtered.length; b += 1) {
       col.push(
         <div className="recipe-card-div">
           <span
             className="recipe-card-span"
-            key={b}
-            onClick={this.props.menuOpen ? null : (e) => this.viewRecipe(e, b)}
+            key={this.props.recipes.indexOf(this.state.filtered[b])}
+            onClick={this.props.menuOpen ? null : () => this.viewRecipe(this.props.recipes.indexOf(this.state.filtered[b]))}
           >
             {" "}
             <Card
@@ -70,6 +54,8 @@ class RecipesTable extends React.Component {
 
   updateFilteredRecipes = (newFilteredList) => {
     this.setState({ filtered: newFilteredList });
+    //Force update of component so that Recipes will display correctly.
+    this.forceUpdate();
   };
 
   render() {
@@ -96,7 +82,7 @@ class RecipesTable extends React.Component {
             <p>No recipes found</p>
           ) : (
             <div className="recipe-cards-container">
-                {this.renderCards(1)}
+                {this.renderCards()}
             </div>
           )}
         </div>

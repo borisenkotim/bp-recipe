@@ -765,7 +765,7 @@ button:focus {
 
 .recipe-cards-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-auto-rows: 280px;
   grid-gap: 10px 10px;
 }
@@ -776,10 +776,17 @@ button:focus {
   margin-top: 10px;
   margin-left: 5px;
   float: left;
+  overflow: hidden;
+  max-width: 11em;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .recipe-card-favorite {
   float: right;
   margin-top: 9px;
   margin-right: 10px;
+  z-index: 20;
 }

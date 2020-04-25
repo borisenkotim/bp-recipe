@@ -46,19 +46,21 @@ class RecipesTable extends React.Component {
 
   renderCards = (colnum) => {
     let col = [];
-    for (let b = colnum - 1; b < this.state.filtered.length; b += 3) {
+    for (let b = 0; b < this.state.filtered.length; b += 1) {
       col.push(
-        <span
-          className="recipe-card-span"
-          key={b}
-          onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}
-        >
-          {" "}
-          <Card
-            name={this.state.filtered[b].name}
-            pictureURL={this.state.filtered[b].pictureURL}
-          />
-        </span>
+        <div className="recipe-card-div">
+          <span
+            className="recipe-card-span"
+            key={b}
+            onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}
+          >
+            {" "}
+            <Card
+              name={this.state.filtered[b].name}
+              pictureURL={this.state.filtered[b].pictureURL}
+            />
+          </span>
+        </div>
       );
     }
 
@@ -92,10 +94,8 @@ class RecipesTable extends React.Component {
           {Object.keys(this.state.filtered).length === 0 ? (
             <p>No recipes found</p>
           ) : (
-            <div class="row">
-              <div class="col-sm-4 column-contents">{this.renderCards(1)}</div>
-              <div class="col-sm-4 column-contents">{this.renderCards(2)}</div>
-              <div class="col-sm-4 column-contents">{this.renderCards(3)}</div>
+            <div className="recipe-cards-container">
+                {this.renderCards(1)}
             </div>
           )}
         </div>

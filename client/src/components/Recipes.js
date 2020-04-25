@@ -137,9 +137,7 @@ class Recipes extends React.Component {
             <RecipesTable
               recipes={this.state.recipes}
               setEditId={this.setEditId}
-              setDeleteId={this.setDeleteId}
               setViewId={this.setViewId}
-              deleteRecipe={this.deleteRecipe}
               changeMode={this.props.changeMode}
               menuOpen={this.props.menuOpen}
             />
@@ -158,7 +156,7 @@ class Recipes extends React.Component {
           <RecipeForm mode={this.props.mode} saveRecipe={this.addRecipe} />
         );
       case AppMode.RECIPES_VIEWRECIPE:
-        return (
+        return ( 
           <ViewRecipePage
             mode={this.props.mode}
             id={this.state.viewId}

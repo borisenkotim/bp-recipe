@@ -750,5 +750,31 @@ button:focus {
 /* End styling for the edit view */
 
 .recipe-search-icon:hover {
-    color: #706e6e
+  color: #706e6e;
+}
+
+.recipe-card {
+  height: 280px;
+  width: 270px;
+  background-color: white;
+  display: inline-block;
+  border-radius: 25px;
+}
+
+.col-sm-4.column-contents {
+  text-align: center;
+}
+
+.recipe-card-name {
+  font-size: 19px;
+  color: black;
+  margin-top: 10px;
+  margin-left: 5px;
+  float: left;
+}
+
+.recipe-card-favorite {
+  float: right;
+  margin-top: 17px;
+  margin-right: 10px;
 }

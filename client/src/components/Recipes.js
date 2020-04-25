@@ -56,7 +56,7 @@ class Recipes extends React.Component {
     this.setState({viewId: val});
   }
 
-  editRecipe = async (newData, editId=this.state.editId) => {
+  editRecipe = async (newData, editId=this.state.editId, redirectPage=null) => {
     let url =
       "/recipes/" +
       this.props.user.id +
@@ -78,7 +78,7 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes();
+      this.fetchRecipes(redirectPage);
     }
   };
 
@@ -138,6 +138,7 @@ class Recipes extends React.Component {
               recipes={this.state.recipes}
               setEditId={this.setEditId}
               setViewId={this.setViewId}
+              saveRecipe={this.editRecipe}
               changeMode={this.props.changeMode}
               menuOpen={this.props.menuOpen}
             />

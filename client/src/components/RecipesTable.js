@@ -22,10 +22,12 @@ class RecipesTable extends React.Component {
     this.setState({ filtered: this.props.recipes });
   }
 
-  viewRecipe = (id) => {
-    this.props.setViewId(id);
-    this.props.setEditId(id);
-    this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
+  viewRecipe = (e, id) => {
+    if(e.target === this){
+      this.props.setViewId(id);
+      this.props.setEditId(id);
+      this.props.changeMode(AppMode.RECIPES_VIEWRECIPE);
+    }
   };
 
   renderTable = () => {
@@ -52,12 +54,13 @@ class RecipesTable extends React.Component {
           <span
             className="recipe-card-span"
             key={b}
-            onClick={this.props.menuOpen ? null : () => this.viewRecipe(b)}
+            onClick={this.props.menuOpen ? null : (e) => this.viewRecipe(e, b)}
           >
             {" "}
             <Card
-              name={this.state.filtered[b].name}
-              pictureURL={this.state.filtered[b].pictureURL}
+              data={this.state.filtered[b]}
+              id={this.props.recipes.indexOf(this.state.filtered[b])}
+              saveRecipe={this.props.saveRecipe}
             />
           </span>
         </div>

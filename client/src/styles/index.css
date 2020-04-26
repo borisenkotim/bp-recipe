@@ -590,6 +590,10 @@ button:focus {
   width: 70vw;
 }
 
+.handle {
+  color: rgb(90, 90, 90);
+}
+
 .list-groupings {
   display: block;
 }

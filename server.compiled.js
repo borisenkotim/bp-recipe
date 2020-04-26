@@ -50,6 +50,10 @@ var ingredientSchema = new Schema({
     required: true
   },
   pictureURL: String,
+  quantityString: {
+    type: String,
+    required: true
+  },
   quantity: {
     type: Number,
     required: true

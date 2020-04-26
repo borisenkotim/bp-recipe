@@ -56,7 +56,7 @@ class Recipes extends React.Component {
     this.setState({viewId: val});
   }
 
-  editRecipe = async (newData, editId=this.state.editId) => {
+  editRecipe = async (newData, editId=this.state.editId, redirectPage=null) => {
     let url =
       "/recipes/" +
       this.props.user.id +
@@ -78,7 +78,7 @@ class Recipes extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchRecipes();
+      this.fetchRecipes(redirectPage);
     }
   };
 
@@ -137,9 +137,8 @@ class Recipes extends React.Component {
             <RecipesTable
               recipes={this.state.recipes}
               setEditId={this.setEditId}
-              setDeleteId={this.setDeleteId}
               setViewId={this.setViewId}
-              deleteRecipe={this.deleteRecipe}
+              saveRecipe={this.editRecipe}
               changeMode={this.props.changeMode}
               menuOpen={this.props.menuOpen}
             />
@@ -158,7 +157,7 @@ class Recipes extends React.Component {
           <RecipeForm mode={this.props.mode} saveRecipe={this.addRecipe} />
         );
       case AppMode.RECIPES_VIEWRECIPE:
-        return (
+        return ( 
           <ViewRecipePage
             mode={this.props.mode}
             id={this.state.viewId}

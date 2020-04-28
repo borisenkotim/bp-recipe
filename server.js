@@ -465,7 +465,16 @@ app.get('/pantry/:userId', async(req, res) => {
     if(!thisUser){
       return res.status(400).message("How did you get here");
     } else{
+      if(thisUser.pantry){
         return res.status(200).json(JSON.stringify(thisUser.pantry));
+      }
+      else{
+        //Jacob notes: i want to tell the page this user doesn't have a thing initialized yet and we should fix that (for old users)
+        return res.status(400).message("User doesn't have a pantry list yet, please intilize for them (even if it's empty)");
+      }
+        
+      //this may be empty if a user has no list initialized
+        
     }
   }catch(err){
       console.log();
@@ -480,7 +489,14 @@ app.get('/groceryList/:userId', async(req,res) => {
     if(!thisUser){
       return res.status(400).message("How did you get here");
     } else{
-        return res.status(200).json(JSON.stringify(thisUser.groceryList));
+      //this may be empty if a user has no list initialized
+        if(thisUser.groceryList){
+          return res.status(200).json(JSON.stringify(thisUser.groceryList));
+        }
+        else{
+          return res.status(400).message("User doesn't have a grocery list yet, please intilize for them (even if it's empty)")
+        }
+        
     }
   }catch(err){
       console.log();
@@ -488,9 +504,46 @@ app.get('/groceryList/:userId', async(req,res) => {
   }
 });
 
-//Jacob notes: we need two more similar to the function above so that we can get pantry list and grocery list accossiated with userId
 //we will need the same thing but for the funciton below so that we can update/post pantry/grocery list for a userID
+app.post('/pantry/:userId', async(req, res, next) => {
+  console.log("in /pantry (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+  if(!req.body.hasOwnProperty("list")){
+    return res.status(400).message("POST request on /pantry was not formulated correctly. Body must contain property: list");
+  }
+  try {
+    let status = await User.updateOne(
+    {id: req.params.userId},
+    {$set: {pantry: req.body}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when updating pantry in database. Pantry was not uodated.");
+    } else {
+      res.status(200).send("pantry successfully updated in database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when updating pantry in database: " + err);
+  } 
+});
 
+app.post('/groceryList/:userId', async(req, res, next) => {
+  console.log("in /groceryList (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+  if(!req.body.hasOwnProperty("list")){
+    return res.status(400).message("POST request on /groceryList was not formulated correctly. Body must contain property: list");
+  }
+  try {
+    let status = await User.updateOne(
+    {id: req.params.userId},
+    {$set: {groceryList: req.body}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when adding groceries to database. Grocery List was not uodated.");
+    } else {
+      res.status(200).send("pantry successfully updated in database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when updating grocery list in database: " + err);
+  } 
+});
 
 //recipes/userId/ (POST): Attempts to add new recipe to database
 //GIVEN:

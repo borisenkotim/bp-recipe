@@ -137,7 +137,7 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 
 
 var LOCAL_PORT = 4001;
-var DEPLOY_URL = "https://recipe.bfapp.org";
+var DEPLOY_URL = "http://localhost:4001";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 

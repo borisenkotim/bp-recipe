@@ -40,6 +40,18 @@ const recipeSchema = new Schema({
   favorited: {type: Boolean, required: true, default: false},
   dateAdded: {type: String, required: true}
 });
+/*
+const grocerycSchema = new Schema({
+  associatedUserId : {type: String, required: true },
+  ingredients: [ingredientSchema]
+  //this shcema will support foods we need go get from the grocery store
+});
+
+const pantrySchema = new Schema({
+  associatedUserId: {type: String, required: true},
+  ingredients: [ingredientSchema]
+});
+*/
 
 const userSchema = new Schema({
   id : {type: String, required: true},
@@ -52,7 +64,9 @@ const userSchema = new Schema({
   securityAnswer: {type: String, required: function(){
       return this.securityQuestion ? true : false 
   } },
-  recipes : [recipeSchema]
+  recipes : [recipeSchema],
+  pantry: [ingredientSchema],
+  groceryList: [ingredientSchema]
 });
 
 import crypto from 'crypto'
@@ -443,6 +457,39 @@ app.get('/recipes/:userId', async(req, res) => {
     return res.status(400).message("Unexpected error occurred when looking up user in database: " + err);
   }
 });
+
+app.get('/pantry/:userId', async(req, res) => {
+  console.log("in /pantry route (GET) with userId = " + JSON.stringify(req.params.userId));
+  try{
+    let thisUser = await User.findOne({id: req.params.userId});
+    if(!thisUser){
+      return res.status(400).message("How did you get here");
+    } else{
+        return res.status(200).json(JSON.stringify(thisUser.pantry));
+    }
+  }catch(err){
+      console.log();
+      return res.status(400).message("Unexpected error occured when looking up user in database for pantry: " + err);
+  }
+});
+
+app.get('/groceryList/:userId', async(req,res) => {
+  console.log("in /groceryList route (GET) with userId = " + JSON.stringify(req.params.userId));
+  try{
+    let thisUser = await User.findOne({id: req.params.userId});
+    if(!thisUser){
+      return res.status(400).message("How did you get here");
+    } else{
+        return res.status(200).json(JSON.stringify(thisUser.groceryList));
+    }
+  }catch(err){
+      console.log();
+      return res.status(400).message("Unexpected error occured when looking up user in database for grocery list: " + err);
+  }
+});
+
+//Jacob notes: we need two more similar to the function above so that we can get pantry list and grocery list accossiated with userId
+//we will need the same thing but for the funciton below so that we can update/post pantry/grocery list for a userID
 
 
 //recipes/userId/ (POST): Attempts to add new recipe to database

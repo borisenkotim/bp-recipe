@@ -136,7 +136,7 @@ class RecipeForm extends React.Component {
                       <div className="direction-item">
                         <input
                           placeholder="ingredient name"
-                          className="ingredient-input ingredient-name"
+                          className="ingredient-input-name"
                           onChange={(e) =>
                             this.handleChangeIngredientName(e, index)
                           }
@@ -145,20 +145,35 @@ class RecipeForm extends React.Component {
                         <input
                           placeholder="quantity"
                           type="number"
-                          className="ingredient-input"
+                          className="ingredient-input-quantity"
                           onChange={(e) =>
                             this.handleChangeIngredientQuantity(e, index)
                           }
                           value={step.quantity}
+                          step="0.01"
+                          min="0"
                         />
                         <input
                           placeholder="unit"
-                          className="ingredient-input"
+                          className="ingredient-input-unit"
+                          type="text"
+                          list="units"
                           onChange={(e) =>
                             this.handleChangeIngredientUnit(e, index)
                           }
                           value={step.unit}
                         />
+                        <datalist id="units">
+                          <option>whole</option>
+                          <option>teaspoon</option>
+                          <option>tablespoon</option>
+                          <option>cup</option>
+                          <option>gallon</option>
+                          <option>pound</option>
+                          <options>ounce</options>
+                          <options>quart</options>
+                          <options>pint</options>
+                        </datalist>
                         &nbsp;&nbsp;
                         <button
                           className="loginBtn btn
@@ -187,14 +202,16 @@ class RecipeForm extends React.Component {
                     <div key={index}>
                       <div className="direction-item">
                         {index + 1}.&nbsp;
-                        <input
-                          onChange={(e) => this.handleChangeDirection(e, index)}
-                          value={step}
-                        />
-                        &nbsp;&nbsp;
+                        <div className="direction-textdiv">
+                          <textarea 
+                            className="direction-textarea"
+                            onChange={(e) => this.handleChangeDirection(e, index)}
+                            value={step}
+                          />
+                        </div>
                         <button
                           className="loginBtn btn
-                    btn-block btncolortheme"
+                          btn-block btncolortheme"
                           onClick={(e) => this.handleRemoveDirection(e, index)}
                         >
                           X

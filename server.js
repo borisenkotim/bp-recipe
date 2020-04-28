@@ -27,6 +27,7 @@ const Schema = mongoose.Schema;
 const ingredientSchema = new Schema({
   name : {type: String, required: true},
   pictureURL : String,
+  quantityString : {type: String, required: true},
   quantity : {type: Number, required: true},
   unit : {type: String, required: true}
 });
@@ -613,8 +614,8 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', " +
-        bodyProp + " is not an allowed prop.");
+        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" +
+        bodyProp + "* is not an allowed prop.");
     } else {
       bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
       delete bodyObj[bodyProp];
@@ -626,11 +627,7 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
       "recipes._id": mongoose.Types.ObjectId(req.params.recipeId)}
       ,{"$set" : bodyObj}
     );
-    if (status.nModified != 1) { //Should never happen!
-      res.status(400).send("Unexpected error occurred when updating recipe in database. recipe was not updated.");
-    } else {
-      res.status(200).send("recipe successfully updated in database.");
-    }
+    res.status(200).send("recipe successfully updated in database.");
   } catch (err) {
     console.log(err);
     return res.status(400).send("Unexpected error occurred when updating recipe in database: " + err);

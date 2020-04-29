@@ -25,7 +25,7 @@ class SortBtn extends React.Component {
             <button
                 className={`recipe-sort-button ${this.props.icon}${this.asc ? this.props.switch[0] : this.props.switch[1]}` + 
                             `${this.props.selected ? " selected" : ""}` + 
-                            `${this.props.visible ? " visible" : ""}`}
+                            `${this.props.visible ? " visible" : ""}` + `${this.props.customIcon ? " custom" : ""}`}
                 onClick={this.onClick}
                 disabled={!this.props.visible}
             />
@@ -143,6 +143,7 @@ class RecipeSort extends React.Component {
                     onClick={() => { this.onBtnClick(1) }}
                     sortFunction={this.timeSort}
                     visible={this.state.visible}
+                    customIcon={true}
                 />
                 <SortBtn
                     selected={this.state.selectedSort === 2}

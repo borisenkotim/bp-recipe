@@ -833,3 +833,7 @@ button:focus {
 .recipe-sort-button.selected {
     background-color: lightgray;
 }
+
+.recipe-sort-button.custom { 
+    padding-bottom: 0px;
+}

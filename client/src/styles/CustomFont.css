@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "sort-time-font";
+  src:url("fonts/sort-time-font.eot");
+  src:url("fonts/sort-time-font.eot?#iefix") format("embedded-opentype"),
+    url("fonts/sort-time-font.woff") format("woff"),
+    url("fonts/sort-time-font.ttf") format("truetype"),
+    url("fonts/sort-time-font.svg#sort-time-font") format("svg");
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+[data-icon]:before {
+  font-family: "sort-time-font" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="custom-icon-"]:before,
+[class*=" custom-icon-"]:before {
+  font-family: "sort-time-font" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-icon-sort-time-asc:before {
+  content: "\61";
+}
+.custom-icon-sort-time-desc:before {
+  content: "\62";
+}

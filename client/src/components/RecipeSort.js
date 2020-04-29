@@ -138,7 +138,7 @@ class RecipeSort extends React.Component {
                 />
                 <SortBtn
                     selected={this.state.selectedSort === 1}
-                    icon="fa fa-sort-numeric"
+                    icon="custom-icon-sort-time"
                     switch={["-asc", "-desc"]}
                     onClick={() => { this.onBtnClick(1) }}
                     sortFunction={this.timeSort}

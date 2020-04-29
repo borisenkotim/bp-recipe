@@ -794,3 +794,19 @@ button:focus {
   margin-right: 10px;
   z-index: 20;
 }
+
+
+/* Styling for sorting buttons */
+.recipe-sort-button {
+    background: none;
+    border: none;
+    border-radius: 10px;
+    font-size: 25px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.recipe-sort-button.selected {
+    background-color: lightgray;
+}

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/modal.css";
+import { ReactSortable } from "react-sortablejs";
 import AppMode from "../AppMode.js";
 
 class ViewRecipePage extends React.Component {
@@ -36,8 +37,9 @@ class ViewRecipePage extends React.Component {
   };
 
   //Update the favorited field in database
-  favoriteClicked = () => {
-    var newData = this.state;
+  favoriteClicked = (e) => {
+    e.preventDefault();
+    let newData = this.state;
     if (this.state.favorited) {
       this.setState({ favorited: false });
       newData.favorited = false;
@@ -47,6 +49,7 @@ class ViewRecipePage extends React.Component {
     }
 
     delete newData.confirmDelete;
+    delete newData.viewMode;
     this.props.saveRecipe(newData, this.props.id, AppMode.RECIPES_VIEWRECIPE);
   };
 
@@ -172,7 +175,7 @@ class ViewRecipePage extends React.Component {
       );
     }
 
-    return ingredients;
+    return (<tbody>{ingredients}</tbody>);
   };
 
   // handles the change to ingredient name
@@ -193,71 +196,93 @@ class ViewRecipePage extends React.Component {
     this.setState({ ingredients: this.state.ingredients });
   }
 
+  updateIngredientOrder = (newOrder) => {
+    let i = 0
+    let ingrArr = []
+    for(i=0; i < newOrder.length; ++i){
+      ingrArr.push(newOrder[i].value)
+    }
+    this.setState({ingredients: ingrArr});
+  }
+
   // render the ingredients in edit mode with inputs
   renderIngredientsEditMode = () => {
-    let ingredients = [];
-    //if the data are ingredients objects
-    for (let i = 0; i < this.state.ingredients.length; ++i) {
-      ingredients.push(
-        <tr key={i}>
-          <td className="view-name-grouping">
-            {" "}
-            <input
-              className="ingredient-input-name-edit form-control"
-              onChange={(e) => this.handleChangeIngredientName(e, i)}
-              value={this.state.ingredients[i].name}
-              placeholder="Ingredient Name"
-            />
-            <input
-              type="number"
-              className="form-control ingredient-input-quantity-edit"
-              onChange={(e) => this.handleChangeIngredientQuantity(e, i)}
-              value={this.state.ingredients[i].quantity}
-              placeholder="Ingredient Quantity"
-              step="0.01"
-              min="0"
-            />
-            <input
-              className="form-control ingredient-input-unit-edit"
-              list="units"
-              onChange={(e) => this.handleChangeIngredientUnit(e, i)}
-              value={this.state.ingredients[i].unit}
-              placeholder="Ingredient Unit"
-            />            
-            <datalist id="units">
-                          <option>whole</option>
-                          <option>teaspoon</option>
-                          <option>tablespoon</option>
-                          <option>cup</option>
-                          <option>gallon</option>
-                          <option>pound</option>
-                          <options>ounce</options>
-                          <options>quart</options>
-                          <options>pint</options>
-                        </datalist>
-          </td>
-          {this.state.ingredients[i].pictureURL && (
-            <td>
-              <img
-                src={this.state.ingredients[i].pictureURL}
-                height="40"
-                width="40"
-              />
-            </td>
-          )}
-          <td className="x-table-col">
-            <button
-              className="loginBtn btn"
-              onClick={(e) => this.handleRemoveIngredient(e, i)}
-            >
-              X
-            </button>
-          </td>
-        </tr>
-      );
+    let i = 0;
+    let ingrArr = []
+    for(i=0; i<this.state.ingredients.length; ++i){
+      ingrArr.push(
+        {
+          value:this.state.ingredients[i],
+          id: i
+        });
     }
 
-    return ingredients;
+    return (
+      <ReactSortable 
+        handle=".handle"
+        tag="tbody"
+        list={ingrArr} 
+        setList={newState => this.updateIngredientOrder(newState)}>
+        {ingrArr.map(ingredient => (
+          <tr key={ingredient.id}>
+            <td><span className="fa fa-bars handle"></span></td>
+            <td className="view-name-grouping">
+              {" "}
+              <input
+                className="ingredient-input-name-edit form-control"
+                onChange={(e) => this.handleChangeIngredientName(e, ingredient.id)}
+                value={ingredient.value.name}
+                placeholder="Ingredient Name"
+              />
+              <input
+                type="number"
+                className="form-control ingredient-input-quantity-edit"
+                onChange={(e) => this.handleChangeIngredientQuantity(e, ingredient.id)}
+                value={ingredient.value.quantity}
+                placeholder="Ingredient Quantity"
+                step="0.01"
+                min="0"
+              />
+              <input
+                className="form-control ingredient-input-unit-edit"
+                list="units"
+                onChange={(e) => this.handleChangeIngredientUnit(e, ingredient.id)}
+                value={ingredient.value.unit}
+                placeholder="Ingredient Unit"
+              />            
+              <datalist id="units">
+                            <option>whole</option>
+                            <option>teaspoon</option>
+                            <option>tablespoon</option>
+                            <option>cup</option>
+                            <option>gallon</option>
+                            <option>pound</option>
+                            <options>ounce</options>
+                            <options>quart</options>
+                            <options>pint</options>
+                          </datalist>
+            </td>
+            {ingredient.value.pictureURL && (
+              <td>
+                <img
+                  src={ingredient.value.pictureURL}
+                  height="40"
+                  width="40"
+                />
+              </td>
+            )}
+            <td className="x-table-col">
+              <button
+                className="loginBtn btn"
+                onClick={(e) => this.handleRemoveIngredient(e, ingredient.id)}
+              >
+                X
+              </button>
+            </td>
+          </tr>
+        ))}
+      </ReactSortable>
+    );
   };
 
   // removes a direction and changes the numbers to match
@@ -285,7 +310,7 @@ class ViewRecipePage extends React.Component {
         </tr>
       );
     }
-    return directions;
+    return (<tbody>{directions}</tbody>);
   };
 
   // handes a change to a direction input
@@ -294,36 +319,60 @@ class ViewRecipePage extends React.Component {
     this.setState({ directions: this.state.directions });
   }
 
+  updateDirectionOrder = (newOrder) => {
+    let i = 0
+    let dirArr = []
+    for(i=0; i < newOrder.length; ++i){
+      dirArr.push(newOrder[i].value)
+    }
+    this.setState({directions: dirArr});
+  }
+
   // renders the directions as inputs for edit mode
   renderDirectionsEditMode = () => {
-    let directions = [];
-    for (let i = 0; i < this.state.directions.length; ++i) {
-      directions.push(
-        <tr key={i}>
-          <td>{i + 1}</td>
-          <td>
-            {" "}
-            <div>
-              <textarea
-                className="form-control direction-textarea-edit"
-                onChange={(e) => this.handleChangeDirection(e, i)}
-                value={this.state.directions[i]}
-              />
-            </div>
-          </td>
-          <td className="x-table-col">
-            <button
-              className="loginBtn btn"
-              style={{height:"5%"}}
-              onClick={(e) => this.handleRemoveDirection(e, i)}
-            >
-              X
-            </button>
-          </td>
-        </tr>
-      );
+    let i = 0;
+    let dirArr = []
+    for(i=0; i<this.state.directions.length; ++i){
+      dirArr.push(
+        {
+          value:this.state.directions[i],
+          id: i
+        });
     }
-    return directions;
+
+    return (
+      <ReactSortable 
+        handle=".handle"
+        tag="tbody"
+        list={dirArr} 
+        setList={newState => this.updateDirectionOrder(newState)}>
+        {dirArr.map(direction => (
+          <tr key={direction.id} className="direction-row">
+            <td><span className="fa fa-bars handle"></span></td>
+            <td>{direction.id+1}</td>
+            <td>
+              {" "}
+              <div>
+                <textarea
+                  className="form-control direction-textarea-edit"
+                  onChange={(e) => this.handleChangeDirection(e, direction.id)}
+                  value={direction.value}
+                />
+              </div>
+            </td>
+            <td className="x-table-col">
+              <button
+                className="loginBtn btn"
+                style={{height:"5%"}}
+                onClick={(e) => this.handleRemoveDirection(e, direction.id)}
+              >
+                X
+              </button>
+            </td>
+        </tr>
+        ))}
+      </ReactSortable>
+    );
   };
 
   render() {
@@ -356,7 +405,7 @@ class ViewRecipePage extends React.Component {
                       "fav-btn fa fa-star " +
                       (this.state.favorited ? "favorited" : "unfavorited")
                     }
-                    onClick={this.favoriteClicked}
+                    onClick={(e) => this.favoriteClicked(e)}
                   ></span>
                 </h1>
               </div>
@@ -423,11 +472,9 @@ class ViewRecipePage extends React.Component {
               Ingredients{" "}
             </h4>
             <table className="table table-hover ingredientsTable">
-              <tbody>
                 {this.state.viewMode
                   ? this.renderIngredients()
                   : this.renderIngredientsEditMode()}
-              </tbody>
             </table>
             <h4>
               <center>
@@ -446,11 +493,9 @@ class ViewRecipePage extends React.Component {
               Directions{" "}
             </h4>
             <table className="table table-hover directionsTable">
-              <tbody>
                 {this.state.viewMode
                   ? this.renderDirections()
                   : this.renderDirectionsEditMode()}
-              </tbody>
             </table>
             <h4>  
               <center>         

@@ -28,7 +28,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var connectStr = "mongodb+srv://AdminUser:TK3bTLCXqCaAeekB@cluster0-iik0u.mongodb.net/test?retryWrites=true&w=majority";
+var connectStr = "mongodb+srv://dbAdmin:5KYp26nhgnpyMAq@cluster0-ouuzr.mongodb.net/test?retryWrites=true&w=majority";
 
 _mongoose["default"].set('useFindAndModify', false);
 
@@ -50,6 +50,10 @@ var ingredientSchema = new Schema({
     required: true
   },
   pictureURL: String,
+  quantityString: {
+    type: String,
+    required: true
+  },
   quantity: {
     type: Number,
     required: true
@@ -84,6 +88,19 @@ var recipeSchema = new Schema({
     required: true
   }
 });
+/*
+const grocerycSchema = new Schema({
+  associatedUserId : {type: String, required: true },
+  ingredients: [ingredientSchema]
+  //this shcema will support foods we need go get from the grocery store
+});
+
+const pantrySchema = new Schema({
+  associatedUserId: {type: String, required: true},
+  ingredients: [ingredientSchema]
+});
+*/
+
 var userSchema = new Schema({
   id: {
     type: String,
@@ -110,7 +127,9 @@ var userSchema = new Schema({
       return this.securityQuestion ? true : false;
     }
   },
-  recipes: [recipeSchema]
+  recipes: [recipeSchema],
+  pantry: [ingredientSchema],
+  groceryList: [ingredientSchema]
 });
 // uses 1000 iterations, length of 64, and sha512 function
 var hashOptions = [1000, 64, 'sha512']; // virtual property password
@@ -719,6 +738,237 @@ app.get('/recipes/:userId', /*#__PURE__*/function () {
   return function (_x20, _x21) {
     return _ref7.apply(this, arguments);
   };
+}());
+app.get('/pantry/:userId', /*#__PURE__*/function () {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
+    var thisUser;
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            console.log("in /pantry route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context8.prev = 1;
+            _context8.next = 4;
+            return User.findOne({
+              id: req.params.userId
+            });
+
+          case 4:
+            thisUser = _context8.sent;
+
+            if (thisUser) {
+              _context8.next = 9;
+              break;
+            }
+
+            return _context8.abrupt("return", res.status(400).message("How did you get here"));
+
+          case 9:
+            if (!thisUser.pantry) {
+              _context8.next = 13;
+              break;
+            }
+
+            return _context8.abrupt("return", res.status(200).json(JSON.stringify(thisUser.pantry)));
+
+          case 13:
+            return _context8.abrupt("return", res.status(400).message("User doesn't have a pantry list yet, please intilize for them (even if it's empty)"));
+
+          case 14:
+            _context8.next = 20;
+            break;
+
+          case 16:
+            _context8.prev = 16;
+            _context8.t0 = _context8["catch"](1);
+            console.log();
+            return _context8.abrupt("return", res.status(400).message("Unexpected error occured when looking up user in database for pantry: " + _context8.t0));
+
+          case 20:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8, null, [[1, 16]]);
+  }));
+
+  return function (_x22, _x23) {
+    return _ref8.apply(this, arguments);
+  };
+}());
+app.get('/groceryList/:userId', /*#__PURE__*/function () {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
+    var thisUser;
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+      while (1) {
+        switch (_context9.prev = _context9.next) {
+          case 0:
+            console.log("in /groceryList route (GET) with userId = " + JSON.stringify(req.params.userId));
+            _context9.prev = 1;
+            _context9.next = 4;
+            return User.findOne({
+              id: req.params.userId
+            });
+
+          case 4:
+            thisUser = _context9.sent;
+
+            if (thisUser) {
+              _context9.next = 9;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(400).message("How did you get here"));
+
+          case 9:
+            if (!thisUser.groceryList) {
+              _context9.next = 13;
+              break;
+            }
+
+            return _context9.abrupt("return", res.status(200).json(JSON.stringify(thisUser.groceryList)));
+
+          case 13:
+            return _context9.abrupt("return", res.status(400).message("User doesn't have a grocery list yet, please intilize for them (even if it's empty)"));
+
+          case 14:
+            _context9.next = 20;
+            break;
+
+          case 16:
+            _context9.prev = 16;
+            _context9.t0 = _context9["catch"](1);
+            console.log();
+            return _context9.abrupt("return", res.status(400).message("Unexpected error occured when looking up user in database for grocery list: " + _context9.t0));
+
+          case 20:
+          case "end":
+            return _context9.stop();
+        }
+      }
+    }, _callee9, null, [[1, 16]]);
+  }));
+
+  return function (_x24, _x25) {
+    return _ref9.apply(this, arguments);
+  };
+}()); //we will need the same thing but for the funciton below so that we can update/post pantry/grocery list for a userID
+
+app.post('/pantry/:userId', /*#__PURE__*/function () {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res, next) {
+    var status;
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            console.log("in /pantry (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (req.body.hasOwnProperty("list")) {
+              _context10.next = 3;
+              break;
+            }
+
+            return _context10.abrupt("return", res.status(400).message("POST request on /pantry was not formulated correctly. Body must contain property: list"));
+
+          case 3:
+            _context10.prev = 3;
+            _context10.next = 6;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $set: {
+                pantry: req.body
+              }
+            });
+
+          case 6:
+            status = _context10.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when updating pantry in database. Pantry was not uodated.");
+            } else {
+              res.status(200).send("pantry successfully updated in database.");
+            }
+
+            _context10.next = 14;
+            break;
+
+          case 10:
+            _context10.prev = 10;
+            _context10.t0 = _context10["catch"](3);
+            console.log(_context10.t0);
+            return _context10.abrupt("return", res.status(400).send("Unexpected error occurred when updating pantry in database: " + _context10.t0));
+
+          case 14:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10, null, [[3, 10]]);
+  }));
+
+  return function (_x26, _x27, _x28) {
+    return _ref10.apply(this, arguments);
+  };
+}());
+app.post('/groceryList/:userId', /*#__PURE__*/function () {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res, next) {
+    var status;
+    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+      while (1) {
+        switch (_context11.prev = _context11.next) {
+          case 0:
+            console.log("in /groceryList (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+
+            if (req.body.hasOwnProperty("list")) {
+              _context11.next = 3;
+              break;
+            }
+
+            return _context11.abrupt("return", res.status(400).message("POST request on /groceryList was not formulated correctly. Body must contain property: list"));
+
+          case 3:
+            _context11.prev = 3;
+            _context11.next = 6;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $set: {
+                groceryList: req.body
+              }
+            });
+
+          case 6:
+            status = _context11.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when adding groceries to database. Grocery List was not uodated.");
+            } else {
+              res.status(200).send("pantry successfully updated in database.");
+            }
+
+            _context11.next = 14;
+            break;
+
+          case 10:
+            _context11.prev = 10;
+            _context11.t0 = _context11["catch"](3);
+            console.log(_context11.t0);
+            return _context11.abrupt("return", res.status(400).send("Unexpected error occurred when updating grocery list in database: " + _context11.t0));
+
+          case 14:
+          case "end":
+            return _context11.stop();
+        }
+      }
+    }, _callee11, null, [[3, 10]]);
+  }));
+
+  return function (_x29, _x30, _x31) {
+    return _ref11.apply(this, arguments);
+  };
 }()); //recipes/userId/ (POST): Attempts to add new recipe to database
 //GIVEN:
 //  id of the user whose recipe is to be added is passed as 
@@ -733,24 +983,24 @@ app.get('/recipes/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app.post('/recipes/:userId', /*#__PURE__*/function () {
-  var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res, next) {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+    return regeneratorRuntime.wrap(function _callee12$(_context12) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context12.prev = _context12.next) {
           case 0:
             console.log("in /recipes (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
 
             if (!(!req.body.hasOwnProperty("name") || !req.body.hasOwnProperty("pictureURL") || !req.body.hasOwnProperty("favorited") || !req.body.hasOwnProperty("dateAdded") || !req.body.hasOwnProperty("ingredients") || !req.body.hasOwnProperty("cookTime") || !req.body.hasOwnProperty("directions"))) {
-              _context8.next = 3;
+              _context12.next = 3;
               break;
             }
 
-            return _context8.abrupt("return", res.status(400).send("POST request on /recipes formulated incorrectly." + "Body must contain all 6 required fields: name, pictureURL, ingredients, directions, dateAdded, favorited."));
+            return _context12.abrupt("return", res.status(400).send("POST request on /recipes formulated incorrectly." + "Body must contain all 6 required fields: name, pictureURL, ingredients, directions, dateAdded, favorited."));
 
           case 3:
-            _context8.prev = 3;
-            _context8.next = 6;
+            _context12.prev = 3;
+            _context12.next = 6;
             return User.updateOne({
               id: req.params.userId
             }, {
@@ -760,7 +1010,7 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
             });
 
           case 6:
-            status = _context8.sent;
+            status = _context12.sent;
 
             if (status.nModified != 1) {
               //Should never happen!
@@ -769,25 +1019,25 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
               res.status(200).send("recipe successfully added to database.");
             }
 
-            _context8.next = 14;
+            _context12.next = 14;
             break;
 
           case 10:
-            _context8.prev = 10;
-            _context8.t0 = _context8["catch"](3);
-            console.log(_context8.t0);
-            return _context8.abrupt("return", res.status(400).send("Unexpected error occurred when adding recipe to database: " + _context8.t0));
+            _context12.prev = 10;
+            _context12.t0 = _context12["catch"](3);
+            console.log(_context12.t0);
+            return _context12.abrupt("return", res.status(400).send("Unexpected error occurred when adding recipe to database: " + _context12.t0));
 
           case 14:
           case "end":
-            return _context8.stop();
+            return _context12.stop();
         }
       }
-    }, _callee8, null, [[3, 10]]);
+    }, _callee12, null, [[3, 10]]);
   }));
 
-  return function (_x22, _x23, _x24) {
-    return _ref8.apply(this, arguments);
+  return function (_x32, _x33, _x34) {
+    return _ref12.apply(this, arguments);
   };
 }()); //recipes/userId/recipeId (PUT): Attempts to update data for an existing recipe
 //GIVEN:
@@ -806,44 +1056,44 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res, next) {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res, next) {
     var validProps, bodyObj, bodyProp, status;
-    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+    return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
             console.log("in /recipes (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
             validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
-            _context9.t0 = regeneratorRuntime.keys(bodyObj);
+            _context13.t0 = regeneratorRuntime.keys(bodyObj);
 
           case 5:
-            if ((_context9.t1 = _context9.t0()).done) {
-              _context9.next = 15;
+            if ((_context13.t1 = _context13.t0()).done) {
+              _context13.next = 15;
               break;
             }
 
-            bodyProp = _context9.t1.value;
+            bodyProp = _context13.t1.value;
 
             if (validProps.includes(bodyProp)) {
-              _context9.next = 11;
+              _context13.next = 11;
               break;
             }
 
-            return _context9.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
+            return _context13.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
 
           case 11:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
             delete bodyObj[bodyProp];
 
           case 13:
-            _context9.next = 5;
+            _context13.next = 5;
             break;
 
           case 15:
-            _context9.prev = 15;
-            _context9.next = 18;
+            _context13.prev = 15;
+            _context13.next = 18;
             return User.updateOne({
               "id": req.params.userId,
               "recipes._id": _mongoose["default"].Types.ObjectId(req.params.recipeId)
@@ -852,27 +1102,27 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             });
 
           case 18:
-            status = _context9.sent;
+            status = _context13.sent;
             res.status(200).send("recipe successfully updated in database.");
-            _context9.next = 26;
+            _context13.next = 26;
             break;
 
           case 22:
-            _context9.prev = 22;
-            _context9.t2 = _context9["catch"](15);
-            console.log(_context9.t2);
-            return _context9.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context9.t2));
+            _context13.prev = 22;
+            _context13.t2 = _context13["catch"](15);
+            console.log(_context13.t2);
+            return _context13.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context13.t2));
 
           case 26:
           case "end":
-            return _context9.stop();
+            return _context13.stop();
         }
       }
-    }, _callee9, null, [[15, 22]]);
+    }, _callee13, null, [[15, 22]]);
   }));
 
-  return function (_x25, _x26, _x27) {
-    return _ref9.apply(this, arguments);
+  return function (_x35, _x36, _x37) {
+    return _ref13.apply(this, arguments);
   };
 }()); //recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
 //GIVEN:
@@ -889,15 +1139,15 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res, next) {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+    return regeneratorRuntime.wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context10.prev = _context10.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
             console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
-            _context10.prev = 1;
-            _context10.next = 4;
+            _context14.prev = 1;
+            _context14.next = 4;
             return User.updateOne({
               id: req.params.userId
             }, {
@@ -909,7 +1159,7 @@ app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             });
 
           case 4:
-            status = _context10.sent;
+            status = _context14.sent;
 
             if (status.nModified != 1) {
               //Should never happen!
@@ -918,24 +1168,24 @@ app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               res.status(200).send("recipe successfully deleted from database.");
             }
 
-            _context10.next = 12;
+            _context14.next = 12;
             break;
 
           case 8:
-            _context10.prev = 8;
-            _context10.t0 = _context10["catch"](1);
-            console.log(_context10.t0);
-            return _context10.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context10.t0));
+            _context14.prev = 8;
+            _context14.t0 = _context14["catch"](1);
+            console.log(_context14.t0);
+            return _context14.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context14.t0));
 
           case 12:
           case "end":
-            return _context10.stop();
+            return _context14.stop();
         }
       }
-    }, _callee10, null, [[1, 8]]);
+    }, _callee14, null, [[1, 8]]);
   }));
 
-  return function (_x28, _x29, _x30) {
-    return _ref10.apply(this, arguments);
+  return function (_x38, _x39, _x40) {
+    return _ref14.apply(this, arguments);
   };
 }());

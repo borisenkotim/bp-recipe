@@ -79,7 +79,7 @@ class RecipesTable extends React.Component {
         </h1>
         <RecipeSort
           updateFilteredRecipes={this.updateFilteredRecipes}
-          recipeList={this.props.recipes}
+          recipeList={this.state.filtered}
         />
 
         <div>

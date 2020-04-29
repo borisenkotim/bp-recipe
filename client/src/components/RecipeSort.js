@@ -19,7 +19,7 @@ class SortBtn extends React.Component {
         this.asc = !this.props.selected ? true : this.asc
         return (
             <button
-                className={`recipe-sort-button ${this.props.icon}${this.asc ? "-asc" : "-desc"}` + 
+                className={`recipe-sort-button ${this.props.icon}${this.asc ? this.props.switch[0] : this.props.switch[1]}` + 
                             `${this.props.selected ? " selected" : ""}` + 
                             `${this.props.visible ? " visible" : ""}`}
                 onClick={this.onClick}
@@ -80,6 +80,27 @@ class RecipeSort extends React.Component {
         this.props.updateFilteredRecipes(recipes)
     }
 
+    favoriteSort = (asc) => {
+        let recipes = [...this.props.recipeList]
+
+        recipes.sort((a, b) => {
+            let favA = a.favorited;
+            let favB = b.favorited;
+
+            let result = 0
+            if (favA && !favB)
+                result = -1
+            if (!favA && favB)
+                result = 1
+            if (!asc)
+                result *= -1
+
+            return result
+        })
+
+        this.props.updateFilteredRecipes(recipes)
+    }
+
     onBtnClick = (btnIndex) => {
         this.setState({selectedSort: btnIndex})
     }
@@ -94,6 +115,7 @@ class RecipeSort extends React.Component {
                 <SortBtn
                     selected={this.state.selectedSort === 0}
                     icon="fa fa-sort-alpha"
+                    switch={["-asc", "-desc"]}
                     onClick={() => { this.onBtnClick(0) }}
                     sortFunction={this.nameSort}
                     visible={this.state.visible}
@@ -101,8 +123,17 @@ class RecipeSort extends React.Component {
                 <SortBtn
                     selected={this.state.selectedSort === 1}
                     icon="fa fa-sort-numeric"
+                    switch={["-asc", "-desc"]}
                     onClick={() => { this.onBtnClick(1) }}
                     sortFunction={this.timeSort}
+                    visible={this.state.visible}
+                />
+                <SortBtn
+                    selected={this.state.selectedSort === 2}
+                    icon="fa fa-star"
+                    switch={["", "-o"]}
+                    onClick={() => { this.onBtnClick(2) }}
+                    sortFunction={this.favoriteSort}
                     visible={this.state.visible}
                 />
                 <button className="recipe-sort-toggle fa fa-filter" onClick={this.toggleVisible}/>

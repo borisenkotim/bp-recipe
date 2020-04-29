@@ -821,7 +821,7 @@ button:focus {
     visibility: hidden;
     opacity: 20%;
     margin-right: -34px;
-    transition: all .5s cubic-bezier(0.47, 0, 0.745, 0.715);
+    transition: all .5s cubic-bezier(0.47, 0, 0.745, 0.715), background 0s;
 }
 
 .recipe-sort-button.visible {

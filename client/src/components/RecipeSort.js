@@ -20,8 +20,10 @@ class SortBtn extends React.Component {
         return (
             <button
                 className={`recipe-sort-button ${this.props.icon}${this.asc ? "-asc" : "-desc"}` + 
-                            `${this.props.selected ? " selected" : ""}`}
+                            `${this.props.selected ? " selected" : ""}` + 
+                            `${this.props.visible ? " visible" : ""}`}
                 onClick={this.onClick}
+                disabled={!this.props.visible}
             />
         )
     }
@@ -86,32 +88,24 @@ class RecipeSort extends React.Component {
         this.setState(prevState => ({ visible: !prevState.visible }))
     }
 
-    renderSortButtons() {
-        if (this.state.visible){
-           return (
-               <>
+    render() {
+        return (
+            <div style={{display: "inline-block", float: "right"}}>
                 <SortBtn
                     selected={this.state.selectedSort === 0}
                     icon="fa fa-sort-alpha"
                     onClick={() => { this.onBtnClick(0) }}
                     sortFunction={this.nameSort}
+                    visible={this.state.visible}
                 />
                 <SortBtn
                     selected={this.state.selectedSort === 1}
                     icon="fa fa-sort-numeric"
                     onClick={() => { this.onBtnClick(1) }}
                     sortFunction={this.timeSort}
+                    visible={this.state.visible}
                 />
-               </>
-           )
-        }
-    }
-
-    render() {
-        return (
-            <div style={{float: "right"}}>
-                {this.renderSortButtons()}
-                <button className="recipe-sort-button fa fa-filter" onClick={this.toggleVisible}/>
+                <button className="recipe-sort-toggle fa fa-filter" onClick={this.toggleVisible}/>
             </div>
         )
     }

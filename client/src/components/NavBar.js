@@ -16,7 +16,7 @@ class NavBar extends React.Component {
         &nbsp;
         <Nav.Item className="navbar-brand-custom">
             <span onClick={addOrEditMode ? () => this.props.changeMode(AppMode.RECIPES) : null}
-            className={addOrEditMode ? "modebar-icon fa fa-arrow-left favorited" : "modebar-icon fa fa-th-list"}
+            className={addOrEditMode ? "modebar-icon fa fa-arrow-left favorited" : "modebar-icon fa fa-cutlery"}
             disabled={!addOrEditMode} style={{marginLeft: "8px", marginTop:"3px"}}/>
           &nbsp;&nbsp;&nbsp;My Recipe App
         </Nav.Item>

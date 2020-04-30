@@ -794,3 +794,46 @@ button:focus {
   margin-right: 10px;
   z-index: 20;
 }
+
+
+/* Styling for sorting buttons */
+.recipe-sort-toggle {
+    display: inline-block;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    font-size: 25px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.recipe-sort-button {
+    display: inline-block;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    font-size: 25px;
+    margin-top: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    visibility: hidden;
+    opacity: .2;
+    margin-right: -34px;
+    transition: all .5s cubic-bezier(0.47, 0, 0.745, 0.715), background 0s;
+}
+
+.recipe-sort-button.visible {
+    margin-right: 0px;
+    opacity: 1;
+    visibility: visible;
+}
+
+.recipe-sort-button.selected {
+    background-color: lightgray;
+}
+
+.recipe-sort-button.custom { 
+    padding-bottom: 0px;
+}

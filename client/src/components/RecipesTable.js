@@ -3,6 +3,7 @@ import "../styles/modal.css";
 import AppMode from "../AppMode.js";
 import RecipeSearch from "./RecipeSearch.js";
 import Card from "./Card.jsx";
+import RecipeSort from "./RecipeSort.js"
 
 class RecipesTable extends React.Component {
   constructor(props) {
@@ -76,6 +77,10 @@ class RecipesTable extends React.Component {
         >
           Your Recipes
         </h1>
+        <RecipeSort
+          updateFilteredRecipes={this.updateFilteredRecipes}
+          recipeList={this.state.filtered}
+        />
 
         <div>
           {Object.keys(this.state.filtered).length === 0 ? (

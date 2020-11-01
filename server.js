@@ -6,7 +6,7 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-const connectStr = "mongodb+srv://dbAdmin:5KYp26nhgnpyMAq@cluster0-ouuzr.mongodb.net/test?retryWrites=true&w=majority";
+const connectStr = "";
 mongoose.set('useFindAndModify', false);
 
 mongoose
@@ -107,7 +107,7 @@ const User = mongoose.model("User", userSchema);
 /////////////////
 
 const LOCAL_PORT = 4001;
-const DEPLOY_URL = "http://localhost:4001";
+const DEPLOY_URL = "https://recipe.bpapp.org";
 import passport from "passport";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -115,8 +115,8 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "483643036081-ntt2vo7dg2aj3bgv2v5uv9v4gkked28c.apps.googleusercontent.com",
-      clientSecret: "g1_qOlTvuWcHbcOwDtsLn53C",
+      clientID: "",
+      clientSecret: "",
       callbackURL: DEPLOY_URL + "/auth/google/callback"
     },
 

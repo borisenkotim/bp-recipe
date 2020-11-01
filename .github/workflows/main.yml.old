@@ -25,7 +25,7 @@ jobs:
         # Message title
         title: ${{format('{0} has made a pull request in {1}!', github.actor, github.repository)}}
         # Message summary
-        summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
+        summary: For more details, visit https://github.com/wsu-cpts489-fa20/bp-recipe 
         #Message text
         text: ${{format('Action - Pull Request<br>Head Ref - {0}<br>Base Ref - {1}<br>For more details, click <a href=''{2}''>here</a>',github.head_ref, github.base_ref, github.event.pull_request.html_url)}}
         # Message theme color
@@ -40,7 +40,7 @@ jobs:
         # Message title
         title: ${{format('{0} has pushed to {1}!', github.actor, github.repository)}}
         # Message summary
-        summary: For more details, visit https://github.com/CptS-489-WSU/bp-recipe 
+        summary: For more details, visit https://github.com/wsu-cpts489-fa20/bp-recipe 
         #Message text
         text: ${{format('Action - Push<br>Branch - {0}<br>For more details, click <a href=''{1}''>here</a>',github.ref, github.event.head_commit.url)}}
         # Message theme color

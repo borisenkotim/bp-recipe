@@ -6,7 +6,7 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-const connectStr = "";
+const connectStr = "mongodb+srv://dbAdmin:QeIeG5LOQ2F363aK@cluster0.9vsgn.mongodb.net/<dbname>?retryWrites=true&w=majority";
 mongoose.set('useFindAndModify', false);
 
 mongoose
@@ -115,8 +115,8 @@ var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "",
-      clientSecret: "",
+      clientID: "716579971282-v9qa5crsf0qv3n50tvncr42f83qa07ni.apps.googleusercontent.com",
+      clientSecret: "WVWxyDb_YI6JbUA_ke_tHRWX",
       callbackURL: DEPLOY_URL + "/auth/google/callback"
     },
 
@@ -609,7 +609,7 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
               JSON.stringify(req.body));
   const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
   let bodyObj = {...req.body};
-  delete bodyObj._id;
+  delete bodyObj._id; 
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +

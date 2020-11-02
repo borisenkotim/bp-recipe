@@ -37,7 +37,8 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "react-strap": "0.0.1"
+    "react-strap": "0.0.1",
+    "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {}
 }

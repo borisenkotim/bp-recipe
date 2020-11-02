@@ -1,28 +1,29 @@
 {
   "files": {
-    "main.css": "/static/css/main.dc8ed0c9.chunk.css",
-    "main.js": "/static/js/main.2d8b94ec.chunk.js",
-    "main.js.map": "/static/js/main.2d8b94ec.chunk.js.map",
+    "main.css": "/static/css/main.fce2f3a9.chunk.css",
+    "main.js": "/static/js/main.1c72e58e.chunk.js",
+    "main.js.map": "/static/js/main.1c72e58e.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.94a947e0.js",
     "runtime-main.js.map": "/static/js/runtime-main.94a947e0.js.map",
-    "static/css/2.c5d64b3a.chunk.css": "/static/css/2.c5d64b3a.chunk.css",
-    "static/js/2.1b89a78c.chunk.js": "/static/js/2.1b89a78c.chunk.js",
-    "static/js/2.1b89a78c.chunk.js.map": "/static/js/2.1b89a78c.chunk.js.map",
+    "static/css/2.a7950f01.chunk.css": "/static/css/2.a7950f01.chunk.css",
+    "static/js/2.6f06c5c3.chunk.js": "/static/js/2.6f06c5c3.chunk.js",
+    "static/js/2.6f06c5c3.chunk.js.map": "/static/js/2.6f06c5c3.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.3f4d8bb8457e1d07f9fafbaadfb9a1b9.js": "/precache-manifest.3f4d8bb8457e1d07f9fafbaadfb9a1b9.js",
+    "precache-manifest.6782e03565644005ee0822589292fc06.js": "/precache-manifest.6782e03565644005ee0822589292fc06.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/2.c5d64b3a.chunk.css.map": "/static/css/2.c5d64b3a.chunk.css.map",
-    "static/css/main.dc8ed0c9.chunk.css.map": "/static/css/main.dc8ed0c9.chunk.css.map",
-    "static/js/2.1b89a78c.chunk.js.LICENSE.txt": "/static/js/2.1b89a78c.chunk.js.LICENSE.txt",
+    "static/css/2.a7950f01.chunk.css.map": "/static/css/2.a7950f01.chunk.css.map",
+    "static/css/main.fce2f3a9.chunk.css.map": "/static/css/main.fce2f3a9.chunk.css.map",
+    "static/js/2.6f06c5c3.chunk.js.LICENSE.txt": "/static/js/2.6f06c5c3.chunk.js.LICENSE.txt",
     "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.fee66e71.woff",
     "static/media/pancakes.jpg": "/static/media/pancakes.305293f5.jpg",
-    "static/media/index.css": "/static/media/shelves.8fa40ac7.jpg"
+    "static/media/index.css": "/static/media/shelves.8fa40ac7.jpg",
+    "static/media/CustomFont.css": "/static/media/sort-time-font.d6aee83d.eot"
   },
   "entrypoints": [
     "static/js/runtime-main.94a947e0.js",
-    "static/css/2.c5d64b3a.chunk.css",
-    "static/js/2.1b89a78c.chunk.js",
-    "static/css/main.dc8ed0c9.chunk.css",
-    "static/js/main.2d8b94ec.chunk.js"
+    "static/css/2.a7950f01.chunk.css",
+    "static/js/2.6f06c5c3.chunk.js",
+    "static/css/main.fce2f3a9.chunk.css",
+    "static/js/main.1c72e58e.chunk.js"
   ]
 }

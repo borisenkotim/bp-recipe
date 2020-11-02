@@ -2,6 +2,8 @@
 //Uses ES6 syntax! We transpile it using Babel. Please see this tutorial:
 //https://medium.com/@wlto/how-to-deploy-an-express-application-with-react-front-end-on-aws-elastic-beanstalk-880ff7245008
 
+import regeneratorRuntime from "regenerator-runtime";
+
 ///////////////////
 //MONGOOSE SET-UP//
 ///////////////////
@@ -208,7 +210,6 @@ passport.deserializeUser(async (userId, done) => {
 });
 
 import session from "express-session";
-import regeneratorRuntime from "regenerator-runtime";
 import path from "path";
 import express from "express";
 import md5 from "md5";

@@ -1,5 +1,7 @@
 "use strict";
 
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _mongoose = _interopRequireDefault(require("mongoose"));
 
 var _crypto = _interopRequireDefault(require("crypto"));
@@ -9,8 +11,6 @@ var _passport = _interopRequireDefault(require("passport"));
 var _passportLocal = _interopRequireDefault(require("passport-local"));
 
 var _expressSession = _interopRequireDefault(require("express-session"));
-
-var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
 
 var _path = _interopRequireDefault(require("path"));
 

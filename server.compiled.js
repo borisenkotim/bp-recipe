@@ -10,6 +10,8 @@ var _passportLocal = _interopRequireDefault(require("passport-local"));
 
 var _expressSession = _interopRequireDefault(require("express-session"));
 
+var _regeneratorRuntime = _interopRequireDefault(require("regenerator-runtime"));
+
 var _path = _interopRequireDefault(require("path"));
 
 var _express = _interopRequireDefault(require("express"));
@@ -155,7 +157,7 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 /////////////////
 
 
-var LOCAL_PORT = 4001;
+var LOCAL_PORT = 8081;
 var DEPLOY_URL = "https://recipe.bpapp.org";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
@@ -168,9 +170,9 @@ _passport["default"].use(new GoogleStrategy({
 /*#__PURE__*/
 //The following function is called after user authenticates with github
 function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(accessToken, refreshToken, profile, done) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee(accessToken, refreshToken, profile, done) {
     var userId, currentUser;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -231,9 +233,9 @@ _passport["default"].use(new LocalStrategy({
 //userId contains the email address entered into the form and password
 //contains the password entered into the form.
 function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(req, userId, password, done) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee2(req, userId, password, done) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return _regeneratorRuntime["default"].wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
@@ -305,9 +307,9 @@ _passport["default"].serializeUser(function (user, done) {
 
 
 _passport["default"].deserializeUser( /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(userId, done) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee3(userId, done) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return _regeneratorRuntime["default"].wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
@@ -446,9 +448,9 @@ app.use(bodyParser.urlencoded({
 //  Failure: status = 400 with error message
 
 app.get('/users/:userId', /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(req, res, next) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee4(req, res, next) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return _regeneratorRuntime["default"].wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
@@ -507,9 +509,9 @@ app.get('/users/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with an error message
 
 app.post('/users/:userId', /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(req, res, next) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee5(req, res, next) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return _regeneratorRuntime["default"].wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
@@ -594,9 +596,9 @@ app.post('/users/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with an error message
 
 app.put('/users/:userId', /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(req, res, next) {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee6(req, res, next) {
     var validProps, bodyProp, user;
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    return _regeneratorRuntime["default"].wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
@@ -611,7 +613,7 @@ app.put('/users/:userId', /*#__PURE__*/function () {
 
           case 3:
             validProps = ['password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
-            _context6.t0 = regeneratorRuntime.keys(req.body);
+            _context6.t0 = _regeneratorRuntime["default"].keys(req.body);
 
           case 5:
             if ((_context6.t1 = _context6.t0()).done) {
@@ -691,9 +693,9 @@ app.put('/users/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app.get('/recipes/:userId', /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(req, res) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee7(req, res) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return _regeneratorRuntime["default"].wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
@@ -740,9 +742,9 @@ app.get('/recipes/:userId', /*#__PURE__*/function () {
   };
 }());
 app.get('/pantry/:userId', /*#__PURE__*/function () {
-  var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(req, res) {
+  var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee8(req, res) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+    return _regeneratorRuntime["default"].wrap(function _callee8$(_context8) {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
@@ -797,9 +799,9 @@ app.get('/pantry/:userId', /*#__PURE__*/function () {
   };
 }());
 app.get('/groceryList/:userId', /*#__PURE__*/function () {
-  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(req, res) {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee9(req, res) {
     var thisUser;
-    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+    return _regeneratorRuntime["default"].wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
@@ -855,9 +857,9 @@ app.get('/groceryList/:userId', /*#__PURE__*/function () {
 }()); //we will need the same thing but for the funciton below so that we can update/post pantry/grocery list for a userID
 
 app.post('/pantry/:userId', /*#__PURE__*/function () {
-  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(req, res, next) {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee10(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+    return _regeneratorRuntime["default"].wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
@@ -913,9 +915,9 @@ app.post('/pantry/:userId', /*#__PURE__*/function () {
   };
 }());
 app.post('/groceryList/:userId', /*#__PURE__*/function () {
-  var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(req, res, next) {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee11(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee11$(_context11) {
+    return _regeneratorRuntime["default"].wrap(function _callee11$(_context11) {
       while (1) {
         switch (_context11.prev = _context11.next) {
           case 0:
@@ -983,9 +985,9 @@ app.post('/groceryList/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app.post('/recipes/:userId', /*#__PURE__*/function () {
-  var _ref12 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(req, res, next) {
+  var _ref12 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee12(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee12$(_context12) {
+    return _regeneratorRuntime["default"].wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
@@ -1056,9 +1058,9 @@ app.post('/recipes/:userId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref13 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(req, res, next) {
+  var _ref13 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee13(req, res, next) {
     var validProps, bodyObj, bodyProp, status;
-    return regeneratorRuntime.wrap(function _callee13$(_context13) {
+    return _regeneratorRuntime["default"].wrap(function _callee13$(_context13) {
       while (1) {
         switch (_context13.prev = _context13.next) {
           case 0:
@@ -1066,7 +1068,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
-            _context13.t0 = regeneratorRuntime.keys(bodyObj);
+            _context13.t0 = _regeneratorRuntime["default"].keys(bodyObj);
 
           case 5:
             if ((_context13.t1 = _context13.t0()).done) {
@@ -1139,9 +1141,9 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref14 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14(req, res, next) {
+  var _ref14 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee14(req, res, next) {
     var status;
-    return regeneratorRuntime.wrap(function _callee14$(_context14) {
+    return _regeneratorRuntime["default"].wrap(function _callee14$(_context14) {
       while (1) {
         switch (_context14.prev = _context14.next) {
           case 0:

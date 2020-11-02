@@ -106,7 +106,7 @@ const User = mongoose.model("User", userSchema);
 //PASSPORT SET-UP
 /////////////////
 
-const LOCAL_PORT = 4001;
+const LOCAL_PORT = 8081;
 const DEPLOY_URL = "https://recipe.bpapp.org";
 import passport from "passport";
 
@@ -208,6 +208,7 @@ passport.deserializeUser(async (userId, done) => {
 });
 
 import session from "express-session";
+import regeneratorRuntime from "regenerator-runtime";
 import path from "path";
 import express from "express";
 import md5 from "md5";

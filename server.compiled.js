@@ -28,7 +28,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var connectStr = "mongodb+srv://dbAdmin:5KYp26nhgnpyMAq@cluster0-ouuzr.mongodb.net/test?retryWrites=true&w=majority";
+var connectStr = "mongodb+srv://dbAdmin:QeIeG5LOQ2F363aK@cluster0.9vsgn.mongodb.net/<dbname>?retryWrites=true&w=majority";
 
 _mongoose["default"].set('useFindAndModify', false);
 
@@ -156,13 +156,13 @@ var User = _mongoose["default"].model("User", userSchema); /////////////////
 
 
 var LOCAL_PORT = 4001;
-var DEPLOY_URL = "http://localhost:4001";
+var DEPLOY_URL = "https://recipe.bpapp.org";
 
 var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
 
 _passport["default"].use(new GoogleStrategy({
-  clientID: "483643036081-ntt2vo7dg2aj3bgv2v5uv9v4gkked28c.apps.googleusercontent.com",
-  clientSecret: "g1_qOlTvuWcHbcOwDtsLn53C",
+  clientID: "716579971282-v9qa5crsf0qv3n50tvncr42f83qa07ni.apps.googleusercontent.com",
+  clientSecret: "WVWxyDb_YI6JbUA_ke_tHRWX",
   callbackURL: DEPLOY_URL + "/auth/google/callback"
 },
 /*#__PURE__*/

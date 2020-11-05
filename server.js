@@ -209,7 +209,7 @@ passport.deserializeUser(async (userId, done) => {
 });
 
 import session from "express-session";
-import regeneratorRuntime from "regenerator-runtime";
+import regeneratorRuntime from "regenerator-runtime/runtime.js";
 import path from "path";
 import express from "express";
 

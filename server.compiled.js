@@ -170,7 +170,7 @@ _passport["default"].use(new GoogleStrategy({
 /*#__PURE__*/
 //The following function is called after user authenticates with github
 function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime["default"].mark(function _callee(accessToken, refreshToken, profile, done) {
+  var _ref = _asyncToGenerator(_regeneratorRuntime["default"].mark(function _callee(accessToken, refreshToken, profile, done) {
     var userId, currentUser;
     return _regeneratorRuntime["default"].wrap(function _callee$(_context) {
       while (1) {

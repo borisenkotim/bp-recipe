@@ -9,8 +9,15 @@ class ViewRecipePage extends React.Component {
     //confirmDelete state variable determines whether to show or hide the
     //confirm delete dialog box
     this.state = this.props.data;
+    console.log(this.props.data);
     this.state.confirmDelete = false;
     this.state.viewMode = true;
+    let totalCal = 0;
+    let ingredients = this.props.data.ingredients;
+    for (var i = 0; i < ingredients.length; i++){
+      totalCal += ingredients[i].calories;
+    } 
+    this.state.totalCalories = totalCal;
   }
 
   // Handles the general changes to an input box
@@ -141,6 +148,7 @@ class ViewRecipePage extends React.Component {
     ingredientObj.name = "";
     ingredientObj.quantity = 0;
     ingredientObj.unit = "";
+    ingredientObj.calories = 0;
     this.setState({
       ingredients: [...this.state.ingredients, ingredientObj],
     });
@@ -174,7 +182,6 @@ class ViewRecipePage extends React.Component {
         </tr>
       );
     }
-
     return (<tbody>{ingredients}</tbody>);
   };
 
@@ -431,6 +438,9 @@ class ViewRecipePage extends React.Component {
                     minutes
                   </label>
                 )}
+              </h3>
+              <h3 className="recipeContentTitleInfoSubInfo">
+                Total Calories: {this.state.totalCalories}
               </h3>
               {/* If we are in edit mode, we want to allow re-entering a new url */}
               {!this.state.viewMode && (

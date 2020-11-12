@@ -613,17 +613,22 @@ button:focus {
 
 .ingredient-input-name {
   margin-left: 1vw;
-  width: 40vw;
+  width: 30vw;
   margin-right: 1vw;
 }
 
 .ingredient-input-quantity {
-  width: 10vw;
+  width: 6vw;
   margin-right: 1vw;
 }
 
+.ingredient-input-calories {
+  width: 6vw;
+}
+
 .ingredient-input-unit {
-  width: 18vw;
+  width: 12vw;
+  margin-right: 1vw;
 }
 
 .btn-block {

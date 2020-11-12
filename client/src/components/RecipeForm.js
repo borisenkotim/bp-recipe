@@ -57,8 +57,9 @@ class RecipeForm extends React.Component {
     e.preventDefault();
     let ingredientObj = {};
     ingredientObj.name = "";
-    ingredientObj.quantity = 0;
+    ingredientObj.quantity = null;
     ingredientObj.unit = "";
+    ingredientObj.calories = null;
     this.setState({
       ingredients: [...this.state.ingredients, ingredientObj],
     });
@@ -93,6 +94,11 @@ class RecipeForm extends React.Component {
   handleRemoveIngredient(e, index) {
     e.preventDefault();
     this.state.ingredients.splice(index, 1);
+    this.setState({ ingredients: this.state.ingredients });
+  }
+  handleChangeIngredientCalories(e, index) {
+    e.preventDefault();
+    this.state.ingredients[index].calories = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
@@ -150,7 +156,7 @@ class RecipeForm extends React.Component {
                             this.handleChangeIngredientQuantity(e, index)
                           }
                           value={step.quantity}
-                          step="0.01"
+                          step="0.1"
                           min="0"
                         />
                         <input
@@ -162,6 +168,17 @@ class RecipeForm extends React.Component {
                             this.handleChangeIngredientUnit(e, index)
                           }
                           value={step.unit}
+                        />
+                        <input
+                          placeholder="calories"
+                          type="number"
+                          className="ingredient-input-calories"
+                          onChange={(e) =>
+                            this.handleChangeIngredientCalories(e, index)
+                          }
+                          value={step.calories}
+                          step="5"
+                          min="0"
                         />
                         <datalist id="units">
                           <option>whole</option>

@@ -47,6 +47,10 @@ _mongoose["default"].connect(connectStr, {
 
 var Schema = _mongoose["default"].Schema;
 var ingredientSchema = new Schema({
+  calories: {
+    type: Number,
+    required: true
+  },
   name: {
     type: String,
     required: true

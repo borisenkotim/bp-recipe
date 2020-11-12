@@ -170,6 +170,7 @@ class ViewRecipePage extends React.Component {
                 this.state.ingredients[i].unit + "s" :
                 this.state.ingredients[i].unit)}
           </td>
+          <td>{this.state.ingredients[i].calories}{"   calories"}</td>
           {this.state.ingredients[i].pictureURL && (
             <td>
               <img
@@ -422,7 +423,7 @@ class ViewRecipePage extends React.Component {
               <h3 className="recipeContentTitleInfoSubInfo">
                 {/* conditionally renders the cook time of the recipe based on mode */}
                 {this.state.viewMode ? (
-                  <p>Cook Time: {this.state.cookTime} minutes</p>
+                  <span>Cook Time: {this.state.cookTime} minutes</span>
                 ) : (
                   <label htmlFor="cookTime">
                     Cook Time:

@@ -19,6 +19,8 @@ class LoginPage extends React.Component {
       loginBtnLabel: "Log In",
       googleIcon: "fa fa-google",
       googleLabel: "Sign in with Google",
+      githubIcon: "fa fa-github",
+      githubLabel: "Sign in with GitHub",
       showAccountDialog: false,
       showLookUpAccountDialog: false,
       showSecurityQuestionDialog: false,
@@ -624,6 +626,17 @@ class LoginPage extends React.Component {
               <span className={this.state.googleIcon}></span>&nbsp;
               {this.state.googleLabel}
             </button>
+
+            <button
+              type="button"
+              className="loginBtn btn btn-primary
+              btn-block btncolortheme"
+              onClick={() => this.handleOAuthLoginClick("github")}
+            >
+              <span className={this.state.githubIcon}></span>&nbsp;
+              {this.state.githubLabel}
+            </button>
+
           </form>
           {this.state.showAccountDialog ? this.renderAccountDialog() : null}
           {this.state.showLookUpAccountDialog

@@ -62,6 +62,10 @@ class NavBar extends React.Component {
                 <Dropdown.Item onClick={this.props.showAbout}>
                   About Recipe App
                 </Dropdown.Item>
+                <Dropdown.Item onClick={this.props.showEditDialog}>
+                  Edit User Information
+                </Dropdown.Item>
+
                 <Dropdown.Divider />
                 <Dropdown.Item
                   onClick={() => this.props.changeMode(AppMode.LOGIN)}

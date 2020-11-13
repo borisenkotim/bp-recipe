@@ -7,7 +7,7 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-const connectStr = "mongodb+srv://dbAdmin:QeIeG5LOQ2F363aK@cluster0.9vsgn.mongodb.net/<dbname>?retryWrites=true&w=majority";
+const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
 mongoose.set('useFindAndModify', false);
 
 mongoose
@@ -109,16 +109,45 @@ const User = mongoose.model("User", userSchema);
 /////////////////
 
 const LOCAL_PORT = 8081;
-const DEPLOY_URL = "https://recipe.bpapp.org";
+const DEPLOY_URL = "http://localhost:8081";
 import passport from "passport";
 
-var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+
+import passportGithub from 'passport-github';
+const GithubStrategy = passportGithub.Strategy;
+
+//
+passport.use(new GithubStrategy({
+  clientID: "a075012c4b08543f42a8",
+  clientSecret: "8dde6978090028aee37c72df9ea7ce268678b6d3",
+  callbackURL: DEPLOY_URL + "/auth/github/callback"
+},
+//The following function is called after user authenticates with github
+async (accessToken, refreshToken, profile, done) => {
+  console.log("User authenticated through GitHub! In passport callback.");
+  //Our convention is to build userId from displayName and provider
+  const userId = `${profile.username}@${profile.provider}`;
+  //See if document with this unique userId exists in database 
+  let currentUser = await User.findOne({id: userId});
+  if (!currentUser) { //Add this user to the database
+      currentUser = await new User({
+      id: userId,
+      displayName: profile.displayName,
+      authStrategy: profile.provider,
+      profileImageURL: profile.photos[0].value
+    }).save();
+}
+return done(null,currentUser);
+}))
+
+import passportGoogle from 'passport-google-oauth2';
+const GoogleStrategy = passportGoogle.Strategy;
 
 passport.use(
   new GoogleStrategy(
     {
-      clientID: "716579971282-v9qa5crsf0qv3n50tvncr42f83qa07ni.apps.googleusercontent.com",
-      clientSecret: "WVWxyDb_YI6JbUA_ke_tHRWX",
+      clientID: "513700040808-lndjcubr19lm72bra49n3c7j2fooailu.apps.googleusercontent.com",
+      clientSecret: "NevQ353WYtJ8g7re9grmsuQ-",
       callbackURL: DEPLOY_URL + "/auth/google/callback"
     },
 
@@ -259,6 +288,25 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     console.log("auth/google/callback reached.");
+    res.redirect("/"); //sends user back to login screen;
+    //req.isAuthenticated() indicates status
+  }
+);
+
+app.get(
+  "/auth/github",
+  passport.authenticate("github", )
+);
+
+//CALLBACK route: GitHub will call this route after the
+//OAuth authentication process is complete.
+//req.isAuthenticated() tells us whether authentication was successful.
+
+app.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/" }),
+  (req, res) => {
+    console.log("auth/github/callback reached.");
     res.redirect("/"); //sends user back to login screen;
     //req.isAuthenticated() indicates status
   }
@@ -416,12 +464,12 @@ app.put('/users/:userId',  async (req, res, next) => {
     return res.status(400).send("users/ PUT request formulated incorrectly." +
         "It must contain 'userId' as parameter.");
   }
-  const validProps = ['password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
+  const validProps = ['password', 'displayName', 'profileImageURL', 'securityQuestion', 'securityAnswer'];
   for (const bodyProp in req.body) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("users/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'password', 'displayname', 'profileImageURL', 'securityQuestion', 'securityAnswer'");
+        "'password', 'displayName', 'profileImageURL', 'securityQuestion', 'securityAnswer'");
     } 
   }
   try {

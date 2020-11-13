@@ -28,7 +28,8 @@ class App extends React.Component {
       menuOpen: false,
       user: "",
       showAbout: false,
-      authenticated: false
+      authenticated: false,
+      showEditUser: false
     };
   }
 
@@ -52,10 +53,21 @@ class App extends React.Component {
     this.setState({ user: userObj });
   };
 
+  showEditDialog = () => {
+    this.setState({showEditUser: true});
+  };
+
    //setAuthenticated -- Given auth (true or false), update authentication state.
    setAuthenticated = (auth) => {
     this.setState({authenticated: auth});
   }
+
+  handleNewEditChange = (event) =>
+  {
+    let userData = this.state.user;
+    userData[event.target.name] = event.target.value;
+    this.setState({user: userData});
+}
 
   //When App component mounts, add a window-level click handler to close the
   //side menu if it is open. This event should fire only if no other lower-level
@@ -119,6 +131,129 @@ class App extends React.Component {
 
   toggleAbout = () => {
     this.setState(prevState => ({ showAbout: !prevState.showAbout }));
+  };
+
+  handleEditAccount = async(event) => {
+    event.preventDefault();
+    //Initialize user account
+    let userData = {
+        displayName: this.state.user['displayName'],
+        securityQuestion: this.state.user['securityQuestion'],
+        securityAnswer: this.state.user['securityAnswer']
+    };
+
+    const url = '/users/' + this.state.user['id'];
+    const res = await fetch(url, {
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      method: 'PUT',
+      userId: this.state.user['id'],
+      body: JSON.stringify(userData)});
+    //Commit to local storage
+    if (res.status !== 200)
+    {
+        alert('userNotedited');
+    }
+    this.setState({showEditUser: false});
+  }
+
+  renderEditAccountDialog = () => {
+    return (
+      <div className="modal" role="dialog">
+        <div className="modal-dialog modal-lg">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 className="modal-title">
+                <b>Edit Account</b>
+                <button
+                  className="close-modal-button"
+                  onClick={() => {
+                    this.setState({ showEditUser: false });
+                  }}
+                >
+                  &times;
+                </button>
+              </h3>
+            </div>
+            <div className="modal-body">
+              <form onSubmit={this.handleEditAccount}>
+                <label>
+                  Email:
+                  <input
+                    className="form-control form-text"
+                    name="id"
+                    type="email"
+                    size="35"
+                    placeholder="Enter Email Address"
+                    pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+                    readOnly = {true}
+                    required={true}
+                    value={this.state.user["id"]}
+                    onChange={this.handleNewEditChange}
+                  />
+                </label>
+                <label>
+                  DisplayName:
+                  <textarea
+                    className="form-control form-text"
+                    name="displayName"
+                    size="35"
+                    placeholder="Security Question"
+                    rows="2"
+                    cols="35"
+                    maxLength="100"
+                    required={true}
+                    value={this.state.user["displayName"]}
+                    onChange={this.handleNewEditChange}
+                  />
+                </label>
+                <label>
+                  Security Question:
+                  <textarea
+                    className="form-control form-text"
+                    name="securityQuestion"
+                    size="35"
+                    placeholder="Security Question"
+                    rows="2"
+                    cols="35"
+                    maxLength="100"
+                    required={true}
+                    readOnly = {this.state.user['authStrategy'] != 'local' ? true: false}
+                    value={this.state.user["securityQuestion"]}
+                    onChange={this.handleNewEditChange}
+                  />
+                </label>
+                <label>
+                  Answer to Security Question:
+                  <textarea
+                    className="form-control form-text"
+                    name="securityAnswer"
+                    type="text"
+                    placeholder="Answer"
+                    rows="2"
+                    cols="35"
+                    maxLength="100"
+                    required={true}
+                    readOnly = {this.state.user['authStrategy'] != 'local' ? true: false}
+                    value={this.state.user["securityAnswer"]}
+                    onChange={this.handleNewEditChange}
+                  />
+                </label>
+                <button
+                  role="submit"
+                  className="loginBtn btn btn-primary
+                  btn-block btncolortheme"
+                >
+                  <span className="fa fa-user-plus"></span>&nbsp;Edit Account
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   renderAbout = () => {
@@ -193,6 +328,7 @@ class App extends React.Component {
           menuOpen={this.state.menuOpen}
           toggleMenuOpen={this.toggleMenuOpen}
           showAbout={this.toggleAbout}
+          showEditDialog={this.showEditDialog}
         />}
         <ModePage
           menuOpen={this.state.menuOpen}
@@ -203,6 +339,7 @@ class App extends React.Component {
           setUser={this.setUser}
         />
         {this.state.showAbout ? this.renderAbout() : null}
+        {this.state.showEditUser ? this.renderEditAccountDialog(): null}
       </div>
     );
   }

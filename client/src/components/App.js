@@ -29,7 +29,7 @@ class App extends React.Component {
       user: "",
       showAbout: false,
       authenticated: false,
-      showEdit: false
+      showEditUser: false
     };
   }
 
@@ -156,7 +156,7 @@ class App extends React.Component {
     {
         alert('userNotedited');
     }
-    this.setState({showEditDialog: false});
+    this.setState({showEditUser: false});
   }
 
   renderEditAccountDialog = () => {

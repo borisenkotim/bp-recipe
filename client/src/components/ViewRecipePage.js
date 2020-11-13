@@ -79,7 +79,8 @@ class ViewRecipePage extends React.Component {
     let totalCals = 0;
     let ingredients = this.state.ingredients;
     for (var i = 0; i < ingredients.length; i++){
-      totalCals = totalCals + parseInt(ingredients[i].calories);
+      let cals = ingredients[i].calories;
+      if (cals != null && cals != NaN && cals > 0) totalCals = totalCals + parseInt(cals);
     }
     return totalCals;
   }
@@ -157,7 +158,10 @@ class ViewRecipePage extends React.Component {
       ingredients: [...this.state.ingredients, ingredientObj],
     });
   }
-
+  ingredientCalories = (index) => {
+    let calories = this.state.ingredients[index].calories;
+    return ((calories == null || calories == NaN || calories < 1) ? 0 : calories);
+  }
   // renders the ingredient list in view mode
   renderIngredients = () => {
     let ingredients = [];
@@ -174,7 +178,7 @@ class ViewRecipePage extends React.Component {
                 this.state.ingredients[i].unit + "s" :
                 this.state.ingredients[i].unit)}
           </td>
-          <td>{this.state.ingredients[i].calories == null ? 0 : this.state.ingredients[i].calories}{"   calories"}</td>
+          <td>{this.ingredientCalories(i)}{"   calories"}</td>
           {this.state.ingredients[i].pictureURL && (
             <td>
               <img

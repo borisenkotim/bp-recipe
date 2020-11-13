@@ -174,7 +174,7 @@ class ViewRecipePage extends React.Component {
                 this.state.ingredients[i].unit + "s" :
                 this.state.ingredients[i].unit)}
           </td>
-          <td>{this.state.ingredients[i].calories}{"   calories"}</td>
+          <td>{this.state.ingredients[i].calories == null ? 0 : this.state.ingredients[i].calories}{"   calories"}</td>
           {this.state.ingredients[i].pictureURL && (
             <td>
               <img
@@ -459,7 +459,7 @@ class ViewRecipePage extends React.Component {
                 )}
               </h3>
               <h3 className="recipeContentTitleInfoSubInfo">
-                Total Calories: {this.getTotalCalories() == null ? 0 : this.getTotalCalories()}
+                Total Calories: {isNaN(this.getTotalCalories()) ? 0 : this.getTotalCalories()}
               </h3>
               {/* If we are in edit mode, we want to allow re-entering a new url */}
               {!this.state.viewMode && (

@@ -614,6 +614,7 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
   const validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
   let bodyObj = {...req.body};
   delete bodyObj._id; 
+  console.log(bodyObj);
   for (const bodyProp in bodyObj) {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +

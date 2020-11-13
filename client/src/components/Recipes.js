@@ -62,6 +62,8 @@ class Recipes extends React.Component {
       this.props.user.id +
       "/" +
       this.state.recipes[editId]._id;
+    console.log("from: Recepes -> editRecipe");
+    console.log(newData);
     let res = await fetch(url, {
       headers: {
         Accept: "application/json",

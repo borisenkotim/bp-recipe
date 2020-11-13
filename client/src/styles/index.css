@@ -736,6 +736,11 @@ button:focus {
 
 .ingredient-input-unit-edit {
   width: 18vw;
+  margin-right: 1vw;
+}
+
+.ingredient-input-calories-edit {
+  width: 10vw;
 }
 
 .direction-textarea-edit {

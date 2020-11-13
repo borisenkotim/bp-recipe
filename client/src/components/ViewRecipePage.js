@@ -9,15 +9,10 @@ class ViewRecipePage extends React.Component {
     //confirmDelete state variable determines whether to show or hide the
     //confirm delete dialog box
     this.state = this.props.data;
-    console.log(this.props.data);
     this.state.confirmDelete = false;
     this.state.viewMode = true;
-    let totalCal = 0;
-    let ingredients = this.props.data.ingredients;
-    for (var i = 0; i < ingredients.length; i++){
-      totalCal += ingredients[i].calories;
-    } 
-    this.state.totalCalories = totalCal;
+    //let totalCal = 0;
+    
   }
 
   // Handles the general changes to an input box
@@ -79,6 +74,15 @@ class ViewRecipePage extends React.Component {
       this.setState({ viewMode: true });
     }
   };
+
+  getTotalCalories = () => {
+    let totalCals = 0;
+    let ingredients = this.state.ingredients;
+    for (var i = 0; i < ingredients.length; i++){
+      totalCals = totalCals + parseInt(ingredients[i].calories);
+    }
+    return totalCals;
+  }
 
   // Generates the dialog to confirm deleting a recipe
   renderConfirmDeleteDialog = () => {
@@ -200,7 +204,12 @@ class ViewRecipePage extends React.Component {
 
   // handles the change to ingredient unit
   handleChangeIngredientUnit(e, index) {
-    this.state.ingredients[index].unit = e.target.value;
+    this.state.ingredients[index].unit = parseInt(e.target.value);
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientCalories(e, index) {
+    this.state.ingredients[index].calories = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
@@ -247,7 +256,7 @@ class ViewRecipePage extends React.Component {
                 className="form-control ingredient-input-quantity-edit"
                 onChange={(e) => this.handleChangeIngredientQuantity(e, ingredient.id)}
                 value={ingredient.value.quantity}
-                placeholder="Ingredient Quantity"
+                placeholder="Quantity"
                 step="0.01"
                 min="0"
               />
@@ -257,6 +266,15 @@ class ViewRecipePage extends React.Component {
                 onChange={(e) => this.handleChangeIngredientUnit(e, ingredient.id)}
                 value={ingredient.value.unit}
                 placeholder="Ingredient Unit"
+              />
+              <input
+                type="number"
+                className="form-control ingredient-input-calories-edit"
+                onChange={(e) => this.handleChangeIngredientCalories(e, ingredient.id)}
+                value={ingredient.value.calories}
+                placeholder="Calories"
+                step="5"
+                min="0"
               />            
               <datalist id="units">
                             <option>whole</option>
@@ -441,7 +459,7 @@ class ViewRecipePage extends React.Component {
                 )}
               </h3>
               <h3 className="recipeContentTitleInfoSubInfo">
-                Total Calories: {this.state.totalCalories}
+                Total Calories: {this.getTotalCalories() == null ? 0 : this.getTotalCalories()}
               </h3>
               {/* If we are in edit mode, we want to allow re-entering a new url */}
               {!this.state.viewMode && (

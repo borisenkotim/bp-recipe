@@ -1072,34 +1072,35 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
+            console.log(bodyObj);
             _context13.t0 = _runtime["default"].keys(bodyObj);
 
-          case 5:
+          case 6:
             if ((_context13.t1 = _context13.t0()).done) {
-              _context13.next = 15;
+              _context13.next = 16;
               break;
             }
 
             bodyProp = _context13.t1.value;
 
             if (validProps.includes(bodyProp)) {
-              _context13.next = 11;
+              _context13.next = 12;
               break;
             }
 
             return _context13.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
 
-          case 11:
+          case 12:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
             delete bodyObj[bodyProp];
 
-          case 13:
-            _context13.next = 5;
+          case 14:
+            _context13.next = 6;
             break;
 
-          case 15:
-            _context13.prev = 15;
-            _context13.next = 18;
+          case 16:
+            _context13.prev = 16;
+            _context13.next = 19;
             return User.updateOne({
               "id": req.params.userId,
               "recipes._id": _mongoose["default"].Types.ObjectId(req.params.recipeId)
@@ -1107,24 +1108,24 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               "$set": bodyObj
             });
 
-          case 18:
+          case 19:
             status = _context13.sent;
             res.status(200).send("recipe successfully updated in database.");
-            _context13.next = 26;
+            _context13.next = 27;
             break;
 
-          case 22:
-            _context13.prev = 22;
-            _context13.t2 = _context13["catch"](15);
+          case 23:
+            _context13.prev = 23;
+            _context13.t2 = _context13["catch"](16);
             console.log(_context13.t2);
             return _context13.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context13.t2));
 
-          case 26:
+          case 27:
           case "end":
             return _context13.stop();
         }
       }
-    }, _callee13, null, [[15, 22]]);
+    }, _callee13, null, [[16, 23]]);
   }));
 
   return function (_x35, _x36, _x37) {

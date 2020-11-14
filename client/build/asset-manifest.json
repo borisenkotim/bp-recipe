@@ -1,33 +1,19 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.css": "/static/css/main.54d34a96.chunk.css",
-    "main.js": "/static/js/main.542e6f15.chunk.js",
-    "main.js.map": "/static/js/main.542e6f15.chunk.js.map",
-=======
-    "main.css": "/static/css/main.fce2f3a9.chunk.css",
-    "main.js": "/static/js/main.8cd46720.chunk.js",
-    "main.js.map": "/static/js/main.8cd46720.chunk.js.map",
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+    "main.css": "/static/css/main.04bda2f8.chunk.css",
+    "main.js": "/static/js/main.cf0f0752.chunk.js",
+    "main.js.map": "/static/js/main.cf0f0752.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.94a947e0.js",
     "runtime-main.js.map": "/static/js/runtime-main.94a947e0.js.map",
     "static/css/2.a7950f01.chunk.css": "/static/css/2.a7950f01.chunk.css",
     "static/js/2.a4571aa6.chunk.js": "/static/js/2.a4571aa6.chunk.js",
     "static/js/2.a4571aa6.chunk.js.map": "/static/js/2.a4571aa6.chunk.js.map",
     "index.html": "/index.html",
-<<<<<<< HEAD
-    "precache-manifest.ec07fce0a5752cb5b055762fa7e45f57.js": "/precache-manifest.ec07fce0a5752cb5b055762fa7e45f57.js",
+    "precache-manifest.8d376a2f0ef3f1ec1b1dc0c8109f99ca.js": "/precache-manifest.8d376a2f0ef3f1ec1b1dc0c8109f99ca.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.a7950f01.chunk.css.map": "/static/css/2.a7950f01.chunk.css.map",
-    "static/css/main.54d34a96.chunk.css.map": "/static/css/main.54d34a96.chunk.css.map",
-    "static/js/2.6f06c5c3.chunk.js.LICENSE.txt": "/static/js/2.6f06c5c3.chunk.js.LICENSE.txt",
-=======
-    "precache-manifest.37bb10aa2a3177622eab9fb2e997b092.js": "/precache-manifest.37bb10aa2a3177622eab9fb2e997b092.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.a7950f01.chunk.css.map": "/static/css/2.a7950f01.chunk.css.map",
-    "static/css/main.fce2f3a9.chunk.css.map": "/static/css/main.fce2f3a9.chunk.css.map",
+    "static/css/main.04bda2f8.chunk.css.map": "/static/css/main.04bda2f8.chunk.css.map",
     "static/js/2.a4571aa6.chunk.js.LICENSE.txt": "/static/js/2.a4571aa6.chunk.js.LICENSE.txt",
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
     "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.fee66e71.woff",
     "static/media/pancakes.jpg": "/static/media/pancakes.305293f5.jpg",
     "static/media/index.css": "/static/media/shelves.8fa40ac7.jpg",
@@ -36,14 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.94a947e0.js",
     "static/css/2.a7950f01.chunk.css",
-<<<<<<< HEAD
-    "static/js/2.6f06c5c3.chunk.js",
-    "static/css/main.54d34a96.chunk.css",
-    "static/js/main.542e6f15.chunk.js"
-=======
     "static/js/2.a4571aa6.chunk.js",
-    "static/css/main.fce2f3a9.chunk.css",
-    "static/js/main.8cd46720.chunk.js"
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+    "static/css/main.04bda2f8.chunk.css",
+    "static/js/main.cf0f0752.chunk.js"
   ]
 }

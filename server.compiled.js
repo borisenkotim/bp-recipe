@@ -71,6 +71,10 @@ var ingredientSchema = new Schema({
   unit: {
     type: String,
     required: true
+  },
+  expiration: {
+    type: String,
+    required: false
   }
 });
 var recipeSchema = new Schema({
@@ -1162,7 +1166,7 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               break;
             }
 
-            return _context14.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
+            return _context14.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'expiration', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
 
           case 12:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];

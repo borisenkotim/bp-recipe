@@ -26,4 +26,4 @@ client/yarn-error.log*
 !.elasticbeanstalk/*.global.yml
 
 # server.compiled.js
-server.compiled.js
+*.compiled.js

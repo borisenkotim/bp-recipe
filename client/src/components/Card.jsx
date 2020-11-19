@@ -18,7 +18,9 @@ class Card extends React.Component {
     if (this.state.favorited) {
       this.setState({ favorited: false });
       newData.favorited = false;
-    } else {
+    } 
+    else 
+    {
       this.setState({ favorited: true });
       newData.favorited = true;
     }

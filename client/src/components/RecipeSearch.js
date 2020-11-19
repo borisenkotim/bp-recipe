@@ -6,7 +6,8 @@ class RecipeSearch extends React.Component {
         super(props)
         // visible represents whether the search text input is shown or not
         this.state = {
-            visible: false
+            visible: false,
+            filter: ""
         }
     }
 
@@ -23,6 +24,11 @@ class RecipeSearch extends React.Component {
     toggleVisible = () => {
         this.setState(prevState => ({ visible: !prevState.visible }))
     }
+
+    handleChangeFilter(e) {
+        this.state.filter = e.target.value;
+        this.setState(this.state.filter);
+      }
 
     // updates the filtered recipes upon search input change
     handleSearchChange = e => {
@@ -65,6 +71,21 @@ class RecipeSearch extends React.Component {
                     style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "8px",
                             width: "15vw", outline: "none"}}
                 />
+                <input
+                    //onClick={this.toggleVisible}
+                    placeholder="Filter Search"
+                    className="ingredient-input-filter"
+                    type="text"
+                    list="filters"
+                    onChange={(e) =>
+                        this.handleChangeFilter(e)
+                    }
+                    value={this.state.filter}
+                />
+                <datalist id="filters">
+                    <option>Recipes</option>
+                    <option>Ingredients</option>
+                </datalist>
             </div>
         )
     }

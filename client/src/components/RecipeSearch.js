@@ -25,13 +25,13 @@ class RecipeSearch extends React.Component {
         this.setState(prevState => ({ visible: !prevState.visible }))
     }
 
-    handleChangeFilter(e) {
-        this.state.filter = e.target.value;
-        this.setState(this.state.filter);
+    handleChangeFilter = (e) => {
+        // this.state.filter = e.target.value;
+        this.setState({filter:  e.target.value});
       }
 
     // updates the filtered recipes upon search input change
-    handleSearchChange = e => {
+    handleSearchChange = (e) => {
         let search = e.target.value
 
         // can add search caching in the future for faster searches
@@ -51,7 +51,7 @@ class RecipeSearch extends React.Component {
     }
 
     // closes search bar upon click outside of the component
-    handleClickOutside = e => {
+    handleClickOutside = (e) => {
         let domNode = ReactDOM.findDOMNode(this)
 
         if (!domNode || !domNode.contains(e.target) && this.state.visible)
@@ -67,7 +67,7 @@ class RecipeSearch extends React.Component {
                             paddingTop: "10px", paddingRight: "15px"}}
                 />
                 <input
-                    type="search" onChange={(e) => this.handleSearchChange(e)} hidden={!this.state.visible} placeholder="Search..."
+                    type="search" onChange={this.handleSearchChange} hidden={!this.state.visible} placeholder="Search..."
                     style={{borderRadius: "10px", border: "1.4px solid", paddingLeft: "8px",
                             width: "15vw", outline: "none"}}
                 />
@@ -77,9 +77,7 @@ class RecipeSearch extends React.Component {
                     className="ingredient-input-filter"
                     type="text"
                     list="filters"
-                    onChange={(e) =>
-                        this.handleChangeFilter(e)
-                    }
+                    onChange={this.handleChangeFilter}
                     value={this.state.filter}
                 />
                 <datalist id="filters">

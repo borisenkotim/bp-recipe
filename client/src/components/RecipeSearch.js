@@ -33,19 +33,47 @@ class RecipeSearch extends React.Component {
     // updates the filtered recipes upon search input change
     handleSearchChange = (e) => {
         let search = e.target.value
-
-        // can add search caching in the future for faster searches
         let filteredList = []
-        if (search !== ""){
+        // can add search caching in the future for faster searches
+        if (this.state.filter == "Recipes")
+        {
+            if (search !== ""){
             // convert search term and item names to lowercase because includes is case sensitve
             let lowerSearch = search.toLowerCase()
             filteredList = this.props.allRecipes.filter(item => {
                 let lowerItem = item.name.toLowerCase()
                 return lowerItem.includes(lowerSearch)
             })
+            }
         }
         else // search term is empty
+        {
             filteredList = this.props.allRecipes
+        }
+        let i = 0
+        let x = 0
+        if (this.state.filter == "Ingredients")
+        {
+            if (search !== "")
+            {
+                let lowerSearch = search.toLowerCase();
+                filteredList = this.props.allRecipes.filter(item => {
+                    for (i = 0; i < item.ingredients.length; ++i)
+                    {
+                        let lowerItem = item.ingredients[i].name.toLowerCase()
+                        //return lowerItem.includes(lowerSearch)
+                        // only checks the first ingredient in the list and updates the list
+                        // doesnt check any other ones
+                        if (lowerItem.includes(lowerSearch))
+                        {
+                            let check = lowerItem.includes(lowerSearch)
+                            filteredList += check
+                            // was thinking of adding to filtered list but isnt working
+                        }
+                    }
+                })
+            }
+        }
 
         this.props.updateFilteredRecipes(filteredList)
     }

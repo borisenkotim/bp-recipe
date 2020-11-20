@@ -154,6 +154,7 @@ class ViewRecipePage extends React.Component {
     ingredientObj.quantity = 0;
     ingredientObj.unit = "";
     ingredientObj.calories = 0;
+    ingredientObj.expiration = "";
     this.setState({
       ingredients: [...this.state.ingredients, ingredientObj],
     });
@@ -170,6 +171,7 @@ class ViewRecipePage extends React.Component {
       ingredients.push(
         <tr key={i}>
           <td>{this.state.ingredients[i].name}</td>
+          <td>{this.state.ingredients[i].expiration}</td>
           <td>
             {this.state.ingredients[i].quantity}{" "}
             {this.state.ingredients[i].unit.toLowerCase() == 'whole' ? 
@@ -197,6 +199,11 @@ class ViewRecipePage extends React.Component {
   // handles the change to ingredient name
   handleChangeIngredientName(e, index) {
     this.state.ingredients[index].name = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientexpiration(e, index) {
+    this.state.ingredients[index].expiration = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
@@ -254,6 +261,12 @@ class ViewRecipePage extends React.Component {
                 onChange={(e) => this.handleChangeIngredientName(e, ingredient.id)}
                 value={ingredient.value.name}
                 placeholder="Ingredient Name"
+              />
+              <input
+                className="ingredient-input-expiration-edit form-control"
+                onChange={(e) => this.handleChangeIngredientName(e, ingredient.id)}
+                value={ingredient.value.expiration}
+                placeholder="Ingredient Expiration"
               />
               <input
                 type="number"

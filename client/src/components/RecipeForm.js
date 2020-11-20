@@ -13,6 +13,7 @@ class RecipeForm extends React.Component {
         cookTime: 0,
         pictureURL: "",
         dateAdded: "",
+        expiration: "",
         favorited: false,
         faIcon: "fa fa-save",
         btnLabel: "Save Recipe",
@@ -60,6 +61,7 @@ class RecipeForm extends React.Component {
     ingredientObj.quantity = null;
     ingredientObj.unit = "";
     ingredientObj.calories = null;
+    ingredientObj.expiration = "";
     this.setState({
       ingredients: [...this.state.ingredients, ingredientObj],
     });
@@ -72,6 +74,11 @@ class RecipeForm extends React.Component {
 
   handleChangeIngredientName(e, index) {
     this.state.ingredients[index].name = e.target.value;
+    this.setState({ ingredients: this.state.ingredients });
+  }
+
+  handleChangeIngredientexpiration(e, index) {
+    this.state.ingredients[index].expiration = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
@@ -147,6 +154,14 @@ class RecipeForm extends React.Component {
                             this.handleChangeIngredientName(e, index)
                           }
                           value={step.name}
+                        />
+                        <input
+                          placeholder="ingredient expiration"
+                          className="ingredient-input-expiration"
+                          onChange={(e) =>
+                            this.handleChangeIngredientexpiration(e, index)
+                          }
+                          value={step.expiration}
                         />
                         <input
                           placeholder="quantity"

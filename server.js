@@ -31,7 +31,8 @@ const ingredientSchema = new Schema({
   pictureURL : String,
   quantityString : {type: String, required: true},
   quantity : {type: Number, required: true},
-  unit : {type: String, required: true}
+  unit : {type: String, required: true},
+  expiration : {type: String, required: false}
 });
 
 const recipeSchema = new Schema({
@@ -667,7 +668,7 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
     if (!validProps.includes(bodyProp)) {
       return res.status(400).send("recipes/ PUT request formulated incorrectly." +
         "Only the following props are allowed in body: " +
-        "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" +
+        "'name', 'dateAdded', 'pictureURL', 'favorited', 'expiration', 'ingredients', 'directions', *" +
         bodyProp + "* is not an allowed prop.");
     } else {
       bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];

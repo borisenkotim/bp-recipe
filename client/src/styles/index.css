@@ -616,6 +616,10 @@ button:focus {
   width: 30vw;
   margin-right: 1vw;
 }
+.ingredient-input-expiration {
+  width: 30vw;
+  margin-right: 1vw;
+}
 
 .ingredient-input-quantity {
   width: 6vw;
@@ -725,6 +729,10 @@ button:focus {
 }
 
 .ingredient-input-name-edit {
+  width: 30vw;
+  margin-right: 1vw;
+}
+.ingredient-input-expiration-edit {
   width: 30vw;
   margin-right: 1vw;
 }

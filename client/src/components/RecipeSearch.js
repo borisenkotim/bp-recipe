@@ -41,38 +41,33 @@ class RecipeSearch extends React.Component {
             // convert search term and item names to lowercase because includes is case sensitve
             let lowerSearch = search.toLowerCase()
             filteredList = this.props.allRecipes.filter(item => {
-                let lowerItem = item.name.toLowerCase()
+                let lowerItem = item.name.toLowerCase();
                 return lowerItem.includes(lowerSearch)
             })
+            }
+        }
+        else if (this.state.filter == "Ingredients")
+        {
+            let i = 0
+            let x = 0
+            if (search !== "")
+            {
+                let lowerSearch = search.toLowerCase();
+                filteredList = this.props.allRecipes.filter(item => {
+                    for (i = 0; i < item.ingredients.length; ++i)       // searches through all the ingredients
+                    {
+                        let lowerItem = item.ingredients[i].name.toLowerCase()
+                        if (lowerItem.includes(lowerSearch))            // returns true, and shows the whole recipe if there is an ingredient match
+                        {
+                            return lowerItem.includes(lowerSearch);
+                        }
+                    }
+                })
             }
         }
         else // search term is empty
         {
             filteredList = this.props.allRecipes
-        }
-        let i = 0
-        let x = 0
-        if (this.state.filter == "Ingredients")
-        {
-            if (search !== "")
-            {
-                let lowerSearch = search.toLowerCase();
-                filteredList = this.props.allRecipes.filter(item => {
-                    for (i = 0; i < item.ingredients.length; ++i)
-                    {
-                        let lowerItem = item.ingredients[i].name.toLowerCase()
-                        //return lowerItem.includes(lowerSearch)
-                        // only checks the first ingredient in the list and updates the list
-                        // doesnt check any other ones
-                        if (lowerItem.includes(lowerSearch))
-                        {
-                            let check = lowerItem.includes(lowerSearch)
-                            filteredList += check
-                            // was thinking of adding to filtered list but isnt working
-                        }
-                    }
-                })
-            }
         }
 
         this.props.updateFilteredRecipes(filteredList)

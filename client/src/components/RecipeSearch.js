@@ -95,7 +95,6 @@ class RecipeSearch extends React.Component {
                             width: "15vw", outline: "none"}}
                 />
                 <input
-                    //onClick={this.toggleVisible}
                     placeholder="Filter Search"
                     className="ingredient-input-filter"
                     type="text"

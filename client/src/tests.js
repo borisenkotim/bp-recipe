@@ -19,3 +19,13 @@ test('test view recipe page', async t =>{
     .expect(recipeSearch.find('.recipeMenu').visible).eql(true)
     .click(recipeSearch.find('select'))
 })
+
+test ('test ingredient search', async t =>{
+    const recipeSearch = search.findReact('RecipeSearch')
+
+    await t
+    .click(recipeSearch)
+    .expect(recipeSearch.find('.filters'))
+    .click(recipeSearch.find('Ingredients'))
+
+})

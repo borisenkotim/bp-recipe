@@ -2,8 +2,9 @@ import React from "react";
 import "../styles/modal.css";
 import AppMode from "../AppMode.js";
 import RecipeSearch from "./RecipeSearch.js";
-import Card from "./Card.jsx";
-import RecipeSort from "./RecipeSort.js"
+import Card from "./Card.jsx"; 
+import RecipeSort from "./RecipeSort.js";
+import RecipeForm from "./RecipeForm.js";
 
 class RecipesTable extends React.Component {
   constructor(props) {

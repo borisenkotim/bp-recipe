@@ -71,6 +71,10 @@ var ingredientSchema = new Schema({
   unit: {
     type: String,
     required: true
+  },
+  expiration: {
+    type: String,
+    required: false
   }
 });
 var recipeSchema = new Schema({
@@ -1146,57 +1150,35 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             validProps = ['name', 'ingredients', 'directions', 'cookTime', 'pictureURL', 'favorited', 'dateAdded'];
             bodyObj = _objectSpread({}, req.body);
             delete bodyObj._id;
-<<<<<<< HEAD
             console.log(bodyObj);
-            _context13.t0 = _runtime["default"].keys(bodyObj);
-
-          case 6:
-            if ((_context13.t1 = _context13.t0()).done) {
-              _context13.next = 16;
-=======
             _context14.t0 = _runtime["default"].keys(bodyObj);
 
-          case 5:
+          case 6:
             if ((_context14.t1 = _context14.t0()).done) {
-              _context14.next = 15;
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+              _context14.next = 16;
               break;
             }
 
             bodyProp = _context14.t1.value;
 
             if (validProps.includes(bodyProp)) {
-<<<<<<< HEAD
-              _context13.next = 12;
-=======
-              _context14.next = 11;
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+              _context14.next = 12;
               break;
             }
 
-            return _context14.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
+            return _context14.abrupt("return", res.status(400).send("recipes/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'dateAdded', 'pictureURL', 'favorited', 'expiration', 'ingredients', 'directions', *" + bodyProp + "* is not an allowed prop."));
 
           case 12:
             bodyObj["recipes.$." + bodyProp] = bodyObj[bodyProp];
             delete bodyObj[bodyProp];
 
-<<<<<<< HEAD
           case 14:
-            _context13.next = 6;
+            _context14.next = 6;
             break;
 
           case 16:
-            _context13.prev = 16;
-            _context13.next = 19;
-=======
-          case 13:
-            _context14.next = 5;
-            break;
-
-          case 15:
-            _context14.prev = 15;
-            _context14.next = 18;
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+            _context14.prev = 16;
+            _context14.next = 19;
             return User.updateOne({
               "id": req.params.userId,
               "recipes._id": _mongoose["default"].Types.ObjectId(req.params.recipeId)
@@ -1204,42 +1186,24 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               "$set": bodyObj
             });
 
-<<<<<<< HEAD
           case 19:
-            status = _context13.sent;
+            status = _context14.sent;
             res.status(200).send("recipe successfully updated in database.");
-            _context13.next = 27;
+            _context14.next = 27;
             break;
 
           case 23:
-            _context13.prev = 23;
-            _context13.t2 = _context13["catch"](16);
-            console.log(_context13.t2);
-            return _context13.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context13.t2));
-=======
-          case 18:
-            status = _context14.sent;
-            res.status(200).send("recipe successfully updated in database.");
-            _context14.next = 26;
-            break;
-
-          case 22:
-            _context14.prev = 22;
-            _context14.t2 = _context14["catch"](15);
+            _context14.prev = 23;
+            _context14.t2 = _context14["catch"](16);
             console.log(_context14.t2);
             return _context14.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context14.t2));
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
 
           case 27:
           case "end":
             return _context14.stop();
         }
       }
-<<<<<<< HEAD
-    }, _callee13, null, [[16, 23]]);
-=======
-    }, _callee14, null, [[15, 22]]);
->>>>>>> 95a44f9c427878b04d7074970ed5bcf03ce098bb
+    }, _callee14, null, [[16, 23]]);
   }));
 
   return function (_x39, _x40, _x41) {

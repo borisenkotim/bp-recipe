@@ -62,7 +62,7 @@ class RecipesTable extends React.Component {
 
   render() {
     return (
-      <div className="paddedPage">
+      <div id="recipe-table-page" className="paddedPage">
         <RecipeSearch
           updateFilteredRecipes={this.updateFilteredRecipes}
           allRecipes={this.props.recipes}
@@ -85,7 +85,7 @@ class RecipesTable extends React.Component {
 
         <div>
           {Object.keys(this.state.filtered).length === 0 ? (
-            <p>No recipes found</p>
+            <p id="norecipes">No recipes found</p>
           ) : (
             <div className="recipe-cards-container">
                 {this.renderCards()}

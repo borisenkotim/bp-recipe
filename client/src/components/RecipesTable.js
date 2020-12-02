@@ -33,8 +33,9 @@ class RecipesTable extends React.Component {
   renderCards = () => {
     let col = [];
     for (let b = 0; b < this.state.filtered.length; b += 1) {
+      const id = "recipe-" + b;
       col.push(
-        <div className="recipe-card-div">
+        <div className="recipe-card-div" id={id}>
           <span
             className="recipe-card-span"
             key={this.props.recipes.indexOf(this.state.filtered[b])}

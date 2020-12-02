@@ -72,7 +72,7 @@ class ViewRecipePage extends React.Component {
       delete recipeData[""];
       setTimeout(this.props.saveRecipe, 1000, recipeData);
       e.preventDefault();
-      this.setState({ viewMode: true });
+      this.setState({ viewMode: true, servings: 1 });
     }
   };
 
@@ -505,12 +505,12 @@ class ViewRecipePage extends React.Component {
                 Total Calories:{" "}
                 {isNaN(this.getTotalCalories()) ? 0 : this.getTotalCalories()}
               </h3>
-              <h3 className="recipeContentTitleInfoSubInfo">
+              {this.state.viewMode && <h3 className="recipeContentTitleInfoSubInfo">
                 Servings:&nbsp;
                 <i id="removeservingbutton" class="fa fa-minus-circle" onClick={this.removeServing}></i>
                 &nbsp;<span id="servings">{this.state.servings}</span>&nbsp;
                 <i id="addservingbutton" class="fa fa-plus-circle" onClick={this.addServing}></i>
-              </h3>
+              </h3>}
               {/* If we are in edit mode, we want to allow re-entering a new url */}
               {!this.state.viewMode && (
                 <label htmlFor="pictureURL">

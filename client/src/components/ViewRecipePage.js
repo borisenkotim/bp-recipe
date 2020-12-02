@@ -66,6 +66,7 @@ class ViewRecipePage extends React.Component {
       let recipeData = this.state;
       delete recipeData.confirmDelete;
       delete recipeData.viewMode;
+      delete recipeData.servings;
 
       // NOTE: A random empty obj was being added. Don't remove this.
       delete recipeData[""];

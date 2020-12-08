@@ -5,7 +5,6 @@ class GroceryTable extends React.Component {
 
   confirmDelete = (id) => {
     this.props.setDeleteId(id);
-    alert("Confirm Delete Goes here!");
   }
 
   //renderTable -- render an HTML table displaying the rounds logged

@@ -1,19 +1,19 @@
 {
   "files": {
     "main.css": "/static/css/main.62adf910.chunk.css",
-    "main.js": "/static/js/main.d8b1108f.chunk.js",
-    "main.js.map": "/static/js/main.d8b1108f.chunk.js.map",
+    "main.js": "/static/js/main.dca8272f.chunk.js",
+    "main.js.map": "/static/js/main.dca8272f.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.94a947e0.js",
     "runtime-main.js.map": "/static/js/runtime-main.94a947e0.js.map",
     "static/css/2.a7950f01.chunk.css": "/static/css/2.a7950f01.chunk.css",
-    "static/js/2.a4571aa6.chunk.js": "/static/js/2.a4571aa6.chunk.js",
-    "static/js/2.a4571aa6.chunk.js.map": "/static/js/2.a4571aa6.chunk.js.map",
+    "static/js/2.1fb1fa12.chunk.js": "/static/js/2.1fb1fa12.chunk.js",
+    "static/js/2.1fb1fa12.chunk.js.map": "/static/js/2.1fb1fa12.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.d46492cd604aa8e0fcdfd2ccc4e2c72e.js": "/precache-manifest.d46492cd604aa8e0fcdfd2ccc4e2c72e.js",
+    "precache-manifest.c24d8f396607f6e77d3677677b68353d.js": "/precache-manifest.c24d8f396607f6e77d3677677b68353d.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.a7950f01.chunk.css.map": "/static/css/2.a7950f01.chunk.css.map",
     "static/css/main.62adf910.chunk.css.map": "/static/css/main.62adf910.chunk.css.map",
-    "static/js/2.a4571aa6.chunk.js.LICENSE.txt": "/static/js/2.a4571aa6.chunk.js.LICENSE.txt",
+    "static/js/2.1fb1fa12.chunk.js.LICENSE.txt": "/static/js/2.1fb1fa12.chunk.js.LICENSE.txt",
     "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.fee66e71.woff",
     "static/media/pancakes.jpg": "/static/media/pancakes.305293f5.jpg",
     "static/media/index.css": "/static/media/shelves.8fa40ac7.jpg",
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.94a947e0.js",
     "static/css/2.a7950f01.chunk.css",
-    "static/js/2.a4571aa6.chunk.js",
+    "static/js/2.1fb1fa12.chunk.js",
     "static/css/main.62adf910.chunk.css",
-    "static/js/main.d8b1108f.chunk.js"
+    "static/js/main.dca8272f.chunk.js"
   ]
 }

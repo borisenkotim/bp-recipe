@@ -195,7 +195,7 @@ class PantryPage extends React.Component {
     {
       case AppMode.PANTRY:
         return (
-          <React.Fragment>
+        <React.Fragment>
         <div className="paddedPage center">
           <h1 align="center">Grocery Management</h1>
           <h2 align="center">Pantry</h2>
@@ -237,11 +237,15 @@ class PantryPage extends React.Component {
       );
       case AppMode.PANTRY_ADDINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} saveRecipe={this.addPantry} />
+          <PantryForm mode={this.props.mode} saveRecipe={this.addIngredient} />
         );
+        case AppMode.GROCERY_ADDINGREDIENT:
+          return (
+            <PantryForm mode={this.props.mode} saveRecipe={this.addGrocery} />
+          );
       case AppMode.PANTRY_EDITINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} saveRecipe={this.editPantry} pantryData={this.state.pantry[this.state.editId]} />
+          <PantryForm mode={this.props.mode} saveRecipe={this.editIngredient} pantryData={this.state.pantry[this.state.editId]} />
         );
   }
 }

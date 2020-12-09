@@ -13,7 +13,8 @@ const AppMode = {
     RECIPES_VIEWRECIPE: "RecipeMode-ViewRecipe",
     PANTRY: "PantryMode",
     PANTRY_EDITINGREDIENT: "PantryMode-EditIngredient",
-    PANTRY_ADDINGREDIENT: "PantryMode-EditIngredient"
+    PANTRY_ADDINGREDIENT: "PantryMode-EditIngredient",
+    GROCERY_ADDINGREDIENT: "GroceryMode-AddIngredient"
 };
 
 Object.freeze(AppMode); //This ensures that the object is immutable.

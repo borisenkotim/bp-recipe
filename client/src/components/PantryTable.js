@@ -46,7 +46,7 @@ class PantryTable extends React.Component {
         </tr>
         </thead>
         <tbody>
-          {Object.keys(this.props.rounds).length === 0 ? 
+          {Object.keys(this.props.ingredients).length === 0 ? 
           <tr>
           <td colSpan="5" style={{fontStyle: "italic"}}>No Ingredients Added</td>
           </tr> : this.renderTable()

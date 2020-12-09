@@ -13,6 +13,7 @@ modeTitle[AppMode.RECIPES_EDITRECIPE] = "Edit Recipe";
 modeTitle[AppMode.PANTRY] = "Grocery Management";
 modeTitle[AppMode.PANTRY_EDITINGREDIENT] = "Edit Ingredient";
 modeTitle[AppMode.PANTRY_ADDINGREDIENT] = "Add Ingredient";
+modeTitle[AppMode.GROCERY_ADDINGREDIENT] = "Add to Shopping Cart";
 
 const modeToPage = {};
 modeToPage[AppMode.LOGIN] = LoginPage;
@@ -23,7 +24,7 @@ modeToPage[AppMode.RECIPES_VIEWRECIPE] = Recipes;
 modeToPage[AppMode.PANTRY] = PantryPage;
 modeToPage[AppMode.PANTRY_EDITINGREDIENT] = PantryPage;
 modeToPage[AppMode.PANTRY_ADDINGREDIENT] = PantryPage;
-
+modeToPage[AppMode.GROCERY_ADDINGREDIENT] = PantryPage;
 class App extends React.Component {
   constructor(props) {
     super(props);

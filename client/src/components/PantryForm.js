@@ -1,11 +1,38 @@
 import React from "react";
 import AppMode from "../AppMode";
-import { Icon, Label } from 'semantic-ui-react';
 
 class PantryForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = this.props.pantryData;
+        if (this.props.mode === AppMode.PANTRY_ADDINGREDIENT) {
+            this.state = {
+              name: "",
+              calories: "",
+              pictureURL: "",
+              unit: "units",
+              expiration: "",
+              quantity: "",
+              faIcon: "fa fa-save",
+              btnLabel: "Save Ingredient"
+            };
+          }
+          else if (this.props.mode === AppMode.GROCERY_ADDINGREDIENT){
+            this.state = {
+                name: "",
+                calories: "",
+                pictureURL: "",
+                unit: "units",
+                expiration: "",
+                quantity: "",
+                faIcon: "fa fa-save",
+                btnLabel: "Add to Cart"
+              };
+        }
+        else {
+            this.state = this.props.startData;
+            this.state.faIcon = "fa fa-edit";
+            this.state.btnLabel = "Update Ingredient";
+          }
     }
 
     //handle change
@@ -39,6 +66,8 @@ class PantryForm extends React.Component{
         return(
         <div className="paddedPage">
             <form onSubmit={this.handleSubmit}>
+                <p></p>
+                <center>
                 <label htmlFor="name">Ingredient Name:
                 <input
                 value={this.state.name}
@@ -49,6 +78,7 @@ class PantryForm extends React.Component{
                 required
                 onChange={this.handleChange}
               /> </label>
+              <p />
                <label htmlFor="calories">
               Calories:
               <input
@@ -59,6 +89,7 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             </label>
+            <p />
             <label className="pictureURL-form" htmlFor="pictureURL">
               Picture URL:
               <input
@@ -70,6 +101,7 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             </label>
+            <p />
             <label htmlFor="calories">
               Quantity:
               <input
@@ -80,7 +112,7 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             <label htmlFor="unit">
-              Units:
+                Units: 
               <input
                 value={this.state.unit}
                 name="unit"
@@ -90,7 +122,8 @@ class PantryForm extends React.Component{
               />
             </label>
             </label>
-            <label htmlFor="calories">
+            <p />
+            <label htmlFor="expiration">
               Expiration Date:
               <input
                 value={this.state.expiration}
@@ -100,7 +133,17 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             </label>
-
+            <button
+              type="submit"
+              onClick={this.props.handleChange}
+              className="loginBtn btn btn-primary
+                    btn-block btncolortheme"
+              style={{ width: "230px", fontSize: "20px", zindex: 110 }}
+            >
+              <span className={this.state.faIcon} />
+              &nbsp;{this.state.btnLabel}
+            </button>
+            </center>
             </form>
         </div>
         );

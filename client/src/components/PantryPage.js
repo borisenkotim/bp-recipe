@@ -216,6 +216,8 @@ class PantryPage extends React.Component {
               />
           </div>
         <h2 align="center">Groceries</h2>
+        <button onClick={() => this.props.changeMode(AppMode.GROCERY_ADDINGREDIENT)}>
+              Add to Shopping Cart</button>
         <GroceryTable 
             ingredients={this.state.groceryList} 
             changeMode={this.props.changeMode}
@@ -237,15 +239,15 @@ class PantryPage extends React.Component {
       );
       case AppMode.PANTRY_ADDINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} saveRecipe={this.addIngredient} />
+          <PantryForm mode={this.props.mode} savePantry={this.addIngredient} />
         );
         case AppMode.GROCERY_ADDINGREDIENT:
           return (
-            <PantryForm mode={this.props.mode} saveRecipe={this.addGrocery} />
+            <PantryForm mode={this.props.mode} savePantry={this.addGrocery} />
           );
       case AppMode.PANTRY_EDITINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} saveRecipe={this.editIngredient} pantryData={this.state.pantry[this.state.editId]} />
+          <PantryForm mode={this.props.mode} savePantry={this.editIngredient} pantryData={this.state.pantry[this.state.editId]} />
         );
   }
 }

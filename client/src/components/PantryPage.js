@@ -101,7 +101,7 @@ class PantryPage extends React.Component {
       );
     } else {
       //Push update into component state:
-      this.fetchPantry(redirectPage);
+      this.fetchPantry(AppMode.PANTRY);
     }
   };
 
@@ -218,7 +218,6 @@ class PantryPage extends React.Component {
         <GroceryTable 
             shopCart={this.state.groceryList} 
             changeMode={this.props.changeMode}
-            setEditId={this.setEditId}
             setDeleteId={this.setDeleteId2}
             saveGrocery={this.addGrocery}
             menuOpen={this.props.menuOpen}
@@ -244,7 +243,7 @@ class PantryPage extends React.Component {
           );
       case AppMode.PANTRY_EDITINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} savePantry={this.editIngredient} pantryData={this.state.pantry[this.state.editId]} />
+          <PantryForm mode={this.props.mode} savePantry={this.editIngredient} startData={this.state.pantry[this.state.editId]} />
         );
   }
 }

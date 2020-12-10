@@ -689,6 +689,38 @@ app.put('/recipes/:userId/:recipeId', async (req, res, next) => {
   } 
 });
 
+app.put('/pantry/:userId/:pantryId', async (req, res, next) => {
+  console.log("in /pantry (PUT) route with params = " + 
+              JSON.stringify(req.params) + " and body = " + 
+              JSON.stringify(req.body));
+  const validProps = ['name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration'];
+  let bodyObj = {...req.body};
+  delete bodyObj._id; 
+  console.log(bodyObj);
+  for (const bodyProp in bodyObj) {
+    if (!validProps.includes(bodyProp)) {
+      return res.status(400).send("pantry/ PUT request formulated incorrectly." +
+        "Only the following props are allowed in body: " +
+        "'name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration', *" +
+        bodyProp + "* is not an allowed prop.");
+    } else {
+      bodyObj["pantry.$." + bodyProp] = bodyObj[bodyProp];
+      delete bodyObj[bodyProp];
+    }
+  }
+  try {
+    let status = await User.updateOne(
+      {"id": req.params.userId,
+      "pantry._id": mongoose.Types.ObjectId(req.params.pantryId)}
+      ,{"$set" : bodyObj}
+    );
+    res.status(200).send("recipe successfully updated in database.");
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when updating recipe in database: " + err);
+  } 
+});
+
 //recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
 //GIVEN:
 //  id of the user whose recipe is to be deleted is passed as first 

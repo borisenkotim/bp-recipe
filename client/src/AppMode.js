@@ -13,7 +13,7 @@ const AppMode = {
     RECIPES_VIEWRECIPE: "RecipeMode-ViewRecipe",
     PANTRY: "PantryMode",
     PANTRY_EDITINGREDIENT: "PantryMode-EditIngredient",
-    PANTRY_ADDINGREDIENT: "PantryMode-EditIngredient",
+    PANTRY_ADDINGREDIENT: "PantryMode-AddIngredient",
     GROCERY_ADDINGREDIENT: "GroceryMode-AddIngredient"
 };
 

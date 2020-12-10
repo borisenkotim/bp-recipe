@@ -28,7 +28,7 @@ class PantryForm extends React.Component{
                 btnLabel: "Add to Cart"
               };
         }
-        else {
+        else if (this.props.mode === AppMode.PANTRY_EDITINGREDIENT){
             this.state = this.props.startData;
             this.state.faIcon = "fa fa-edit";
             this.state.btnLabel = "Update Ingredient";

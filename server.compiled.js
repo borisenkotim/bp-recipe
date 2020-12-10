@@ -1202,6 +1202,77 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
   return function (_x39, _x40, _x41) {
     return _ref14.apply(this, arguments);
   };
+}());
+app.put('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
+  var _ref15 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee15(req, res, next) {
+    var validProps, bodyObj, bodyProp, status;
+    return _runtime["default"].wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            console.log("in /pantry (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            validProps = ['name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration'];
+            bodyObj = _objectSpread({}, req.body);
+            delete bodyObj._id;
+            console.log(bodyObj);
+            _context15.t0 = _runtime["default"].keys(bodyObj);
+
+          case 6:
+            if ((_context15.t1 = _context15.t0()).done) {
+              _context15.next = 16;
+              break;
+            }
+
+            bodyProp = _context15.t1.value;
+
+            if (validProps.includes(bodyProp)) {
+              _context15.next = 12;
+              break;
+            }
+
+            return _context15.abrupt("return", res.status(400).send("pantry/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration', *" + bodyProp + "* is not an allowed prop."));
+
+          case 12:
+            bodyObj["pantry.$." + bodyProp] = bodyObj[bodyProp];
+            delete bodyObj[bodyProp];
+
+          case 14:
+            _context15.next = 6;
+            break;
+
+          case 16:
+            _context15.prev = 16;
+            _context15.next = 19;
+            return User.updateOne({
+              "id": req.params.userId,
+              "pantry._id": _mongoose["default"].Types.ObjectId(req.params.pantryId)
+            }, {
+              "$set": bodyObj
+            });
+
+          case 19:
+            status = _context15.sent;
+            res.status(200).send("recipe successfully updated in database.");
+            _context15.next = 27;
+            break;
+
+          case 23:
+            _context15.prev = 23;
+            _context15.t2 = _context15["catch"](16);
+            console.log(_context15.t2);
+            return _context15.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context15.t2));
+
+          case 27:
+          case "end":
+            return _context15.stop();
+        }
+      }
+    }, _callee15, null, [[16, 23]]);
+  }));
+
+  return function (_x42, _x43, _x44) {
+    return _ref15.apply(this, arguments);
+  };
 }()); //recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
 //GIVEN:
 //  id of the user whose recipe is to be deleted is passed as first 
@@ -1217,57 +1288,6 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref15 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee15(req, res, next) {
-    var status;
-    return _runtime["default"].wrap(function _callee15$(_context15) {
-      while (1) {
-        switch (_context15.prev = _context15.next) {
-          case 0:
-            console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
-            _context15.prev = 1;
-            _context15.next = 4;
-            return User.updateOne({
-              id: req.params.userId
-            }, {
-              $pull: {
-                recipes: {
-                  _id: _mongoose["default"].Types.ObjectId(req.params.recipeId)
-                }
-              }
-            });
-
-          case 4:
-            status = _context15.sent;
-
-            if (status.nModified != 1) {
-              //Should never happen!
-              res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
-            } else {
-              res.status(200).send("recipe successfully deleted from database.");
-            }
-
-            _context15.next = 12;
-            break;
-
-          case 8:
-            _context15.prev = 8;
-            _context15.t0 = _context15["catch"](1);
-            console.log(_context15.t0);
-            return _context15.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context15.t0));
-
-          case 12:
-          case "end":
-            return _context15.stop();
-        }
-      }
-    }, _callee15, null, [[1, 8]]);
-  }));
-
-  return function (_x42, _x43, _x44) {
-    return _ref15.apply(this, arguments);
-  };
-}());
-app["delete"]('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
   var _ref16 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee16(req, res, next) {
     var status;
     return _runtime["default"].wrap(function _callee16$(_context16) {
@@ -1281,8 +1301,8 @@ app["delete"]('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
               id: req.params.userId
             }, {
               $pull: {
-                pantry: {
-                  _id: _mongoose["default"].Types.ObjectId(req.params.pantryId)
+                recipes: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.recipeId)
                 }
               }
             });
@@ -1318,7 +1338,7 @@ app["delete"]('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
     return _ref16.apply(this, arguments);
   };
 }());
-app["delete"]('/groceryList/:userId/:groceryId', /*#__PURE__*/function () {
+app["delete"]('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
   var _ref17 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee17(req, res, next) {
     var status;
     return _runtime["default"].wrap(function _callee17$(_context17) {
@@ -1332,8 +1352,8 @@ app["delete"]('/groceryList/:userId/:groceryId', /*#__PURE__*/function () {
               id: req.params.userId
             }, {
               $pull: {
-                groceryList: {
-                  _id: _mongoose["default"].Types.ObjectId(req.params.groceryId)
+                pantry: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.pantryId)
                 }
               }
             });
@@ -1367,5 +1387,56 @@ app["delete"]('/groceryList/:userId/:groceryId', /*#__PURE__*/function () {
 
   return function (_x48, _x49, _x50) {
     return _ref17.apply(this, arguments);
+  };
+}());
+app["delete"]('/groceryList/:userId/:groceryId', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee18(req, res, next) {
+    var status;
+    return _runtime["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
+            _context18.prev = 1;
+            _context18.next = 4;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $pull: {
+                groceryList: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.groceryId)
+                }
+              }
+            });
+
+          case 4:
+            status = _context18.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+            } else {
+              res.status(200).send("recipe successfully deleted from database.");
+            }
+
+            _context18.next = 12;
+            break;
+
+          case 8:
+            _context18.prev = 8;
+            _context18.t0 = _context18["catch"](1);
+            console.log(_context18.t0);
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context18.t0));
+
+          case 12:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[1, 8]]);
+  }));
+
+  return function (_x51, _x52, _x53) {
+    return _ref18.apply(this, arguments);
   };
 }());

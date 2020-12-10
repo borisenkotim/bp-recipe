@@ -12,8 +12,8 @@ class GroceryTable extends React.Component {
   for (let r = 0; r < this.props.shopCart.length; ++r) {
     table.push(
       <tr key={r}>
-        <td>{this.props.shopCart[r].ingredient}</td>
-        <td>{this.props.shopCart[r].quantity}{this.props.pantry[r].units}</td>
+        <td>{this.props.shopCart[r].name}</td>
+        <td>{this.props.shopCart[r].quantity}{this.props.shopCart[r].units}</td>
         <td><button onClick={() => this.confirmDelete(r)}>
               <span className="fa fa-trash"></span></button></td>
       </tr> 
@@ -34,7 +34,7 @@ class GroceryTable extends React.Component {
         </tr>
         </thead>
         <tbody>
-          {Object.keys(this.props.ingredients).length === 0 ? 
+          {Object.keys(this.props.shopCart).length === 0 ? 
           <tr>
           <td colSpan="5" style={{fontStyle: "italic"}}>No Items Added to the Shopping cart</td>
           </tr> : this.renderTable()

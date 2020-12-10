@@ -136,17 +136,13 @@ class PantryPage extends React.Component {
           msg
       );
     }
-    this.fetchPantry(AppMode.PANTRY); 
+    this.fetchGroceryList(AppMode.PANTRY); 
   };
 
 
   addIngredient = async (newData) => {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, "0");
-    var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    var yyyy = today.getFullYear();
-    today = mm + "/" + dd + "/" + yyyy;
-    newData.dateAdded = today;
+
+    this.state.pantry.push(newData);
     
     const url = "/pantry/" + this.props.user.id;
     const res = await fetch(url, {
@@ -155,7 +151,7 @@ class PantryPage extends React.Component {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(newData),
+      body: JSON.stringify(this.state.pantry),
     });
     const msg = await res.text();
     if (res.status != 200) {
@@ -171,13 +167,14 @@ class PantryPage extends React.Component {
 
   addGrocery = async (newData) => {
     const url = "/groceryList/" + this.props.user.id;
+    this.state.groceryList.push(newData);
     const res = await fetch(url, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(newData),
+      body: JSON.stringify(this.state.groceryList),
     });
     const msg = await res.text();
     if (res.status != 200) {
@@ -200,7 +197,7 @@ class PantryPage extends React.Component {
           <h1 align="center">Grocery Management</h1>
           <h2 align="center">Pantry</h2>
           <PantryTable 
-            ingredients={this.state.pantry} 
+            pantry={this.state.pantry} 
             changeMode={this.props.changeMode}
             setEditId={this.setEditId}
             setDeleteId={this.setDeleteId}
@@ -219,7 +216,7 @@ class PantryPage extends React.Component {
         <button onClick={() => this.props.changeMode(AppMode.GROCERY_ADDINGREDIENT)}>
               Add to Shopping Cart</button>
         <GroceryTable 
-            ingredients={this.state.groceryList} 
+            shopCart={this.state.groceryList} 
             changeMode={this.props.changeMode}
             setEditId={this.setEditId}
             setDeleteId={this.setDeleteId2}

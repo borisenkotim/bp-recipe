@@ -15,8 +15,8 @@ class PantryTable extends React.Component {
   for (let r = 0; r < this.props.pantry.length; ++r) {
     table.push(
       <tr key={r}>
-        <td>{this.props.pantry[r].ingredient}</td>
-    <td>{this.props.pantry[r].quantity}{this.props.pantry[r].units}</td>
+        <td>{this.props.pantry[r].name}</td>
+    <td>{this.props.pantry[r].quantity}{this.props.pantry[r].unit}</td>
         <td><button onClick={() => this.editPantry(r)}>
               <span className="fa fa-eye"></span></button></td>
         <td><button onClick={() => this.confirmDelete(r)}>
@@ -41,7 +41,7 @@ class PantryTable extends React.Component {
         </tr>
         </thead>
         <tbody>
-          {Object.keys(this.props.ingredients).length === 0 ? 
+          {Object.keys(this.props.pantry).length === 0 ? 
           <tr>
           <td colSpan="5" style={{fontStyle: "italic"}}>No Ingredients Added</td>
           </tr> : this.renderTable()

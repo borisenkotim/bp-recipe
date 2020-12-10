@@ -7,7 +7,8 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
+//const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
+const connectStr = "mongodb://localhost:27017";
 mongoose.set('useFindAndModify', false);
 
 mongoose
@@ -44,8 +45,8 @@ const recipeSchema = new Schema({
   favorited: {type: Boolean, required: true, default: false},
   dateAdded: {type: String, required: true}
 });
-/*
-const grocerycSchema = new Schema({
+
+const grocerySchema = new Schema({
   associatedUserId : {type: String, required: true },
   ingredients: [ingredientSchema]
   //this shcema will support foods we need go get from the grocery store
@@ -55,7 +56,7 @@ const pantrySchema = new Schema({
   associatedUserId: {type: String, required: true},
   ingredients: [ingredientSchema]
 });
-*/
+
 
 const userSchema = new Schema({
   id : {type: String, required: true},
@@ -561,9 +562,9 @@ app.get('/groceryList/:userId', async(req,res) => {
 //we will need the same thing but for the funciton below so that we can update/post pantry/grocery list for a userID
 app.post('/pantry/:userId', async(req, res, next) => {
   console.log("in /pantry (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-  if(!req.body.hasOwnProperty("list")){
+  /*if(!req.body.hasOwnProperty("list")){
     return res.status(400).message("POST request on /pantry was not formulated correctly. Body must contain property: list");
-  }
+  }*/
   try {
     let status = await User.updateOne(
     {id: req.params.userId},
@@ -581,9 +582,9 @@ app.post('/pantry/:userId', async(req, res, next) => {
 
 app.post('/groceryList/:userId', async(req, res, next) => {
   console.log("in /groceryList (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
-  if(!req.body.hasOwnProperty("list")){
+  /*if(!req.body.hasOwnProperty("list")){
     return res.status(400).message("POST request on /groceryList was not formulated correctly. Body must contain property: list");
-  }
+  }*/
   try {
     let status = await User.updateOne(
     {id: req.params.userId},
@@ -708,6 +709,42 @@ app.delete('/recipes/:userId/:recipeId', async (req, res, next) => {
     let status = await User.updateOne(
       {id: req.params.userId},
       {$pull: {recipes: {_id: mongoose.Types.ObjectId(req.params.recipeId)}}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+    } else {
+      res.status(200).send("recipe successfully deleted from database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when deleting recipe from database: " + err);
+  } 
+});
+
+app.delete('/pantry/:userId/:pantryId', async (req, res, next) => {
+  console.log("in /recipes (DELETE) route with params = " + 
+              JSON.stringify(req.params)); 
+  try {
+    let status = await User.updateOne(
+      {id: req.params.userId},
+      {$pull: {pantry: {_id: mongoose.Types.ObjectId(req.params.pantryId)}}});
+    if (status.nModified != 1) { //Should never happen!
+      res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+    } else {
+      res.status(200).send("recipe successfully deleted from database.");
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send("Unexpected error occurred when deleting recipe from database: " + err);
+  } 
+});
+
+app.delete('/groceryList/:userId/:groceryId', async (req, res, next) => {
+  console.log("in /recipes (DELETE) route with params = " + 
+              JSON.stringify(req.params)); 
+  try {
+    let status = await User.updateOne(
+      {id: req.params.userId},
+      {$pull: {groceryList: {_id: mongoose.Types.ObjectId(req.params.groceryId)}}});
     if (status.nModified != 1) { //Should never happen!
       res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
     } else {

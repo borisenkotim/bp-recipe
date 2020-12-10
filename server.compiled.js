@@ -34,8 +34,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
-var connectStr = "mongodb://localhost:27017";
+var connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
 
 _mongoose["default"].set('useFindAndModify', false);
 

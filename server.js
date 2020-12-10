@@ -7,8 +7,7 @@
 //MONGOOSE SET-UP//
 ///////////////////
 import mongoose from "mongoose";
-//const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
-const connectStr = "mongodb://localhost:27017";
+const connectStr = "mongodb+srv://dbAdmin:matthews@localtest.km1f8.mongodb.net/newDB?retryWrites=true&w=majority";
 mongoose.set('useFindAndModify', false);
 
 mongoose

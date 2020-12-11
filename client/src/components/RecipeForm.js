@@ -112,7 +112,7 @@ class RecipeForm extends React.Component {
   render() {
     return (
       <div className="paddedPage">
-        <form onSubmit={this.handleSubmit}>
+        <form id="pantryForm" onSubmit={this.handleSubmit}>
           <p></p>
           <center>
             <label htmlFor="name">

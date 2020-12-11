@@ -11,10 +11,10 @@ class GroceryTable extends React.Component {
   let table = [];
   for (let r = 0; r < this.props.shopCart.length; ++r) {
     table.push(
-      <tr key={r}>
+      <tr id={"tableRow-"+ r} key={r}>
         <td>{this.props.shopCart[r].name}</td>
         <td>{this.props.shopCart[r].quantity}{this.props.shopCart[r].units}</td>
-        <td><button onClick={() => this.confirmDelete(r)}>
+        <td><button id={"button-"+r} onClick={() => this.confirmDelete(r)}>
               <span className="fa fa-trash"></span></button></td>
       </tr> 
     );
@@ -23,9 +23,9 @@ class GroceryTable extends React.Component {
   }
   render() {
     return(
-    <div className="padded-page">
+    <div id="groceryTablePage" className="padded-page">
       <h1></h1>
-      <table className="table table-hover">
+      <table id="groceryTable" className="table table-hover">
         <thead className="thead-light">
         <tr>
           <th>Ingredient</th>

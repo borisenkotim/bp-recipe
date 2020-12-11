@@ -134,6 +134,7 @@ class PantryForm extends React.Component{
               />
             </label>
             <button
+              id="pantrySubmit"
               type="submit"
               onClick={this.props.handleChange}
               className="loginBtn btn btn-primary

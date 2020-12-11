@@ -29,3 +29,4 @@ test ('test ingredient search', async t =>{
     .click(recipeSearch.find('Ingredients'))
 
 })
+

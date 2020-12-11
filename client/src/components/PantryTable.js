@@ -14,12 +14,12 @@ class PantryTable extends React.Component {
   let table = [];
   for (let r = 0; r < this.props.pantry.length; ++r) {
     table.push(
-      <tr key={r}>
+      <tr id={"tableRow-"+ r}key={r}>
         <td>{this.props.pantry[r].name}</td>
     <td>{this.props.pantry[r].quantity}{this.props.pantry[r].unit}</td>
-        <td><button onClick={() => this.editPantry(r)}>
+        <td><button id={"button2-"+r}onClick={() => this.editPantry(r)}>
               <span className="fa fa-eye"></span></button></td>
-        <td><button onClick={() => this.confirmDelete(r)}>
+        <td><button id={"button3-"+r}onClick={() => this.confirmDelete(r)}>
               <span className="fa fa-trash"></span></button></td>
       </tr> 
     );
@@ -29,9 +29,9 @@ class PantryTable extends React.Component {
 
   render() {
     return(
-    <div className="padded-page">
+    <div id="pantryTablePage" className="padded-page">
       <h1></h1>
-      <table className="table table-hover">
+      <table id="pantryTable" className="table table-hover">
         <thead className="thead-light">
         <tr>
           <th>Ingredient</th>

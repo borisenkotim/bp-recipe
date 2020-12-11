@@ -70,6 +70,7 @@ class PantryPage extends React.Component {
     this.deleteIngredient();
   };
   setDeleteId2 = (val) => {
+    alert(val);
     this.setState({ groceryDeleteId: val });
     this.deleteGrocery();
   };
@@ -105,7 +106,7 @@ class PantryPage extends React.Component {
     }
   };
 
-  deleteIngredient = async (deleteId=this.state.deleteId) => {
+  deleteIngredient = async (deleteId) => {
     let url =
       "/pantry/" +
       this.props.user.id +
@@ -122,7 +123,7 @@ class PantryPage extends React.Component {
     this.fetchPantry(AppMode.PANTRY); 
   };
 
-  deleteGrocery = async (deleteId=this.state.groceryDeleteId) => {
+  deleteGrocery = async (deleteId) => {
     let url =
       "/groceryList/" +
       this.props.user.id +
@@ -194,42 +195,28 @@ class PantryPage extends React.Component {
         return (
         <React.Fragment>
         <div className="paddedPage center">
-          <h1 align="center">Grocery Management</h1>
+          <h1 id="Header1" align="center">Grocery Management</h1>
           <h2 align="center">Pantry</h2>
+          <button id="pantryButton" onClick={() => this.props.changeMode(AppMode.PANTRY_ADDINGREDIENT)}>
+              Add to Pantry</button>
           <PantryTable 
             pantry={this.state.pantry} 
             changeMode={this.props.changeMode}
             setEditId={this.setEditId}
-            setDeleteId={this.setDeleteId}
+            setDeleteId={this.deleteIngredient}
             savePantry={this.editIngredient}
             menuOpen={this.props.menuOpen}
             />
-          <div className="floatbtn-location">
-              <FloatingButton
-                handleClick={() =>
-                  this.props.changeMode(AppMode.PANTRY_ADDINGREDIENT)
-                }
-                icon={"fa fa-plus"}
-              />
-          </div>
         <h2 align="center">Groceries</h2>
-        <button onClick={() => this.props.changeMode(AppMode.GROCERY_ADDINGREDIENT)}>
+        <button id="groceryButton" onClick={() => this.props.changeMode(AppMode.GROCERY_ADDINGREDIENT)}>
               Add to Shopping Cart</button>
         <GroceryTable 
             shopCart={this.state.groceryList} 
             changeMode={this.props.changeMode}
-            setDeleteId={this.setDeleteId2}
+            setDeleteId={this.deleteGrocery}
             saveGrocery={this.addGrocery}
             menuOpen={this.props.menuOpen}
             />
-          <div className="floatbtn-location">
-              <FloatingButton
-                handleClick={() =>
-                  this.props.changeMode(AppMode.PANTRY_ADDINGREDIENT)
-                }
-                icon={"fa fa-plus"}
-              />
-          </div>
       </div>
       </React.Fragment>
       );

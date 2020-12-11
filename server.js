@@ -786,3 +786,4 @@ app.delete('/groceryList/:userId/:groceryId', async (req, res, next) => {
     return res.status(400).send("Unexpected error occurred when deleting recipe from database: " + err);
   } 
 });
+

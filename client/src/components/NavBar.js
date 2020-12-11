@@ -37,6 +37,7 @@ class NavBar extends React.Component {
 
             <Nav.Item>
               <Nav.Link
+                id="groceryNav"
                 onClick={() => this.props.changeMode(AppMode.PANTRY)}
                 className={
                   this.props.mode == AppMode.PANTRY

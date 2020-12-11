@@ -1,5 +1,4 @@
 import { Selector } from 'testcafe';
-
 fixture `BP Recipe Tests`
     .page `http://127.0.0.1:8081/index.html`;
 
@@ -43,4 +42,3 @@ test('TestRemoveServing', async t => {
         .click('#removeservingbutton')
         .expect(Selector('#servings').innerText).eql('1')
 });
-

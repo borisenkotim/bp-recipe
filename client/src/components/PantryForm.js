@@ -9,7 +9,7 @@ class PantryForm extends React.Component{
               name: "",
               calories: "",
               pictureURL: "",
-              unit: "units",
+              unit: "",
               expiration: "",
               quantity: "",
               faIcon: "fa fa-save",
@@ -21,7 +21,7 @@ class PantryForm extends React.Component{
                 name: "",
                 calories: "",
                 pictureURL: "",
-                unit: "units",
+                unit: "",
                 expiration: "",
                 quantity: "",
                 faIcon: "fa fa-save",
@@ -90,18 +90,6 @@ class PantryForm extends React.Component{
               />
             </label>
             <p />
-            <label className="pictureURL-form" htmlFor="pictureURL">
-              Picture URL:
-              <input
-                value={this.state.pictureURL}
-                name="pictureURL"
-                id="pictureURL"
-                className="form-control form-center"
-                required
-                onChange={this.handleChange}
-              />
-            </label>
-            <p />
             <label htmlFor="calories">
               Quantity:
               <input
@@ -110,17 +98,29 @@ class PantryForm extends React.Component{
                 id="quantity"
                 className="form-control form-center"
                 onChange={this.handleChange}
-              />
+              /></label>
+              <p />
             <label htmlFor="unit">
-                Units: 
+                Unit: 
               <input
                 value={this.state.unit}
                 name="unit"
+                list="units"
                 id="unit"
                 className="form-control form-center"
                 onChange={this.handleChange}
               />
-            </label>
+              <datalist id="units">
+                <option>whole</option>
+                <option>teaspoons</option>
+                <option>tablespoons</option>
+                <option>cups</option>
+                <option>gallons</option>
+                <option>pounds</option>
+                <options>ounces</options>
+                <options>quarts</options>
+                <options>pints</options>
+              </datalist>
             </label>
             <p />
             <label htmlFor="expiration">
@@ -133,13 +133,26 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             </label>
+            <p />
+            <label className="pictureURL-form" htmlFor="pictureURL">
+              Picture URL:
+              <input
+                value={this.state.pictureURL}
+                name="pictureURL"
+                id="pictureURL"
+                className="form-control form-center"
+                required
+                onChange={this.handleChange}
+              />
+            </label>
+            <p />
             <button
               id="pantrySubmit"
               type="submit"
               onClick={this.props.handleChange}
               className="loginBtn btn btn-primary
                     btn-block btncolortheme"
-              style={{ width: "230px", fontSize: "20px", zindex: 110 }}
+              style={{ width: "280px", fontSize: "20px", zindex: 110}}
             >
               <span className={this.state.faIcon} />
               &nbsp;{this.state.btnLabel}

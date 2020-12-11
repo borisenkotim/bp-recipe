@@ -231,12 +231,12 @@ class ViewRecipePage extends React.Component {
 
   // handles the change to ingredient unit
   handleChangeIngredientUnit(e, index) {
-    this.state.ingredients[index].unit = parseInt(e.target.value);
+    this.state.ingredients[index].unit = e.target.value;
     this.setState({ ingredients: this.state.ingredients });
   }
 
   handleChangeIngredientCalories(e, index) {
-    this.state.ingredients[index].calories = e.target.value;
+    this.state.ingredients[index].calories = parseFloat(e.target.value);
     this.setState({ ingredients: this.state.ingredients });
   }
 

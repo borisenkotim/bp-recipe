@@ -321,6 +321,12 @@ class ViewRecipePage extends React.Component {
                 step="5"
                 min="0"
               />
+              <button
+                className="loginBtn btn"
+                onClick={(e) => this.handleRemoveIngredient(e, ingredient.id)}
+              >
+                X
+              </button>
               <datalist id="units">
                 <option>whole</option>
                 <option>teaspoon</option>
@@ -332,20 +338,14 @@ class ViewRecipePage extends React.Component {
                 <options>quart</options>
                 <options>pint</options>
               </datalist>
+              
             </td>
             {ingredient.value.pictureURL && (
               <td>
                 <img src={ingredient.value.pictureURL} height="40" width="40" />
               </td>
             )}
-            <td className="x-table-col">
-              <button
-                className="loginBtn btn"
-                onClick={(e) => this.handleRemoveIngredient(e, ingredient.id)}
-              >
-                X
-              </button>
-            </td>
+            
           </tr>
         ))}
       </ReactSortable>

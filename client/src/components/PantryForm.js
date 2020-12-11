@@ -112,14 +112,14 @@ class PantryForm extends React.Component{
               />
               <datalist id="units">
                 <option>whole</option>
-                <option>teaspoon(s)</option>
-                <option>tablespoon(s)</option>
-                <option>cup(s)</option>
-                <option>gallon(s)</option>
-                <option>pound(s)</option>
-                <options>ounce(s)</options>
-                <options>quart(s)</options>
-                <options>pint(s)</options>
+                <option>teaspoons</option>
+                <option>tablespoons</option>
+                <option>cups</option>
+                <option>gallons</option>
+                <option>pounds</option>
+                <options>ounces</options>
+                <options>quarts</options>
+                <options>pints</options>
               </datalist>
             </label>
             <p />

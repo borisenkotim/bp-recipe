@@ -6,14 +6,14 @@
     "runtime-main.js": "/static/js/runtime-main.94a947e0.js",
     "runtime-main.js.map": "/static/js/runtime-main.94a947e0.js.map",
     "static/css/2.a7950f01.chunk.css": "/static/css/2.a7950f01.chunk.css",
-    "static/js/2.a4571aa6.chunk.js": "/static/js/2.a4571aa6.chunk.js",
-    "static/js/2.a4571aa6.chunk.js.map": "/static/js/2.a4571aa6.chunk.js.map",
+    "static/js/2.1fb1fa12.chunk.js": "/static/js/2.1fb1fa12.chunk.js",
+    "static/js/2.1fb1fa12.chunk.js.map": "/static/js/2.1fb1fa12.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.dbf7cd69885210447fc0e0f19a1abdb4.js": "/precache-manifest.dbf7cd69885210447fc0e0f19a1abdb4.js",
+    "precache-manifest.91df6af04ef6a35d3fb84a87d0d3feca.js": "/precache-manifest.91df6af04ef6a35d3fb84a87d0d3feca.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.a7950f01.chunk.css.map": "/static/css/2.a7950f01.chunk.css.map",
     "static/css/main.62adf910.chunk.css.map": "/static/css/main.62adf910.chunk.css.map",
-    "static/js/2.a4571aa6.chunk.js.LICENSE.txt": "/static/js/2.a4571aa6.chunk.js.LICENSE.txt",
+    "static/js/2.1fb1fa12.chunk.js.LICENSE.txt": "/static/js/2.1fb1fa12.chunk.js.LICENSE.txt",
     "static/media/font-awesome.min.css": "/static/media/fontawesome-webfont.fee66e71.woff",
     "static/media/pancakes.jpg": "/static/media/pancakes.305293f5.jpg",
     "static/media/index.css": "/static/media/shelves.8fa40ac7.jpg",
@@ -22,8 +22,8 @@
   "entrypoints": [
     "static/js/runtime-main.94a947e0.js",
     "static/css/2.a7950f01.chunk.css",
-    "static/js/2.a4571aa6.chunk.js",
+    "static/js/2.1fb1fa12.chunk.js",
     "static/css/main.62adf910.chunk.css",
-    "static/js/main.8d13e407.chunk.js"
+    "static/js/main.2fe6a3f4.chunk.js"
   ]
 }

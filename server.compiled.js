@@ -102,19 +102,21 @@ var recipeSchema = new Schema({
     required: true
   }
 });
-/*
-const grocerycSchema = new Schema({
-  associatedUserId : {type: String, required: true },
-  ingredients: [ingredientSchema]
-  //this shcema will support foods we need go get from the grocery store
-});
+var grocerySchema = new Schema({
+  associatedUserId: {
+    type: String,
+    required: true
+  },
+  ingredients: [ingredientSchema] //this shcema will support foods we need go get from the grocery store
 
-const pantrySchema = new Schema({
-  associatedUserId: {type: String, required: true},
+});
+var pantrySchema = new Schema({
+  associatedUserId: {
+    type: String,
+    required: true
+  },
   ingredients: [ingredientSchema]
 });
-*/
-
 var userSchema = new Schema({
   id: {
     type: String,
@@ -946,17 +948,12 @@ app.post('/pantry/:userId', /*#__PURE__*/function () {
         switch (_context11.prev = _context11.next) {
           case 0:
             console.log("in /pantry (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            /*if(!req.body.hasOwnProperty("list")){
+              return res.status(400).message("POST request on /pantry was not formulated correctly. Body must contain property: list");
+            }*/
 
-            if (req.body.hasOwnProperty("list")) {
-              _context11.next = 3;
-              break;
-            }
-
-            return _context11.abrupt("return", res.status(400).message("POST request on /pantry was not formulated correctly. Body must contain property: list"));
-
-          case 3:
-            _context11.prev = 3;
-            _context11.next = 6;
+            _context11.prev = 1;
+            _context11.next = 4;
             return User.updateOne({
               id: req.params.userId
             }, {
@@ -965,7 +962,7 @@ app.post('/pantry/:userId', /*#__PURE__*/function () {
               }
             });
 
-          case 6:
+          case 4:
             status = _context11.sent;
 
             if (status.nModified != 1) {
@@ -975,21 +972,21 @@ app.post('/pantry/:userId', /*#__PURE__*/function () {
               res.status(200).send("pantry successfully updated in database.");
             }
 
-            _context11.next = 14;
+            _context11.next = 12;
             break;
 
-          case 10:
-            _context11.prev = 10;
-            _context11.t0 = _context11["catch"](3);
+          case 8:
+            _context11.prev = 8;
+            _context11.t0 = _context11["catch"](1);
             console.log(_context11.t0);
             return _context11.abrupt("return", res.status(400).send("Unexpected error occurred when updating pantry in database: " + _context11.t0));
 
-          case 14:
+          case 12:
           case "end":
             return _context11.stop();
         }
       }
-    }, _callee11, null, [[3, 10]]);
+    }, _callee11, null, [[1, 8]]);
   }));
 
   return function (_x30, _x31, _x32) {
@@ -1004,17 +1001,12 @@ app.post('/groceryList/:userId', /*#__PURE__*/function () {
         switch (_context12.prev = _context12.next) {
           case 0:
             console.log("in /groceryList (POST) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            /*if(!req.body.hasOwnProperty("list")){
+              return res.status(400).message("POST request on /groceryList was not formulated correctly. Body must contain property: list");
+            }*/
 
-            if (req.body.hasOwnProperty("list")) {
-              _context12.next = 3;
-              break;
-            }
-
-            return _context12.abrupt("return", res.status(400).message("POST request on /groceryList was not formulated correctly. Body must contain property: list"));
-
-          case 3:
-            _context12.prev = 3;
-            _context12.next = 6;
+            _context12.prev = 1;
+            _context12.next = 4;
             return User.updateOne({
               id: req.params.userId
             }, {
@@ -1023,7 +1015,7 @@ app.post('/groceryList/:userId', /*#__PURE__*/function () {
               }
             });
 
-          case 6:
+          case 4:
             status = _context12.sent;
 
             if (status.nModified != 1) {
@@ -1033,21 +1025,21 @@ app.post('/groceryList/:userId', /*#__PURE__*/function () {
               res.status(200).send("pantry successfully updated in database.");
             }
 
-            _context12.next = 14;
+            _context12.next = 12;
             break;
 
-          case 10:
-            _context12.prev = 10;
-            _context12.t0 = _context12["catch"](3);
+          case 8:
+            _context12.prev = 8;
+            _context12.t0 = _context12["catch"](1);
             console.log(_context12.t0);
             return _context12.abrupt("return", res.status(400).send("Unexpected error occurred when updating grocery list in database: " + _context12.t0));
 
-          case 14:
+          case 12:
           case "end":
             return _context12.stop();
         }
       }
-    }, _callee12, null, [[3, 10]]);
+    }, _callee12, null, [[1, 8]]);
   }));
 
   return function (_x33, _x34, _x35) {
@@ -1209,6 +1201,77 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
   return function (_x39, _x40, _x41) {
     return _ref14.apply(this, arguments);
   };
+}());
+app.put('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
+  var _ref15 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee15(req, res, next) {
+    var validProps, bodyObj, bodyProp, status;
+    return _runtime["default"].wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            console.log("in /pantry (PUT) route with params = " + JSON.stringify(req.params) + " and body = " + JSON.stringify(req.body));
+            validProps = ['name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration'];
+            bodyObj = _objectSpread({}, req.body);
+            delete bodyObj._id;
+            console.log(bodyObj);
+            _context15.t0 = _runtime["default"].keys(bodyObj);
+
+          case 6:
+            if ((_context15.t1 = _context15.t0()).done) {
+              _context15.next = 16;
+              break;
+            }
+
+            bodyProp = _context15.t1.value;
+
+            if (validProps.includes(bodyProp)) {
+              _context15.next = 12;
+              break;
+            }
+
+            return _context15.abrupt("return", res.status(400).send("pantry/ PUT request formulated incorrectly." + "Only the following props are allowed in body: " + "'name', 'calories', 'pictureURL', 'quantity', 'unit', 'expiration', *" + bodyProp + "* is not an allowed prop."));
+
+          case 12:
+            bodyObj["pantry.$." + bodyProp] = bodyObj[bodyProp];
+            delete bodyObj[bodyProp];
+
+          case 14:
+            _context15.next = 6;
+            break;
+
+          case 16:
+            _context15.prev = 16;
+            _context15.next = 19;
+            return User.updateOne({
+              "id": req.params.userId,
+              "pantry._id": _mongoose["default"].Types.ObjectId(req.params.pantryId)
+            }, {
+              "$set": bodyObj
+            });
+
+          case 19:
+            status = _context15.sent;
+            res.status(200).send("recipe successfully updated in database.");
+            _context15.next = 27;
+            break;
+
+          case 23:
+            _context15.prev = 23;
+            _context15.t2 = _context15["catch"](16);
+            console.log(_context15.t2);
+            return _context15.abrupt("return", res.status(400).send("Unexpected error occurred when updating recipe in database: " + _context15.t2));
+
+          case 27:
+          case "end":
+            return _context15.stop();
+        }
+      }
+    }, _callee15, null, [[16, 23]]);
+  }));
+
+  return function (_x42, _x43, _x44) {
+    return _ref15.apply(this, arguments);
+  };
 }()); //recipes/userId/recipeId (DELETE): Attempts to delete an existing recipe
 //GIVEN:
 //  id of the user whose recipe is to be deleted is passed as first 
@@ -1224,15 +1287,15 @@ app.put('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
 //  Failure: status = 400 with error message
 
 app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
-  var _ref15 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee15(req, res, next) {
+  var _ref16 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee16(req, res, next) {
     var status;
-    return _runtime["default"].wrap(function _callee15$(_context15) {
+    return _runtime["default"].wrap(function _callee16$(_context16) {
       while (1) {
-        switch (_context15.prev = _context15.next) {
+        switch (_context16.prev = _context16.next) {
           case 0:
             console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
-            _context15.prev = 1;
-            _context15.next = 4;
+            _context16.prev = 1;
+            _context16.next = 4;
             return User.updateOne({
               id: req.params.userId
             }, {
@@ -1244,7 +1307,7 @@ app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
             });
 
           case 4:
-            status = _context15.sent;
+            status = _context16.sent;
 
             if (status.nModified != 1) {
               //Should never happen!
@@ -1253,24 +1316,126 @@ app["delete"]('/recipes/:userId/:recipeId', /*#__PURE__*/function () {
               res.status(200).send("recipe successfully deleted from database.");
             }
 
-            _context15.next = 12;
+            _context16.next = 12;
             break;
 
           case 8:
-            _context15.prev = 8;
-            _context15.t0 = _context15["catch"](1);
-            console.log(_context15.t0);
-            return _context15.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context15.t0));
+            _context16.prev = 8;
+            _context16.t0 = _context16["catch"](1);
+            console.log(_context16.t0);
+            return _context16.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context16.t0));
 
           case 12:
           case "end":
-            return _context15.stop();
+            return _context16.stop();
         }
       }
-    }, _callee15, null, [[1, 8]]);
+    }, _callee16, null, [[1, 8]]);
   }));
 
-  return function (_x42, _x43, _x44) {
-    return _ref15.apply(this, arguments);
+  return function (_x45, _x46, _x47) {
+    return _ref16.apply(this, arguments);
+  };
+}());
+app["delete"]('/pantry/:userId/:pantryId', /*#__PURE__*/function () {
+  var _ref17 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee17(req, res, next) {
+    var status;
+    return _runtime["default"].wrap(function _callee17$(_context17) {
+      while (1) {
+        switch (_context17.prev = _context17.next) {
+          case 0:
+            console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
+            _context17.prev = 1;
+            _context17.next = 4;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $pull: {
+                pantry: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.pantryId)
+                }
+              }
+            });
+
+          case 4:
+            status = _context17.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+            } else {
+              res.status(200).send("recipe successfully deleted from database.");
+            }
+
+            _context17.next = 12;
+            break;
+
+          case 8:
+            _context17.prev = 8;
+            _context17.t0 = _context17["catch"](1);
+            console.log(_context17.t0);
+            return _context17.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context17.t0));
+
+          case 12:
+          case "end":
+            return _context17.stop();
+        }
+      }
+    }, _callee17, null, [[1, 8]]);
+  }));
+
+  return function (_x48, _x49, _x50) {
+    return _ref17.apply(this, arguments);
+  };
+}());
+app["delete"]('/groceryList/:userId/:groceryId', /*#__PURE__*/function () {
+  var _ref18 = _asyncToGenerator( /*#__PURE__*/_runtime["default"].mark(function _callee18(req, res, next) {
+    var status;
+    return _runtime["default"].wrap(function _callee18$(_context18) {
+      while (1) {
+        switch (_context18.prev = _context18.next) {
+          case 0:
+            console.log("in /recipes (DELETE) route with params = " + JSON.stringify(req.params));
+            _context18.prev = 1;
+            _context18.next = 4;
+            return User.updateOne({
+              id: req.params.userId
+            }, {
+              $pull: {
+                groceryList: {
+                  _id: _mongoose["default"].Types.ObjectId(req.params.groceryId)
+                }
+              }
+            });
+
+          case 4:
+            status = _context18.sent;
+
+            if (status.nModified != 1) {
+              //Should never happen!
+              res.status(400).send("Unexpected error occurred when deleting recipe from database. recipe was not deleted.");
+            } else {
+              res.status(200).send("recipe successfully deleted from database.");
+            }
+
+            _context18.next = 12;
+            break;
+
+          case 8:
+            _context18.prev = 8;
+            _context18.t0 = _context18["catch"](1);
+            console.log(_context18.t0);
+            return _context18.abrupt("return", res.status(400).send("Unexpected error occurred when deleting recipe from database: " + _context18.t0));
+
+          case 12:
+          case "end":
+            return _context18.stop();
+        }
+      }
+    }, _callee18, null, [[1, 8]]);
+  }));
+
+  return function (_x51, _x52, _x53) {
+    return _ref18.apply(this, arguments);
   };
 }());

@@ -856,3 +856,9 @@ button:focus {
 .recipe-sort-button.custom { 
     padding-bottom: 0px;
 }
+
+.inline {
+  display: inline-block !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}

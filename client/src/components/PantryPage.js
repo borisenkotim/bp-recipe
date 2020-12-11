@@ -188,6 +188,7 @@ class PantryPage extends React.Component {
       this.fetchPantry(AppMode.PANTRY);
     }
   };
+  
   render() {
     switch (this.props.mode)
     {
@@ -222,15 +223,15 @@ class PantryPage extends React.Component {
       );
       case AppMode.PANTRY_ADDINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} savePantry={this.addIngredient} />
+          <PantryForm mode={this.props.mode} savePantry={this.addIngredient}/>
         );
         case AppMode.GROCERY_ADDINGREDIENT:
           return (
-            <PantryForm mode={this.props.mode} savePantry={this.addGrocery} />
+            <PantryForm mode={this.props.mode} savePantry={this.addGrocery}/>
           );
       case AppMode.PANTRY_EDITINGREDIENT:
         return (
-          <PantryForm mode={this.props.mode} savePantry={this.editIngredient} startData={this.state.pantry[this.state.editId]} />
+          <PantryForm mode={this.props.mode} savePantry={this.editIngredient} startData={this.state.pantry[this.state.editId]}/>
         );
   }
 }

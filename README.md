@@ -7,7 +7,7 @@ A comprehensive recipe management app built using the MERN stack as a CptS 489 t
 - Issues referenced (worked on): #4, #20
 
 - The following files have been editted and worked on: NavBar.js, PantryForm.js, PantryPage.js, PantryTable.js, 
-ViewRecipePage.js, index.css, GroceryTable.js, RecipeForm.js issue4Tests.js
+ViewRecipePage.js, index.css, GroceryTable.js, RecipeForm.js, issue4Tests.js
 
 
 

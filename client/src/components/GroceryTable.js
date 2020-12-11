@@ -13,7 +13,7 @@ class GroceryTable extends React.Component {
     table.push(
       <tr id={"tableRow-"+ r} key={r}>
         <td>{this.props.shopCart[r].name}</td>
-        <td>{this.props.shopCart[r].quantity}{this.props.shopCart[r].units}</td>
+        <td>{this.props.shopCart[r].quantity}&nbsp;{this.props.shopCart[r].units}</td>
         <td><button id={"button-"+r} onClick={() => this.confirmDelete(r)}>
               <span className="fa fa-trash"></span></button></td>
       </tr> 

@@ -90,18 +90,6 @@ class PantryForm extends React.Component{
               />
             </label>
             <p />
-            <label className="pictureURL-form" htmlFor="pictureURL">
-              Picture URL:
-              <input
-                value={this.state.pictureURL}
-                name="pictureURL"
-                id="pictureURL"
-                className="form-control form-center"
-                required
-                onChange={this.handleChange}
-              />
-            </label>
-            <p />
             <label htmlFor="calories">
               Quantity:
               <input
@@ -110,7 +98,8 @@ class PantryForm extends React.Component{
                 id="quantity"
                 className="form-control form-center"
                 onChange={this.handleChange}
-              />
+              /></label>
+              <p />
             <label htmlFor="unit">
                 Units: 
               <input
@@ -120,7 +109,6 @@ class PantryForm extends React.Component{
                 className="form-control form-center"
                 onChange={this.handleChange}
               />
-            </label>
             </label>
             <p />
             <label htmlFor="expiration">
@@ -133,13 +121,26 @@ class PantryForm extends React.Component{
                 onChange={this.handleChange}
               />
             </label>
+            <p />
+            <label className="pictureURL-form" htmlFor="pictureURL">
+              Picture URL:
+              <input
+                value={this.state.pictureURL}
+                name="pictureURL"
+                id="pictureURL"
+                className="form-control form-center"
+                required
+                onChange={this.handleChange}
+              />
+            </label>
+            <p />
             <button
               id="pantrySubmit"
               type="submit"
               onClick={this.props.handleChange}
               className="loginBtn btn btn-primary
                     btn-block btncolortheme"
-              style={{ width: "230px", fontSize: "20px", zindex: 110 }}
+              style={{ width: "280px", fontSize: "20px", zindex: 110 }}
             >
               <span className={this.state.faIcon} />
               &nbsp;{this.state.btnLabel}

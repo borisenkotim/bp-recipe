@@ -9,7 +9,7 @@ class PantryForm extends React.Component{
               name: "",
               calories: "",
               pictureURL: "",
-              unit: "units",
+              unit: "",
               expiration: "",
               quantity: "",
               faIcon: "fa fa-save",
@@ -21,7 +21,7 @@ class PantryForm extends React.Component{
                 name: "",
                 calories: "",
                 pictureURL: "",
-                unit: "units",
+                unit: "",
                 expiration: "",
                 quantity: "",
                 faIcon: "fa fa-save",
@@ -101,14 +101,26 @@ class PantryForm extends React.Component{
               /></label>
               <p />
             <label htmlFor="unit">
-                Units: 
+                Unit: 
               <input
                 value={this.state.unit}
                 name="unit"
+                list="units"
                 id="unit"
                 className="form-control form-center"
                 onChange={this.handleChange}
               />
+              <datalist id="units">
+                <option>whole</option>
+                <option>teaspoon(s)</option>
+                <option>tablespoon(s)</option>
+                <option>cup(s)</option>
+                <option>gallon(s)</option>
+                <option>pound(s)</option>
+                <options>ounce(s)</options>
+                <options>quart(s)</options>
+                <options>pint(s)</options>
+              </datalist>
             </label>
             <p />
             <label htmlFor="expiration">
@@ -140,7 +152,7 @@ class PantryForm extends React.Component{
               onClick={this.props.handleChange}
               className="loginBtn btn btn-primary
                     btn-block btncolortheme"
-              style={{ width: "280px", fontSize: "20px", zindex: 110 }}
+              style={{ width: "280px", fontSize: "20px", zindex: 110}}
             >
               <span className={this.state.faIcon} />
               &nbsp;{this.state.btnLabel}

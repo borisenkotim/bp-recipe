@@ -16,7 +16,7 @@ class PantryTable extends React.Component {
     table.push(
       <tr id={"tableRow-"+ r}key={r}>
         <td>{this.props.pantry[r].name}</td>
-    <td>{this.props.pantry[r].quantity}{this.props.pantry[r].unit}</td>
+    <td>{this.props.pantry[r].quantity}&nbsp;{this.props.pantry[r].unit}</td>
         <td><button id={"button2-"+r}onClick={() => this.editPantry(r)}>
               <span className="fa fa-eye"></span></button></td>
         <td><button id={"button3-"+r}onClick={() => this.confirmDelete(r)}>
